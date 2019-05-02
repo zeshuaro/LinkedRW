@@ -23,6 +23,13 @@ def main():
     driver.find_element_by_id('password').send_keys(credentials['password'])
     driver.find_element_by_class_name('login__form_action_container').submit()
 
+    # Skip adding a phone number
+    try:
+        driver.find_element_by_css_selector('.ember-view.cp-add-phone')
+        driver.find_element_by_class_name('secondary-action').click()
+    except NoSuchElementException:
+        pass
+
     # Navigate to profile page
     driver.find_element_by_xpath("//a[@data-control-name='identity_welcome_message']").click()
     WebDriverWait(driver, TIMEOUT).until(ec.presence_of_element_located((By.ID, 'oc-background-section')))
