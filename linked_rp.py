@@ -86,8 +86,8 @@ def get_single_role(exp_div, exp_summary):
     title = exp_summary.find_element(By.CSS_SELECTOR, '.t-16.t-black.t-bold').text
     company = exp_summary.find_element_by_class_name('pv-entity__secondary-title').text
     dates = get_span_text(exp_summary, '.pv-entity__date-range.t-14.t-black--light.t-normal')
-    location = get_experience_location(exp_summary)
-    description = get_experience_description(exp_div)
+    location = get_optional_field(exp_summary, '.pv-entity__location.t-14.t-black--light.t-normal.block')
+    description = get_description(exp_div, '.pv-entity__description.t-14.t-black.t-normal.ember-view')
 
     results = {
         'company': company,
@@ -116,8 +116,8 @@ def get_multiple_roles(exp_div, exp_summary):
     for role_section in exp_div.find_elements_by_class_name('pv-entity__position-group-role-item'):
         title = get_span_text(role_section, '.t-14.t-black.t-bold')
         dates = get_span_text(role_section, '.pv-entity__date-range.t-14.t-black.t-normal')
-        location = get_experience_location(role_section)
-        description = get_experience_description(role_section)
+        location = get_optional_field(role_section, '.pv-entity__location.t-14.t-black--light.t-normal.block')
+        description = get_description(role_section, '.pv-entity__description.t-14.t-black.t-normal.ember-view')
 
         roles.append({
             'title': title,
@@ -138,23 +138,22 @@ def get_span_text(element, name):
     return element.find_element(By.CSS_SELECTOR, name).find_elements_by_tag_name('span')[1].text.replace('–', '-')
 
 
-def get_experience_location(element):
+def get_optional_field(element, name):
     try:
-        return get_span_text(element, '.pv-entity__location.t-14.t-black--light.t-normal.block')
+        return get_span_text(element, name)
     except NoSuchElementException:
         return ''
 
 
-def get_experience_description(element):
+def get_description(element, name):
     try:
-        description_section = element.find_element(
-            By.CSS_SELECTOR, '.pv-entity__description.t-14.t-black.t-normal.ember-view')
-        more_btn_section = description_section.find_element_by_class_name('lt-line-clamp__ellipsis')
+        description_section = element.find_element(By.CSS_SELECTOR, name)
+        more_btn_section = description_section.find_elements_by_class_name('lt-line-clamp__ellipsis')
 
-        if 'lt-line-clamp__ellipsis--dummy' in more_btn_section.get_attribute('class'):
+        if not more_btn_section or 'lt-line-clamp__ellipsis--dummy' in more_btn_section[0].get_attribute('class'):
             description = description_section.text
         else:
-            more_btn_section.find_element_by_class_name('lt-line-clamp__more').click()
+            more_btn_section[0].find_element_by_class_name('lt-line-clamp__more').click()
             description = description_section.find_element_by_class_name('lt-line-clamp__raw-line').text
     except NoSuchElementException:
         description = ''
@@ -183,15 +182,14 @@ def get_education(background):
         except NoSuchElementException:
             degree = degree_name
 
-        try:
-            dates = get_span_text(edu_li, '.pv-entity__dates.t-14.t-black--light.t-normal')
-        except NoSuchElementException:
-            dates = ''
+        dates = get_optional_field(edu_li, '.pv-entity__dates.t-14.t-black--light.t-normal')
+        description = get_description(edu_li, '.pv-entity__description.t-14.t-black--light.t-normal.mt4')
 
         edus.append({
             'school': school,
             'degree': degree,
-            'dates': dates
+            'dates': dates,
+            'description': description
         })
 
     return edus
