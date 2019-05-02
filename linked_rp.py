@@ -65,31 +65,32 @@ def get_experience(driver, background):
     time.sleep(1)
 
     # Locate individual experiences
-    exp_section = background.find_element(
+    section = background.find_element(
         By.CSS_SELECTOR,
         '.pv-profile-section.pv-profile-section--reorder-enabled.background-section.artdeco-container-card.ember-view')
-    exp_divs = exp_section.find_elements(
+    divs = section.find_elements(
         By.CSS_SELECTOR, '.pv-entity__position-group-pager.pv-profile-section__list-item.ember-view')
     exps = []
 
-    for exp_div in exp_divs:
+    for div in divs:
+        # Check if it is a single role in a company or multiple roles in a company
         try:
-            exp_summary = exp_div.find_element(
+            summary = div.find_element(
                 By.CSS_SELECTOR, '.pv-entity__summary-info.pv-entity__summary-info--background-section')
-            exps.append(get_single_role(exp_div, exp_summary))
+            exps.append(get_single_role(div, summary))
         except NoSuchElementException:
-            exp_summary = exp_div.find_element_by_class_name('pv-entity__company-summary-info-v2')
-            exps.append(get_multiple_roles(exp_div, exp_summary))
+            summary = div.find_element_by_class_name('pv-entity__company-summary-info-v2')
+            exps.append(get_multiple_roles(div, summary))
 
     return exps
 
 
-def get_single_role(exp_div, exp_summary):
-    title = exp_summary.find_element(By.CSS_SELECTOR, '.t-16.t-black.t-bold').text
-    company = exp_summary.find_element_by_class_name('pv-entity__secondary-title').text
-    dates = get_span_text(exp_summary, '.pv-entity__date-range.t-14.t-black--light.t-normal')
-    location = get_optional_field(exp_summary, '.pv-entity__location.t-14.t-black--light.t-normal.block')
-    description = get_description(exp_div, '.pv-entity__description.t-14.t-black.t-normal.ember-view')
+def get_single_role(div, summary):
+    title = summary.find_element(By.CSS_SELECTOR, '.t-16.t-black.t-bold').text
+    company = summary.find_element_by_class_name('pv-entity__secondary-title').text
+    dates = get_span_text(summary, '.pv-entity__date-range.t-14.t-black--light.t-normal')
+    location = get_optional_field(summary, '.pv-entity__location.t-14.t-black--light.t-normal.block')
+    description = get_description(div, '.pv-entity__description.t-14.t-black.t-normal.ember-view')
 
     results = {
         'company': company,
@@ -104,18 +105,18 @@ def get_single_role(exp_div, exp_summary):
     return results
 
 
-def get_multiple_roles(exp_div, exp_summary):
-    company = get_span_text(exp_summary, '.t-16.t-black.t-bold')
+def get_multiple_roles(div, summary):
+    company = get_span_text(summary, '.t-16.t-black.t-bold')
 
     # Show all roles
     try:
-        exp_div.find_element_by_class_name('pv-profile-section__toggle-detail-icon').click()
+        div.find_element_by_class_name('pv-profile-section__toggle-detail-icon').click()
         time.sleep(1)
     except NoSuchElementException:
         pass
 
     roles = []
-    for role_section in exp_div.find_elements_by_class_name('pv-entity__position-group-role-item'):
+    for role_section in div.find_elements_by_class_name('pv-entity__position-group-role-item'):
         title = get_span_text(role_section, '.t-14.t-black.t-bold')
         dates = get_span_text(role_section, '.pv-entity__date-range.t-14.t-black.t-normal')
         location = get_optional_field(role_section, '.pv-entity__location.t-14.t-black--light.t-normal.block')
@@ -137,28 +138,28 @@ def get_multiple_roles(exp_div, exp_summary):
 
 
 def get_education(background):
-    edu_section = background.find_element(By.CSS_SELECTOR, '.pv-profile-section.education-section.ember-view')
-    edu_ul = edu_section.find_element(
+    section = background.find_element(By.CSS_SELECTOR, '.pv-profile-section.education-section.ember-view')
+    ul = section.find_element(
         By.CSS_SELECTOR,
         '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-no-more.ember-view')
     edus = []
 
-    for edu_li in edu_ul.find_elements_by_tag_name('li'):
-        school = edu_li.find_element(By.CSS_SELECTOR, '.pv-entity__school-name.t-16.t-black.t-bold').text
+    for li in ul.find_elements_by_tag_name('li'):
+        school = li.find_element(By.CSS_SELECTOR, '.pv-entity__school-name.t-16.t-black.t-bold').text
         degree_name = get_span_text(
-            edu_li,
-            '.pv-entity__secondary-title.pv-entity__degree-name.pv-entity__secondary-title.t-14.t-black.t-normal')
+            li, '.pv-entity__secondary-title.pv-entity__degree-name.pv-entity__secondary-title.t-14.t-black.t-normal')
 
+        # Check for field of study
         try:
             field = get_span_text(
-                edu_li,
+                li,
                 '.pv-entity__secondary-title.pv-entity__fos.pv-entity__secondary-title.t-14.t-black--light.t-normal')
             degree = f'{degree_name} - {field}'
         except NoSuchElementException:
             degree = degree_name
 
-        dates = get_optional_field(edu_li, '.pv-entity__dates.t-14.t-black--light.t-normal')
-        description = get_description(edu_li, '.pv-entity__description.t-14.t-black--light.t-normal.mt4')
+        dates = get_optional_field(li, '.pv-entity__dates.t-14.t-black--light.t-normal')
+        description = get_description(li, '.pv-entity__description.t-14.t-black--light.t-normal.mt4')
 
         edus.append({
             'school': school,
@@ -171,18 +172,18 @@ def get_education(background):
 
 
 def get_volunteering(background):
-    vol_section = background.find_element(By.CSS_SELECTOR, '.pv-profile-section.volunteering-section.ember-view')
-    vol_ul = vol_section.find_element(
+    section = background.find_element(By.CSS_SELECTOR, '.pv-profile-section.volunteering-section.ember-view')
+    ul = section.find_element(
         By.CSS_SELECTOR,
         '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-no-more.ember-view')
     vols = []
 
-    for vol_li in vol_ul.find_elements_by_tag_name('li'):
-        role = vol_li.find_element(By.CSS_SELECTOR, '.t-16.t-black.t-bold').text
-        organisation = get_span_text(vol_li, '.t-14.t-black.t-normal')
+    for li in ul.find_elements_by_tag_name('li'):
+        role = li.find_element(By.CSS_SELECTOR, '.t-16.t-black.t-bold').text
+        organisation = get_span_text(li, '.t-14.t-black.t-normal')
         dates = get_optional_field(
-            vol_li, '.pv-entity__date-range.detail-facet.inline-block.t-14.t-black--light.t-normal')
-        description = get_description(vol_li, '.pv-entity__description.t-14.t-black--light.t-normal.mt4')
+            li, '.pv-entity__date-range.detail-facet.inline-block.t-14.t-black--light.t-normal')
+        description = get_description(li, '.pv-entity__description.t-14.t-black--light.t-normal.mt4')
 
         vols.append({
             'role': role,
@@ -195,26 +196,28 @@ def get_volunteering(background):
 
 
 def get_skills(driver):
-    skills_section = driver.find_element(
+    section = driver.find_element(
         By.CSS_SELECTOR, '.pv-profile-section.pv-skill-categories-section.artdeco-container-card.ember-view')
 
     # Show all skills
     try:
-        skills_section.find_element_by_class_name('pv-skills-section__chevron-icon').click()
+        section.find_element_by_class_name('pv-skills-section__chevron-icon').click()
         time.sleep(1)
     except NoSuchElementException:
         pass
 
+    # Extract top skills
     skills = []
-    for top_skill in skills_section.find_elements(
+    for top_skill in section.find_elements(
             By.CSS_SELECTOR,
             '.pv-skill-category-entity__top-skill.pv-skill-category-entity.pb3.pt4.pv-skill-endorsedSkill-entity.'
             'relative.ember-view'):
         skill = top_skill.find_element(By.CSS_SELECTOR, '.pv-skill-category-entity__name-text.t-16.t-black.t-bold').text
         skills.append(skill)
 
+    # Locate Tools & Technologies section
     target_div = None
-    for div in skills_section.find_elements(
+    for div in section.find_elements(
             By.CSS_SELECTOR, '.pv-skill-category-list.pv-profile-section__section-info.mb6.ember-view'):
         header = div.find_element(
             By.CSS_SELECTOR, '.pb2.t-16.t-black--light.t-normal.pv-skill-categories-section__secondary-skill-heading')
@@ -223,6 +226,7 @@ def get_skills(driver):
             target_div = div
             break
 
+    # Extract the rest of the skills
     if target_div is not None:
         for li in target_div.find_elements_by_tag_name('li'):
             skills.append(li.text)
@@ -246,6 +250,7 @@ def get_description(element, name):
         description_section = element.find_element(By.CSS_SELECTOR, name)
         more_btn_section = description_section.find_elements_by_class_name('lt-line-clamp__ellipsis')
 
+        # Check if there is a more button
         if not more_btn_section or 'lt-line-clamp__ellipsis--dummy' in more_btn_section[0].get_attribute('class'):
             description = description_section.text
         else:
