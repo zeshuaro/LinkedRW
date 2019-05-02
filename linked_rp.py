@@ -247,15 +247,15 @@ def get_optional_field(element, name):
 
 def get_description(element, name):
     try:
-        description_section = element.find_element(By.CSS_SELECTOR, name)
-        more_btn_section = description_section.find_elements_by_class_name('lt-line-clamp__ellipsis')
+        section = element.find_element(By.CSS_SELECTOR, name)
+        btn_section = section.find_elements_by_class_name('lt-line-clamp__ellipsis')
 
         # Check if there is a more button
-        if not more_btn_section or 'lt-line-clamp__ellipsis--dummy' in more_btn_section[0].get_attribute('class'):
-            description = description_section.text
+        if not btn_section or 'lt-line-clamp__ellipsis--dummy' in btn_section[0].get_attribute('class'):
+            description = section.text
         else:
-            more_btn_section[0].find_element_by_class_name('lt-line-clamp__more').click()
-            description = description_section.find_element_by_class_name('lt-line-clamp__raw-line').text
+            btn_section[0].find_element_by_class_name('lt-line-clamp__more').click()
+            description = section.find_element_by_class_name('lt-line-clamp__raw-line').text
     except NoSuchElementException:
         description = ''
 
