@@ -1,5 +1,8 @@
 TIMEOUT = 10
 
+NAME = 'name'
+CONTACT = 'contact'
+SUMMARY = 'summary'
 EXPERIENCE = 'experience'
 EDUCATION = 'education'
 VOLUNTEERING = 'volunteering'
