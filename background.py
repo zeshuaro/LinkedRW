@@ -15,9 +15,12 @@ def get_background_details(driver, by, section_identifier, section_type):
 
     # Load the rest of the page
     elif section_type == SKILLS:
-        skills = driver.find_element_by_css_selector('.pv-deferred-area.pv-deferred-area--pending.ember-view')
-        driver.execute_script("arguments[0].scrollIntoView(true);", skills)
-        time.sleep(1)
+        try:
+            skills = driver.find_element_by_css_selector('.pv-deferred-area.pv-deferred-area--pending.ember-view')
+            driver.execute_script("arguments[0].scrollIntoView(true);", skills)
+            time.sleep(1)
+        except NoSuchElementException:
+            pass
 
     # Check if the section exists
     try:
