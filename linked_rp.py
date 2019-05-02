@@ -33,7 +33,8 @@ def main():
         'volunteering': get_volunteering(background),
         'skills': get_skills(driver),
         'projects': get_projects(driver),
-        'publications': get_publications(driver)
+        'publications': get_publications(driver),
+        'languages': get_languages(driver)
     }
 
     with open('profile.json', 'w') as f:
@@ -295,6 +296,14 @@ def get_publications(driver):
         })
 
     return projects
+
+
+def get_languages(driver):
+    section = driver.find_element_by_css_selector(
+        '.accordion-panel.pv-profile-section.pv-accomplishments-block.languages.ember-view')
+    languages = [x.text for x in section.find_elements_by_tag_name('li')]
+
+    return languages
 
 
 def get_span_text(element, name):
