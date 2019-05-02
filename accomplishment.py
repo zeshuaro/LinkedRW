@@ -11,9 +11,9 @@ def get_accomplishment_details(driver, section_type):
     if 'display: none' in section.get_attribute('style'):
         return []
 
-    if section_type in (PROJECTS, PUBLICATIONS):
+    if section_type in (PROJECTS, PUBLICATIONS, AWARDS):
         # Expand the section
-        section.find_element_by_xpath(f"//button[@aria-label='Expand {section_type} section']").click()
+        section.find_element_by_xpath(f"//button[@aria-controls='{section_type}-expandable-content']").click()
         section = driver.find_element_by_css_selector(
             f'.accordion-panel.pv-profile-section.pv-accomplishments-block.{section_type}.'
             f'pv-accomplishments-block--expanded.ember-view')
@@ -30,6 +30,8 @@ def get_accomplishment_details(driver, section_type):
             return get_projects(ul)
         elif section_type == PUBLICATIONS:
             return get_publications(ul)
+        elif section_type == AWARDS:
+            return get_awards(ul)
     elif section_type == LANGUAGES:
         return get_languages(section)
 
@@ -70,6 +72,23 @@ def get_publications(ul):
         })
 
     return publications
+
+
+def get_awards(ul):
+    awards = []
+    for li in ul.find_elements_by_tag_name('li'):
+        title = li.find_element_by_class_name('pv-accomplishment-entity__title').text.\
+            replace('honor title', '').strip()
+        date = get_optional_text_replace(li, 'pv-accomplishment-entity__date', 'honor date')
+        issuer = get_optional_text_replace(li, 'pv-accomplishment-entity__issuer', 'honor issuer')
+
+        awards.append({
+            'title': title,
+            'date': date,
+            'issuer': issuer
+        })
+
+    return awards
 
 
 def get_languages(section):
