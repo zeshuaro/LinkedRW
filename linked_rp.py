@@ -52,10 +52,9 @@ def main():
         'languages': get_accomplishment_details(driver, LANGUAGES)
     }
 
+    driver.quit()
     with open('profile.json', 'w') as f:
         json.dump(profile, f, indent=4)
-
-    driver.quit()
 
 
 if __name__ == '__main__':
