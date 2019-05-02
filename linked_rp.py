@@ -32,10 +32,12 @@ def main():
         'education': get_education(background),
         'volunteering': get_volunteering(background),
         'skills': get_skills(driver),
-        'projects': get_projects(driver)
+        'projects': get_projects(driver),
+        'publications': get_publications(driver)
     }
 
-    print(json.dumps(profile, indent=4))
+    with open('profile.json', 'w') as f:
+        json.dump(profile, f, indent=4)
 
     driver.quit()
 
@@ -85,7 +87,7 @@ def get_single_role(div, summary):
     title = summary.find_element_by_css_selector('.t-16.t-black.t-bold').text
     company = summary.find_element_by_class_name('pv-entity__secondary-title').text
     dates = get_span_text(summary, '.pv-entity__date-range.t-14.t-black--light.t-normal')
-    location = get_optional_field(summary, '.pv-entity__location.t-14.t-black--light.t-normal.block')
+    location = get_optional_text(summary, '.pv-entity__location.t-14.t-black--light.t-normal.block')
     description = get_description(div, '.pv-entity__description.t-14.t-black.t-normal.ember-view')
 
     results = {
@@ -115,7 +117,7 @@ def get_multiple_roles(div, summary):
     for role_section in div.find_elements_by_class_name('pv-entity__position-group-role-item'):
         title = get_span_text(role_section, '.t-14.t-black.t-bold')
         dates = get_span_text(role_section, '.pv-entity__date-range.t-14.t-black.t-normal')
-        location = get_optional_field(role_section, '.pv-entity__location.t-14.t-black--light.t-normal.block')
+        location = get_optional_text(role_section, '.pv-entity__location.t-14.t-black--light.t-normal.block')
         description = get_description(role_section, '.pv-entity__description.t-14.t-black.t-normal.ember-view')
 
         roles.append({
@@ -153,7 +155,7 @@ def get_education(background):
         except NoSuchElementException:
             degree = degree_name
 
-        dates = get_optional_field(li, '.pv-entity__dates.t-14.t-black--light.t-normal')
+        dates = get_optional_text(li, '.pv-entity__dates.t-14.t-black--light.t-normal')
         description = get_description(li, '.pv-entity__description.t-14.t-black--light.t-normal.mt4')
 
         edus.append({
@@ -175,7 +177,7 @@ def get_volunteering(background):
     for li in ul.find_elements_by_tag_name('li'):
         role = li.find_element_by_css_selector('.t-16.t-black.t-bold').text
         organisation = get_span_text(li, '.t-14.t-black.t-normal')
-        dates = get_optional_field(
+        dates = get_optional_text(
             li, '.pv-entity__date-range.detail-facet.inline-block.t-14.t-black--light.t-normal')
         description = get_description(li, '.pv-entity__description.t-14.t-black--light.t-normal.mt4')
 
@@ -237,23 +239,18 @@ def get_projects(driver):
     # Show all projects
     try:
         section.find_element_by_xpath("//button[@aria-controls='projects-accomplishment-list']").click()
+        ul = section.find_element_by_css_selector(
+            '.pv-accomplishments-block__list.pv-accomplishments-block__list--has-more')
     except NoSuchElementException:
-        pass
+        ul = section.find_element_by_class_name('pv-accomplishments-block__list ')
 
-    ul = section.find_element_by_css_selector(
-        '.pv-accomplishments-block__list.pv-accomplishments-block__list--has-more')
     projects = []
-
     for li in ul.find_elements_by_tag_name('li'):
         name = li.find_element_by_class_name('pv-accomplishment-entity__title').text.replace('Project name', '').strip()
-        dates = get_optional_field(li, '.pv-accomplishment-entity__date.pv-accomplishment-entity__subtitle',
-                                   is_span=False)
+        dates = get_optional_text(li, '.pv-accomplishment-entity__date.pv-accomplishment-entity__subtitle',
+                                  is_span=False)
         description = get_description(li, '.pv-accomplishment-entity__description.t-14.t-black--light.t-normal')
-
-        try:
-            link = li.find_element_by_class_name('pv-accomplishment-entity__external-source').get_attribute('href')
-        except NoSuchElementException:
-            link = ''
+        link = get_accomplishment_link(li)
 
         projects.append({
             'name': name,
@@ -265,11 +262,46 @@ def get_projects(driver):
     return projects
 
 
+def get_publications(driver):
+    # Locate and expand publications section
+    section = driver.find_element_by_css_selector(
+        '.accordion-panel.pv-profile-section.pv-accomplishments-block.publications.ember-view')
+    section.find_element_by_xpath("//button[@aria-label='Expand publications section']").click()
+    section = driver.find_element_by_css_selector(
+        '.accordion-panel.pv-profile-section.pv-accomplishments-block.publications.pv-accomplishments-block--expanded.'
+        'ember-view')
+
+    # Show all publications
+    try:
+        section.find_element_by_xpath("//button[@aria-controls='publications-accomplishment-list']").click()
+        ul = section.find_element_by_css_selector(
+            '.pv-accomplishments-block__list.pv-accomplishments-block__list--has-more')
+    except NoSuchElementException:
+        ul = section.find_element_by_class_name('pv-accomplishments-block__list ')
+
+    projects = []
+    for li in ul.find_elements_by_tag_name('li'):
+        title = li.find_element_by_class_name('pv-accomplishment-entity__title').text.\
+            replace('publication title', '').strip()
+        date = get_optional_text_replace(li, 'pv-accomplishment-entity__date', 'publication date')
+        publisher = get_optional_text_replace(li, 'pv-accomplishment-entity__publisher', 'publication description')
+        link = get_accomplishment_link(li)
+
+        projects.append({
+            'title': title,
+            'date': date,
+            'publisher': publisher,
+            'link': link
+        })
+
+    return projects
+
+
 def get_span_text(element, name):
     return element.find_element_by_css_selector(name).find_elements_by_tag_name('span')[1].text
 
 
-def get_optional_field(element, name, is_span=True):
+def get_optional_text(element, name, is_span=True):
     text = ''
     try:
         if is_span:
@@ -280,6 +312,13 @@ def get_optional_field(element, name, is_span=True):
         pass
 
     return text.replace('–', '-')
+
+
+def get_optional_text_replace(element, name, text):
+    try:
+        return element.find_element_by_class_name(name).text.replace(text, '').strip()
+    except NoSuchElementException:
+        return ''
 
 
 def get_description(element, name):
@@ -297,6 +336,13 @@ def get_description(element, name):
         description = ''
 
     return description
+
+
+def get_accomplishment_link(element):
+    try:
+        return element.find_element_by_class_name('pv-accomplishment-entity__external-source').get_attribute('href')
+    except NoSuchElementException:
+        return ''
 
 
 if __name__ == '__main__':
