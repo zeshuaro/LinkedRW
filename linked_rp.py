@@ -31,7 +31,8 @@ def main():
     profile = {
         'summary': get_summary(driver),
         'experience': get_experience(driver, background),
-        'education': get_education(background)
+        'education': get_education(background),
+        'volunteering': get_volunteering(background)
     }
 
     print(json.dumps(profile, indent=4))
@@ -166,6 +167,30 @@ def get_education(background):
         })
 
     return edus
+
+
+def get_volunteering(background):
+    vol_section = background.find_element(By.CSS_SELECTOR, '.pv-profile-section.volunteering-section.ember-view')
+    vol_ul = vol_section.find_element(
+        By.CSS_SELECTOR,
+        '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-no-more.ember-view')
+    vols = []
+
+    for vol_li in vol_ul.find_elements_by_tag_name('li'):
+        role = vol_li.find_element(By.CSS_SELECTOR, '.t-16.t-black.t-bold').text
+        organisation = get_span_text(vol_li, '.t-14.t-black.t-normal')
+        dates = get_optional_field(
+            vol_li, '.pv-entity__date-range.detail-facet.inline-block.t-14.t-black--light.t-normal')
+        description = get_description(vol_li, '.pv-entity__description.t-14.t-black--light.t-normal.mt4')
+
+        vols.append({
+            'role': role,
+            'organisation': organisation,
+            'dates': dates,
+            'description': description
+        })
+
+    return vols
 
 
 def get_span_text(element, name):
