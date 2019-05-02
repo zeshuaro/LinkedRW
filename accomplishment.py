@@ -12,29 +12,29 @@ def get_accomplishment_details(driver, section_type):
         return []
 
     if section_type in (PROJECTS, PUBLICATIONS):
-        # Expand the section section
+        # Expand the section
         section.find_element_by_xpath(f"//button[@aria-label='Expand {section_type} section']").click()
         section = driver.find_element_by_css_selector(
             f'.accordion-panel.pv-profile-section.pv-accomplishments-block.{section_type}.'
             f'pv-accomplishments-block--expanded.ember-view')
 
+        # Show all items
+        try:
+            section.find_element_by_xpath(f"//button[@aria-controls='{section_type}-accomplishment-list']").click()
+            ul = section.find_element_by_css_selector(
+                '.pv-accomplishments-block__list.pv-accomplishments-block__list--has-more')
+        except NoSuchElementException:
+            ul = section.find_element_by_class_name('pv-accomplishments-block__list ')
+
         if section_type == PROJECTS:
-            return get_projects(section)
+            return get_projects(ul)
         elif section_type == PUBLICATIONS:
-            return get_publications(section)
+            return get_publications(ul)
     elif section_type == LANGUAGES:
         return get_languages(section)
 
 
-def get_projects(section):
-    # Show all projects
-    try:
-        section.find_element_by_xpath("//button[@aria-controls='projects-accomplishment-list']").click()
-        ul = section.find_element_by_css_selector(
-            '.pv-accomplishments-block__list.pv-accomplishments-block__list--has-more')
-    except NoSuchElementException:
-        ul = section.find_element_by_class_name('pv-accomplishments-block__list ')
-
+def get_projects(ul):
     projects = []
     for li in ul.find_elements_by_tag_name('li'):
         name = li.find_element_by_class_name('pv-accomplishment-entity__title').text.replace('Project name', '').strip()
@@ -53,15 +53,7 @@ def get_projects(section):
     return projects
 
 
-def get_publications(section):
-    # Show all publications
-    try:
-        section.find_element_by_xpath("//button[@aria-controls='publications-accomplishment-list']").click()
-        ul = section.find_element_by_css_selector(
-            '.pv-accomplishments-block__list.pv-accomplishments-block__list--has-more')
-    except NoSuchElementException:
-        ul = section.find_element_by_class_name('pv-accomplishments-block__list ')
-
+def get_publications(ul):
     publications = []
     for li in ul.find_elements_by_tag_name('li'):
         title = li.find_element_by_class_name('pv-accomplishment-entity__title').text.\
