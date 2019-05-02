@@ -100,10 +100,14 @@ def get_multiple_roles(div, summary):
 
 
 def get_education(section):
-    ul = section.find_element_by_css_selector(
-        '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-no-more.ember-view')
-    edus = []
+    try:
+        ul = section.find_element_by_css_selector(
+            '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-no-more.ember-view')
+    except NoSuchElementException:
+        ul = section.find_element_by_css_selector(
+            '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-no-more')
 
+    edus = []
     for li in ul.find_elements_by_tag_name('li'):
         school = li.find_element_by_css_selector('.pv-entity__school-name.t-16.t-black.t-bold').text
         degree_name = get_span_text(
