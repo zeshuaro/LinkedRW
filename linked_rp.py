@@ -134,33 +134,6 @@ def get_multiple_roles(exp_div, exp_summary):
     return results
 
 
-def get_span_text(element, name):
-    return element.find_element(By.CSS_SELECTOR, name).find_elements_by_tag_name('span')[1].text.replace('–', '-')
-
-
-def get_optional_field(element, name):
-    try:
-        return get_span_text(element, name)
-    except NoSuchElementException:
-        return ''
-
-
-def get_description(element, name):
-    try:
-        description_section = element.find_element(By.CSS_SELECTOR, name)
-        more_btn_section = description_section.find_elements_by_class_name('lt-line-clamp__ellipsis')
-
-        if not more_btn_section or 'lt-line-clamp__ellipsis--dummy' in more_btn_section[0].get_attribute('class'):
-            description = description_section.text
-        else:
-            more_btn_section[0].find_element_by_class_name('lt-line-clamp__more').click()
-            description = description_section.find_element_by_class_name('lt-line-clamp__raw-line').text
-    except NoSuchElementException:
-        description = ''
-
-    return description
-
-
 def get_education(background):
     edu_section = background.find_element(By.CSS_SELECTOR, '.pv-profile-section.education-section.ember-view')
     edu_ul = edu_section.find_element(
@@ -193,6 +166,33 @@ def get_education(background):
         })
 
     return edus
+
+
+def get_span_text(element, name):
+    return element.find_element(By.CSS_SELECTOR, name).find_elements_by_tag_name('span')[1].text.replace('–', '-')
+
+
+def get_optional_field(element, name):
+    try:
+        return get_span_text(element, name)
+    except NoSuchElementException:
+        return ''
+
+
+def get_description(element, name):
+    try:
+        description_section = element.find_element(By.CSS_SELECTOR, name)
+        more_btn_section = description_section.find_elements_by_class_name('lt-line-clamp__ellipsis')
+
+        if not more_btn_section or 'lt-line-clamp__ellipsis--dummy' in more_btn_section[0].get_attribute('class'):
+            description = description_section.text
+        else:
+            more_btn_section[0].find_element_by_class_name('lt-line-clamp__more').click()
+            description = description_section.find_element_by_class_name('lt-line-clamp__raw-line').text
+    except NoSuchElementException:
+        description = ''
+
+    return description
 
 
 if __name__ == '__main__':
