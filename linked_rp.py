@@ -26,12 +26,15 @@ def main():
     driver.find_element(
         By.CSS_SELECTOR,
         '.tap-target.profile-rail-card__actor-link.block.link-without-hover-visited.ember-view').click()
-    exp_section = WebDriverWait(driver, TIMEOUT).until(ec.presence_of_element_located((By.ID, 'oc-background-section')))
+    background = WebDriverWait(driver, TIMEOUT).until(ec.presence_of_element_located((By.ID, 'oc-background-section')))
 
-    summary = get_summary(driver)
-    experience = get_experience(driver, exp_section)
-    print(summary)
-    print(json.dumps(experience, indent=4))
+    profile = {
+        'summary': get_summary(driver),
+        'experience': get_experience(driver, background),
+        'education': get_education(background)
+    }
+
+    print(json.dumps(profile, indent=4))
 
     driver.quit()
 
@@ -54,15 +57,16 @@ def get_summary(driver):
         By.CSS_SELECTOR, '.pv-top-card-section__summary-text.text-align-left.mt4.ember-view').text
 
 
-def get_experience(driver, exp_section):
+def get_experience(driver, background):
     # Load experience section
-    driver.execute_script("arguments[0].scrollIntoView(true);", exp_section)
+    driver.execute_script("arguments[0].scrollIntoView(true);", background)
     time.sleep(1)
 
     # Locate individual experiences
-    exp_ul = exp_section.find_element(
-        By.CSS_SELECTOR, '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-no-more')
-    exp_divs = exp_ul.find_elements(
+    exp_section = background.find_element(
+        By.CSS_SELECTOR,
+        '.pv-profile-section.pv-profile-section--reorder-enabled.background-section.artdeco-container-card.ember-view')
+    exp_divs = exp_section.find_elements(
         By.CSS_SELECTOR, '.pv-entity__position-group-pager.pv-profile-section__list-item.ember-view')
     exps = []
 
@@ -156,6 +160,41 @@ def get_experience_description(element):
         description = ''
 
     return description
+
+
+def get_education(background):
+    edu_section = background.find_element(By.CSS_SELECTOR, '.pv-profile-section.education-section.ember-view')
+    edu_ul = edu_section.find_element(
+        By.CSS_SELECTOR,
+        '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-no-more.ember-view')
+    edus = []
+
+    for edu_li in edu_ul.find_elements_by_tag_name('li'):
+        school = edu_li.find_element(By.CSS_SELECTOR, '.pv-entity__school-name.t-16.t-black.t-bold').text
+        degree_name = get_span_text(
+            edu_li,
+            '.pv-entity__secondary-title.pv-entity__degree-name.pv-entity__secondary-title.t-14.t-black.t-normal')
+
+        try:
+            field = get_span_text(
+                edu_li,
+                '.pv-entity__secondary-title.pv-entity__fos.pv-entity__secondary-title.t-14.t-black--light.t-normal')
+            degree = f'{degree_name} - {field}'
+        except NoSuchElementException:
+            degree = degree_name
+
+        try:
+            dates = get_span_text(edu_li, '.pv-entity__dates.t-14.t-black--light.t-normal')
+        except NoSuchElementException:
+            dates = ''
+
+        edus.append({
+            'school': school,
+            'degree': degree,
+            'dates': dates
+        })
+
+    return edus
 
 
 if __name__ == '__main__':
