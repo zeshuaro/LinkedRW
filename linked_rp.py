@@ -31,7 +31,8 @@ def main():
         'experience': get_experience(driver, background),
         'education': get_education(background),
         'volunteering': get_volunteering(background),
-        'skills': get_skills(driver)
+        'skills': get_skills(driver),
+        'projects': get_projects(driver)
     }
 
     print(json.dumps(profile, indent=4))
@@ -224,15 +225,61 @@ def get_skills(driver):
     return skills
 
 
-def get_span_text(element, name):
-    return element.find_element_by_css_selector(name).find_elements_by_tag_name('span')[1].text.replace('–', '-')
+def get_projects(driver):
+    # Locate and expand projects section
+    section = driver.find_element_by_css_selector(
+        '.accordion-panel.pv-profile-section.pv-accomplishments-block.projects.ember-view')
+    section.find_element_by_xpath("//button[@aria-label='Expand projects section']").click()
+    section = driver.find_element_by_css_selector(
+        '.accordion-panel.pv-profile-section.pv-accomplishments-block.projects.pv-accomplishments-block--expanded.'
+        'ember-view')
 
-
-def get_optional_field(element, name):
+    # Show all projects
     try:
-        return get_span_text(element, name)
+        section.find_element_by_xpath("//button[@aria-controls='projects-accomplishment-list']").click()
     except NoSuchElementException:
-        return ''
+        pass
+
+    ul = section.find_element_by_css_selector(
+        '.pv-accomplishments-block__list.pv-accomplishments-block__list--has-more')
+    projects = []
+
+    for li in ul.find_elements_by_tag_name('li'):
+        name = li.find_element_by_class_name('pv-accomplishment-entity__title').text.replace('Project name', '').strip()
+        dates = get_optional_field(li, '.pv-accomplishment-entity__date.pv-accomplishment-entity__subtitle',
+                                   is_span=False)
+        description = get_description(li, '.pv-accomplishment-entity__description.t-14.t-black--light.t-normal')
+
+        try:
+            link = li.find_element_by_class_name('pv-accomplishment-entity__external-source').get_attribute('href')
+        except NoSuchElementException:
+            link = ''
+
+        projects.append({
+            'name': name,
+            'dates': dates,
+            'description': description,
+            'link': link
+        })
+
+    return projects
+
+
+def get_span_text(element, name):
+    return element.find_element_by_css_selector(name).find_elements_by_tag_name('span')[1].text
+
+
+def get_optional_field(element, name, is_span=True):
+    text = ''
+    try:
+        if is_span:
+            text = get_span_text(element, name)
+        else:
+            text = element.find_element_by_css_selector(name).text
+    except NoSuchElementException:
+        pass
+
+    return text.replace('–', '-')
 
 
 def get_description(element, name):
