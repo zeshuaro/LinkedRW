@@ -6,10 +6,9 @@ from utils import get_optional_text, get_optional_text_replace, get_description,
 
 def get_accomplishment_details(driver, section_type):
     # Check if the section exists
-    try:
-        section = driver.find_element_by_css_selector(
-            f'.accordion-panel.pv-profile-section.pv-accomplishments-block.{section_type}.ember-view')
-    except NoSuchElementException:
+    section = driver.find_element_by_css_selector(
+        f'.accordion-panel.pv-profile-section.pv-accomplishments-block.{section_type}.ember-view')
+    if 'display: none' in section.get_attribute('style'):
         return []
 
     if section_type in (PROJECTS, PUBLICATIONS):
