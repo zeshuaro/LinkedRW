@@ -32,7 +32,8 @@ def main():
         'summary': get_summary(driver),
         'experience': get_experience(driver, background),
         'education': get_education(background),
-        'volunteering': get_volunteering(background)
+        'volunteering': get_volunteering(background),
+        'skills': get_skills(driver)
     }
 
     print(json.dumps(profile, indent=4))
@@ -191,6 +192,42 @@ def get_volunteering(background):
         })
 
     return vols
+
+
+def get_skills(driver):
+    skills_section = driver.find_element(
+        By.CSS_SELECTOR, '.pv-profile-section.pv-skill-categories-section.artdeco-container-card.ember-view')
+
+    # Show all skills
+    try:
+        skills_section.find_element_by_class_name('pv-skills-section__chevron-icon').click()
+        time.sleep(1)
+    except NoSuchElementException:
+        pass
+
+    skills = []
+    for top_skill in skills_section.find_elements(
+            By.CSS_SELECTOR,
+            '.pv-skill-category-entity__top-skill.pv-skill-category-entity.pb3.pt4.pv-skill-endorsedSkill-entity.'
+            'relative.ember-view'):
+        skill = top_skill.find_element(By.CSS_SELECTOR, '.pv-skill-category-entity__name-text.t-16.t-black.t-bold').text
+        skills.append(skill)
+
+    target_div = None
+    for div in skills_section.find_elements(
+            By.CSS_SELECTOR, '.pv-skill-category-list.pv-profile-section__section-info.mb6.ember-view'):
+        header = div.find_element(
+            By.CSS_SELECTOR, '.pb2.t-16.t-black--light.t-normal.pv-skill-categories-section__secondary-skill-heading')
+
+        if header.text.lower() == 'tools & technologies':
+            target_div = div
+            break
+
+    if target_div is not None:
+        for li in target_div.find_elements_by_tag_name('li'):
+            skills.append(li.text)
+
+    return skills
 
 
 def get_span_text(element, name):
