@@ -2,7 +2,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 
 def get_span_text(element, name):
-    return element.find_element_by_css_selector(name).find_elements_by_tag_name('span')[1].text
+    return element.find_element_by_css_selector(name).find_elements_by_tag_name('span')[1].text.replace('–', '-')
 
 
 def get_optional_text(element, name, is_span=True):
@@ -11,11 +11,11 @@ def get_optional_text(element, name, is_span=True):
         if is_span:
             text = get_span_text(element, name)
         else:
-            text = element.find_element_by_css_selector(name).text
+            text = element.find_element_by_css_selector(name).text.replace('–', '-')
     except NoSuchElementException:
         pass
 
-    return text.replace('–', '-')
+    return text
 
 
 def get_optional_text_replace(element, name, text):
