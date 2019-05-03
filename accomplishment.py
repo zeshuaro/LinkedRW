@@ -11,7 +11,7 @@ def get_accomplishment_details(driver, section_type):
     if 'display: none' in section.get_attribute('style'):
         return []
 
-    if section_type in (PROJECTS, PUBLICATIONS, AWARDS):
+    if section_type in (PROJECTS, PUBLICATIONS, HONORS):
         # Expand the section
         section.find_element_by_xpath(f"//button[@aria-controls='{section_type}-expandable-content']").click()
         section = driver.find_element_by_css_selector(
@@ -30,8 +30,8 @@ def get_accomplishment_details(driver, section_type):
             return get_projects(ul)
         elif section_type == PUBLICATIONS:
             return get_publications(ul)
-        elif section_type == AWARDS:
-            return get_awards(ul)
+        elif section_type == HONORS:
+            return get_honors(ul)
     elif section_type == LANGUAGES:
         return get_languages(section)
 
@@ -74,7 +74,7 @@ def get_publications(ul):
     return publications
 
 
-def get_awards(ul):
+def get_honors(ul):
     awards = []
     for li in ul.find_elements_by_tag_name('li'):
         title = li.find_element_by_class_name('pv-accomplishment-entity__title').text.\
