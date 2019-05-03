@@ -49,7 +49,7 @@ def main():
             '.pv-profile-section.pv-skill-categories-section.artdeco-container-card.ember-view', SKILLS),
         'projects': get_accomplishment_details(driver, PROJECTS),
         'publications': get_accomplishment_details(driver, PUBLICATIONS),
-        'awards': get_accomplishment_details(driver, HONORS),
+        'honors': get_accomplishment_details(driver, HONORS),
         'languages': get_accomplishment_details(driver, LANGUAGES)
     }
 
