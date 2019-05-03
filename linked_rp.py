@@ -37,6 +37,7 @@ def main():
 
     profile = {
         'name': get_personal_details(driver, NAME),
+        'position': get_personal_details(driver, POSITION),
         'contact': get_personal_details(driver, CONTACT),
         'summary': get_personal_details(driver, SUMMARY),
         'experience': get_background_details(driver, By.ID, 'experience-section', EXPERIENCE),

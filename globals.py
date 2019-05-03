@@ -1,6 +1,7 @@
 TIMEOUT = 10
 
 NAME = 'name'
+POSITION = 'position'
 CONTACT = 'contact'
 SUMMARY = 'summary'
 EXPERIENCE = 'experience'

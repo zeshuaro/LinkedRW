@@ -1,3 +1,5 @@
+import re
+
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
@@ -9,10 +11,18 @@ from globals import *
 def get_personal_details(driver, section_type):
     if section_type == NAME:
         return driver.find_element_by_css_selector('.pv-top-card-section__name.inline.t-24.t-black.t-normal').text
+    elif section_type == POSITION:
+        return get_position(driver)
     elif section_type == CONTACT:
         return get_contact(driver)
     elif section_type == SUMMARY:
         return get_summary(driver)
+
+
+def get_position(driver):
+    position = driver.find_element_by_css_selector('.pv-top-card-section__headline.mt1.t-18.t-black.t-normal').text
+
+    return re.sub('\s+at.*', '', position)
 
 
 def get_contact(driver):
