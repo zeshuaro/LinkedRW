@@ -6,10 +6,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 
-from accomplishment import get_accomplishment_details
-from background import get_background_details
 from globals import *
-from personal import get_personal_details
+from scraper.accomplishment import get_accomplishment_details
+from scraper.background import get_background_details
+from scraper.personal import get_personal_details
 
 
 def main():
