@@ -36,21 +36,21 @@ def main():
     WebDriverWait(driver, TIMEOUT).until(ec.presence_of_element_located((By.ID, 'oc-background-section')))
 
     profile = {
-        'name': get_personal_details(driver, NAME),
-        'position': get_personal_details(driver, POSITION),
-        'contact': get_personal_details(driver, CONTACT),
-        'summary': get_personal_details(driver, SUMMARY),
-        'experience': get_background_details(driver, By.ID, 'experience-section', EXPERIENCE),
-        'education': get_background_details(driver, By.ID, 'education-section', EDUCATION),
-        'volunteering': get_background_details(
+        NAME: get_personal_details(driver, NAME),
+        POSITION: get_personal_details(driver, POSITION),
+        CONTACT: get_personal_details(driver, CONTACT),
+        SUMMARY: get_personal_details(driver, SUMMARY),
+        EXPERIENCE: get_background_details(driver, By.ID, 'experience-section', EXPERIENCE),
+        EDUCATION: get_background_details(driver, By.ID, 'education-section', EDUCATION),
+        VOLUNTEERING: get_background_details(
             driver, By.CSS_SELECTOR, '.pv-profile-section.volunteering-section.ember-view', VOLUNTEERING),
-        'skills': get_background_details(
+        SKILLS: get_background_details(
             driver, By.CSS_SELECTOR,
             '.pv-profile-section.pv-skill-categories-section.artdeco-container-card.ember-view', SKILLS),
-        'projects': get_accomplishment_details(driver, PROJECTS),
-        'publications': get_accomplishment_details(driver, PUBLICATIONS),
-        'honors': get_accomplishment_details(driver, HONORS),
-        'languages': get_accomplishment_details(driver, LANGUAGES)
+        PROJECTS: get_accomplishment_details(driver, PROJECTS),
+        PUBLICATIONS: get_accomplishment_details(driver, PUBLICATIONS),
+        HONORS: get_accomplishment_details(driver, HONORS),
+        LANGUAGES: get_accomplishment_details(driver, LANGUAGES)
     }
 
     driver.quit()

@@ -34,10 +34,10 @@ def get_contact(driver):
         find_element_by_tag_name('a').text
 
     try:
-        phone = driver.find_element_by_css_selector('.pv-contact-info__contact-type.ci-phone').\
+        mobile = driver.find_element_by_css_selector('.pv-contact-info__contact-type.ci-phone').\
             find_element_by_css_selector('.t-14.t-black.t-normal').text
     except NoSuchElementException:
-        phone = ''
+        mobile = ''
 
     try:
         address = driver.find_element_by_css_selector('.pv-contact-info__contact-type.ci-address').\
@@ -68,17 +68,19 @@ def get_contact(driver):
 
     driver.find_element_by_class_name('artdeco-dismiss').click()
     results = {
-        'phone': phone,
-        'address': address,
-        'email': email,
-        'linkedin': linkedin_id,
-        'github': github,
-        'gitlab': gitlab,
-        'stackoverflow': stackoverflow,
-        'twitter': twitter,
-        'reddit': reddit,
-        'medium': medium,
-        'scholar': scholar
+        ADDRESS: address,
+        MOBILE: mobile,
+        EMAIL: email,
+        HOMEPAGE: '',
+        GITHUB: github,
+        LINKEDIN: linkedin_id,
+        GITLAB: gitlab,
+        STACKOVERFLOW: stackoverflow,
+        TWITTER: twitter,
+        SKYPE: '',
+        REDDIT: reddit,
+        MEDIUM: medium,
+        GOOGLE_SCHOLAR: scholar
     }
 
     return results
