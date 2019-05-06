@@ -9,28 +9,28 @@ def main():
     with open('../profile.json') as f:
         profile = json.load(f)
 
-    resume = []
+    make_resume_main(profile)
+    for section in RESUME_SECTIONS:
+        make_resume_section(profile, section)
+
+
+def make_resume_main(profile):
+    lines = []
     with open('resume_template.tex') as f:
         for line in f:
             line = line.strip()
             if 'personal-info-here' in line:
-                resume += make_personal_info(profile)
+                lines += make_personal_info(profile)
             elif 'resume-content-here' in line:
-                resume += make_resume_content(profile)
+                lines += make_resume_content(profile)
             else:
                 if line.startswith('\\makecvfooter'):
                     line += f'{{\\today}}{{{profile["name"]}~~~·~~~Resume}}{{\\thepage}}'
 
-                resume.append(line)
+                lines.append(line)
 
     with open('resume.tex', 'w') as f:
-        f.write('\n'.join(resume))
-
-    make_resume_section_grouped(profile, EDUCATION)
-    make_resume_section_grouped(profile, EXPERIENCE)
-    make_resume_section_grouped(profile, VOLUNTEERING)
-    make_resume_section_ungrouped(profile, HONORS)
-    make_resume_section_ungrouped(profile, PROJECTS)
+        f.write('\n'.join(lines))
 
 
 def make_personal_info(profile):
@@ -131,11 +131,11 @@ def make_resume_section_grouped(profile, section):
                 else:
                     lines.append(f'{INDENT * 2}{{}}')
 
+    return lines
+
 
 def make_resume_section_ungrouped(profile, section):
-    title = 'Honors \\& Awards' if section == HONORS else section.title()
-    lines = [f'\\cvsection{{{title}}}\n', '\\begin{cventries}']
-
+    lines = []
     for entry in profile[section]:
         lines.append(f'{INDENT}\\cventry')
         for key in SECTION_ITEMS[section]:
@@ -156,6 +156,8 @@ def make_resume_section_ungrouped(profile, section):
                 lines.append(f'{INDENT * 2}{{{entry[key]}}} % {key}')
             else:
                 lines.append(f'{INDENT * 2}{{}}')
+
+    return lines
 
 
 if __name__ == '__main__':
