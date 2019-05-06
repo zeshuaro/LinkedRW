@@ -7,13 +7,13 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 
 from globals import *
-from scraper.accomplishment import get_accomplishment_details
-from scraper.background import get_background_details
-from scraper.personal import get_personal_details
+from accomplishment import get_accomplishment_details
+from background import get_background_details
+from personal import get_personal_details
 
 
 def main():
-    with open('config.json') as f:
+    with open('../config.json') as f:
         credentials = json.load(f)
 
     driver = webdriver.Chrome()

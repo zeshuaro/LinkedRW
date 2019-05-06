@@ -64,12 +64,12 @@ def get_single_role(div, summary):
     description = get_description(div, '.pv-entity__description.t-14.t-black.t-normal.ember-view')
 
     results = {
-        'company': company,
-        'roles': [{
-            'title': title,
-            'dates': dates,
-            'location': location,
-            'description': description
+        COMPANY: company,
+        ROLES: [{
+            TITLE: title,
+            DATES: dates,
+            LOCATION: location,
+            DESCRIPTION: description
         }]
     }
 
@@ -94,15 +94,15 @@ def get_multiple_roles(div, summary):
         description = get_description(role_section, '.pv-entity__description.t-14.t-black.t-normal.ember-view')
 
         roles.append({
-            'title': title,
-            'dates': dates,
-            'location': location,
-            'description': description
+            TITLE: title,
+            DATES: dates,
+            LOCATION: location,
+            DESCRIPTION: description
         })
 
     results = {
-        'company': company,
-        'roles': roles
+        COMPANY: company,
+        ROLES: roles
     }
 
     return results
@@ -135,10 +135,10 @@ def get_education(section):
         description = get_description(li, '.pv-entity__description.t-14.t-black--light.t-normal.mt4')
 
         edus.append({
-            'school': school,
-            'degree': degree,
-            'dates': dates,
-            'description': description
+            SCHOOL: school,
+            DEGREE: degree,
+            DATES: dates,
+            DESCRIPTION: description
         })
 
     return edus
@@ -157,10 +157,10 @@ def get_volunteering(section):
         description = get_description(li, '.pv-entity__description.t-14.t-black--light.t-normal.mt4')
 
         vols.append({
-            'role': role,
-            'organisation': organisation,
-            'dates': dates,
-            'description': description
+            ROLE: role,
+            ORGANISATION: organisation,
+            DATES: dates,
+            DESCRIPTION: description
         })
 
     return vols

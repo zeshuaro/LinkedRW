@@ -46,10 +46,10 @@ def get_projects(ul):
         link = get_accomplishment_link(li)
 
         projects.append({
-            'name': name,
-            'dates': dates,
-            'description': description,
-            'link': link
+            NAME: name,
+            DATES: dates,
+            DESCRIPTION: description,
+            LINK: link
         })
 
     return projects
@@ -65,10 +65,10 @@ def get_publications(ul):
         link = get_accomplishment_link(li)
 
         publications.append({
-            'title': title,
-            'date': date,
-            'publisher': publisher,
-            'link': link
+            TITLE: title,
+            DATE: date,
+            PUBLISHER: publisher,
+            LINK: link
         })
 
     return publications
@@ -83,9 +83,9 @@ def get_honors(ul):
         issuer = get_optional_text_replace(li, 'pv-accomplishment-entity__issuer', 'honor issuer')
 
         awards.append({
-            'title': title,
-            'date': date,
-            'issuer': issuer
+            TITLE: title,
+            DATE: date,
+            ISSUER: issuer
         })
 
     return awards

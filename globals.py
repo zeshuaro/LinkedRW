@@ -1,4 +1,5 @@
 TIMEOUT = 10
+INDENT = '  '
 
 NAME = 'name'
 POSITION = 'position'
@@ -27,7 +28,21 @@ REDDIT = 'reddit'
 MEDIUM = 'medium'
 GOOGLE_SCHOLAR = 'googlescholar'
 
+DATES = 'dates'
+LOCATION = 'location'
+DESCRIPTION = 'description'
+SCHOOL = 'school'
+DEGREE = 'degree'
+COMPANY = 'company'
+TITLE = 'title'
+ROLES = 'roles'
+ROLE = 'role'
+ORGANISATION = 'organisation'
+DATE = 'date'
+LINK = 'link'
+PUBLISHER = 'publisher'
+ISSUER = 'issuer'
+
 PERSONAL_INFO = [NAME, POSITION, ADDRESS, MOBILE, EMAIL, HOMEPAGE, GITHUB, LINKEDIN, GITLAB, STACKOVERFLOW, TWITTER,
                  SKYPE, REDDIT, MEDIUM, GOOGLE_SCHOLAR]
-
 RESUME_CONTENT = [EDUCATION, EXPERIENCE, HONORS, PROJECTS, VOLUNTEERING, SKILLS]
