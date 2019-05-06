@@ -26,10 +26,11 @@ def main():
     with open('resume.tex', 'w') as f:
         f.write('\n'.join(resume))
 
-    make_resume_section(profile, EDUCATION)
-    make_resume_section(profile, HONORS)
-    make_resume_section(profile, PROJECTS)
-    make_resume_section(profile, VOLUNTEERING)
+    make_resume_section_grouped(profile, EDUCATION)
+    make_resume_section_grouped(profile, EXPERIENCE)
+    make_resume_section_grouped(profile, VOLUNTEERING)
+    make_resume_section_ungrouped(profile, HONORS)
+    make_resume_section_ungrouped(profile, PROJECTS)
 
 
 def make_personal_info(profile):
@@ -89,34 +90,72 @@ def make_resume_content(profile):
 
 
 def make_resume_section(profile, section):
-    title = 'Honors \\& Awards' if section == HONORS else section.capitalize()
+    title = 'Honors \\& Awards' if section == HONORS else section.title()
+    lines = [f'\\cvsection{{{title}}}\n', '\\begin{cventries}']
+
+    if section in (EDUCATION, EXPERIENCE, VOLUNTEERING):
+        lines += make_resume_section_grouped(profile, section)
+    else:
+        lines += make_resume_section_ungrouped(profile, section)
+
+    lines.append('\\end{cventries}')
+    with open(f'{section}.tex', 'w') as f:
+        f.write('\n'.join(lines))
+
+
+def make_resume_section_grouped(profile, section):
+    lines = []
+    for entry in profile[section]:
+        lines.append(f'{INDENT}\\cventry')
+        name = entry[NAME]
+
+        for i, item in enumerate(entry[ENTRIES]):
+            for key in SECTION_ITEMS[section]:
+                if key == NAME and i == 0:
+                    lines.append(f'{INDENT * 2}{{{name}}} % {NAME}')
+                elif key == DESCRIPTION:
+                    if item[key]:
+                        lines.append(f'{INDENT * 2}{{')
+                        lines.append(f'{INDENT * 3}\\begin{{cvitems}}')
+
+                        for description in item[key].split('\n'):
+                            description = description.strip('-').strip()
+                            lines.append(f'{INDENT * 4}\\item{{{description}}}')
+
+                        lines.append(f'{INDENT * 3}\\end{{cvitems}}')
+                        lines.append(f'{INDENT * 2}}}\n')
+                    else:
+                        lines.append(f'{INDENT * 2}{{}} % {key}\n')
+                elif key and key != NAME:
+                    lines.append(f'{INDENT * 2}{{{item[key]}}} % {key}')
+                else:
+                    lines.append(f'{INDENT * 2}{{}}')
+
+
+def make_resume_section_ungrouped(profile, section):
+    title = 'Honors \\& Awards' if section == HONORS else section.title()
     lines = [f'\\cvsection{{{title}}}\n', '\\begin{cventries}']
 
     for entry in profile[section]:
         lines.append(f'{INDENT}\\cventry')
-        for item in SECTION_ITEMS[section]:
-            if item == DESCRIPTION:
-                if entry[item]:
+        for key in SECTION_ITEMS[section]:
+            if key == DESCRIPTION:
+                if entry[key]:
                     lines.append(f'{INDENT * 2}{{')
                     lines.append(f'{INDENT * 3}\\begin{{cvitems}}')
 
-                    for description in entry[item].split('\n'):
+                    for description in entry[key].split('\n'):
                         description = description.strip('-').strip()
                         lines.append(f'{INDENT * 4}\\item{{{description}}}')
 
                     lines.append(f'{INDENT * 3}\\end{{cvitems}}')
                     lines.append(f'{INDENT * 2}}}\n')
                 else:
-                    lines.append(f'{INDENT * 2}{{}} % {item}\n')
-            elif item:
-                lines.append(f'{INDENT * 2}{{{entry[item]}}} % {item}')
+                    lines.append(f'{INDENT * 2}{{}} % {key}\n')
+            elif key:
+                lines.append(f'{INDENT * 2}{{{entry[key]}}} % {key}')
             else:
                 lines.append(f'{INDENT * 2}{{}}')
-
-    lines.append('\\end{cventries}')
-
-    with open(f'{section}.tex', 'w') as f:
-        f.write('\n'.join(lines))
 
 
 if __name__ == '__main__':
