@@ -65,7 +65,7 @@ def get_single_role(div, summary):
     description = get_description(div, '.pv-entity__description.t-14.t-black.t-normal.ember-view')
 
     results = {
-        COMPANY: company,
+        NAME: company,
         ENTRIES: [{
             TITLE: title,
             DATES: dates,
@@ -102,7 +102,7 @@ def get_multiple_roles(div, summary):
         })
 
     results = {
-        COMPANY: company,
+        NAME: company,
         ENTRIES: roles
     }
 
@@ -144,7 +144,7 @@ def get_education(section):
     edu_list = []
     for school in edu_dict:
         edu_list.append({
-            SCHOOL: school,
+            NAME: school,
             ENTRIES: edu_dict[school]
         })
 
@@ -173,7 +173,7 @@ def get_volunteering(section):
     vol_list = []
     for organisation in vol_dict:
         vol_list.append({
-            ORGANISATION: organisation,
+            NAME: organisation,
             ENTRIES: vol_dict[organisation]
         })
 
