@@ -6,7 +6,7 @@ from globals import *
 
 
 def main():
-    with open('profile.json') as f:
+    with open('../profile.json') as f:
         profile = json.load(f)
 
     resume = []
@@ -19,12 +19,17 @@ def main():
                 resume += make_resume_content(profile)
             else:
                 if line.startswith('\\makecvfooter'):
-                    line = f'\\makecvfooter{{\\today}}{{{profile["name"]}~~~·~~~Resume}}{{\\thepage}}'
+                    line += f'{{\\today}}{{{profile["name"]}~~~·~~~Resume}}{{\\thepage}}'
 
                 resume.append(line)
 
     with open('resume.tex', 'w') as f:
         f.write('\n'.join(resume))
+
+    make_resume_section(profile, EDUCATION)
+    make_resume_section(profile, HONORS)
+    make_resume_section(profile, PROJECTS)
+    make_resume_section(profile, VOLUNTEERING)
 
 
 def make_personal_info(profile):
@@ -81,6 +86,37 @@ def make_resume_content(profile):
             lines.append(f'\\input{{{section}.tex}}')
 
     return lines
+
+
+def make_resume_section(profile, section):
+    title = 'Honors \\& Awards' if section == HONORS else section.capitalize()
+    lines = [f'\\cvsection{{{title}}}\n', '\\begin{cventries}']
+
+    for entry in profile[section]:
+        lines.append(f'{INDENT}\\cventry')
+        for key in RESUME_KEYS[section]:
+            if key == DESCRIPTION:
+                if entry[key]:
+                    lines.append(f'{INDENT * 2}{{')
+                    lines.append(f'{INDENT * 3}\\begin{{cvitems}}')
+
+                    for description in entry[key].split('\n'):
+                        description = description.strip('-').strip()
+                        lines.append(f'{INDENT * 4}\\item{{{description}}}')
+
+                    lines.append(f'{INDENT * 3}\\end{{cvitems}}')
+                    lines.append(f'{INDENT * 2}}}\n')
+                else:
+                    lines.append(f'{INDENT * 2}{{}} % {key}\n')
+            elif key:
+                lines.append(f'{INDENT * 2}{{{entry[key]}}} % {key}')
+            else:
+                lines.append(f'{INDENT * 2}{{}}')
+
+    lines.append('\\end{cventries}')
+
+    with open(f'{section}.tex', 'w') as f:
+        f.write('\n'.join(lines))
 
 
 if __name__ == '__main__':
