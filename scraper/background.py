@@ -161,6 +161,7 @@ def get_volunteering(section):
             TITLE: title,
             ORGANISATION: organisation,
             DATES: dates,
+            LOCATION: '',
             DESCRIPTION: description
         })
 
