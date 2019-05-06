@@ -47,24 +47,26 @@ def get_contact(driver):
 
     # Extract social media
     github = gitlab = stackoverflow = twitter = reddit = medium = scholar = ''
-    websites_section = driver.find_element_by_css_selector('.pv-contact-info__contact-type.ci-websites')
-
-    for li in websites_section.find_elements_by_tag_name('li'):
-        link = li.find_element_by_tag_name('a').get_attribute('href')
-        if 'github.com' in link:
-            github = link
-        elif 'scholar.google.com' in link:
-            scholar = link
-        elif 'gitlab.com' in link:
-            gitlab = link
-        elif 'stackoverflow.com' in link:
-            stackoverflow = link
-        elif 'twitter.com' in link:
-            twitter = link
-        elif 'reddit' in link:
-            reddit = link
-        elif 'medium.com' in link:
-            medium = link
+    try:
+        websites_section = driver.find_element_by_css_selector('.pv-contact-info__contact-type.ci-websites')
+        for li in websites_section.find_elements_by_tag_name('li'):
+            link = li.find_element_by_tag_name('a').get_attribute('href')
+            if 'github.com' in link:
+                github = link
+            elif 'scholar.google.com' in link:
+                scholar = link
+            elif 'gitlab.com' in link:
+                gitlab = link
+            elif 'stackoverflow.com' in link:
+                stackoverflow = link
+            elif 'twitter.com' in link:
+                twitter = link
+            elif 'reddit' in link:
+                reddit = link
+            elif 'medium.com' in link:
+                medium = link
+    except NoSuchElementException:
+        pass
 
     driver.find_element_by_class_name('artdeco-dismiss').click()
     results = {
