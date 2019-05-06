@@ -94,22 +94,22 @@ def make_resume_section(profile, section):
 
     for entry in profile[section]:
         lines.append(f'{INDENT}\\cventry')
-        for key in RESUME_KEYS[section]:
-            if key == DESCRIPTION:
-                if entry[key]:
+        for item in SECTION_ITEMS[section]:
+            if item == DESCRIPTION:
+                if entry[item]:
                     lines.append(f'{INDENT * 2}{{')
                     lines.append(f'{INDENT * 3}\\begin{{cvitems}}')
 
-                    for description in entry[key].split('\n'):
+                    for description in entry[item].split('\n'):
                         description = description.strip('-').strip()
                         lines.append(f'{INDENT * 4}\\item{{{description}}}')
 
                     lines.append(f'{INDENT * 3}\\end{{cvitems}}')
                     lines.append(f'{INDENT * 2}}}\n')
                 else:
-                    lines.append(f'{INDENT * 2}{{}} % {key}\n')
-            elif key:
-                lines.append(f'{INDENT * 2}{{{entry[key]}}} % {key}')
+                    lines.append(f'{INDENT * 2}{{}} % {item}\n')
+            elif item:
+                lines.append(f'{INDENT * 2}{{{entry[item]}}} % {item}')
             else:
                 lines.append(f'{INDENT * 2}{{}}')
 
