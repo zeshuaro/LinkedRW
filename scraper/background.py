@@ -137,6 +137,7 @@ def get_education(section):
         edus.append({
             SCHOOL: school,
             DEGREE: degree,
+            LOCATION: '',
             DATES: dates,
             DESCRIPTION: description
         })
@@ -150,14 +151,14 @@ def get_volunteering(section):
     vols = []
 
     for li in ul.find_elements_by_tag_name('li'):
-        role = li.find_element_by_css_selector('.t-16.t-black.t-bold').text
+        title = li.find_element_by_css_selector('.t-16.t-black.t-bold').text
         organisation = get_span_text(li, '.t-14.t-black.t-normal')
         dates = get_optional_text(
             li, '.pv-entity__date-range.detail-facet.inline-block.t-14.t-black--light.t-normal')
         description = get_description(li, '.pv-entity__description.t-14.t-black--light.t-normal.mt4')
 
         vols.append({
-            ROLE: role,
+            TITLE: title,
             ORGANISATION: organisation,
             DATES: dates,
             DESCRIPTION: description
