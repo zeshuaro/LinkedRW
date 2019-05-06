@@ -1,5 +1,6 @@
 import time
 
+from collections import defaultdict
 from selenium.common.exceptions import NoSuchElementException
 
 from globals import *
@@ -65,7 +66,7 @@ def get_single_role(div, summary):
 
     results = {
         COMPANY: company,
-        ROLES: [{
+        ENTRIES: [{
             TITLE: title,
             DATES: dates,
             LOCATION: location,
@@ -102,7 +103,7 @@ def get_multiple_roles(div, summary):
 
     results = {
         COMPANY: company,
-        ROLES: roles
+        ENTRIES: roles
     }
 
     return results
@@ -116,11 +117,13 @@ def get_education(section):
         ul = section.find_element_by_css_selector(
             '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-no-more')
 
-    edus = []
+    edu_dict = defaultdict(list)
     for li in ul.find_elements_by_tag_name('li'):
         school = li.find_element_by_css_selector('.pv-entity__school-name.t-16.t-black.t-bold').text
         degree_name = get_span_text(
             li, '.pv-entity__secondary-title.pv-entity__degree-name.pv-entity__secondary-title.t-14.t-black.t-normal')
+        dates = get_optional_text(li, '.pv-entity__dates.t-14.t-black--light.t-normal')
+        description = get_description(li, '.pv-entity__description.t-14.t-black--light.t-normal.mt4')
 
         # Check for field of study
         try:
@@ -131,24 +134,27 @@ def get_education(section):
         except NoSuchElementException:
             degree = degree_name
 
-        dates = get_optional_text(li, '.pv-entity__dates.t-14.t-black--light.t-normal')
-        description = get_description(li, '.pv-entity__description.t-14.t-black--light.t-normal.mt4')
-
-        edus.append({
-            SCHOOL: school,
+        edu_dict[school].append({
             DEGREE: degree,
             LOCATION: '',
             DATES: dates,
             DESCRIPTION: description
         })
 
-    return edus
+    edu_list = []
+    for school in edu_dict:
+        edu_list.append({
+            SCHOOL: school,
+            ENTRIES: edu_dict[school]
+        })
+
+    return edu_list
 
 
 def get_volunteering(section):
     ul = section.find_element_by_css_selector(
         '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-no-more.ember-view')
-    vols = []
+    vol_dict = defaultdict(list)
 
     for li in ul.find_elements_by_tag_name('li'):
         title = li.find_element_by_css_selector('.t-16.t-black.t-bold').text
@@ -157,15 +163,21 @@ def get_volunteering(section):
             li, '.pv-entity__date-range.detail-facet.inline-block.t-14.t-black--light.t-normal')
         description = get_description(li, '.pv-entity__description.t-14.t-black--light.t-normal.mt4')
 
-        vols.append({
+        vol_dict[organisation].append({
             TITLE: title,
-            ORGANISATION: organisation,
             DATES: dates,
             LOCATION: '',
             DESCRIPTION: description
         })
 
-    return vols
+    vol_list = []
+    for organisation in vol_dict:
+        vol_list.append({
+            ORGANISATION: organisation,
+            ENTRIES: vol_dict[organisation]
+        })
+
+    return vol_list
 
 
 def get_skills(section):
