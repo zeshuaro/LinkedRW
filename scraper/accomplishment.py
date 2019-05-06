@@ -86,6 +86,7 @@ def get_honors(ul):
         awards.append({
             TITLE: title,
             DATE: date,
+            LOCATION: '',
             ISSUER: issuer
         })
 
