@@ -1,2 +1,4 @@
+beautifulsoup4==4.7.1
 habanero==0.6.2
+requests==2.21.0
 selenium==3.141.0
