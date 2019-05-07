@@ -11,16 +11,56 @@ def main():
     with open('../profile.json') as f:
         profile = json.load(f)
 
-    has_publications = make_publication_section(profile)
+    make_skill_section(profile[SKILLS], profile[LANGUAGES])
+    has_publications = make_publication_section(profile[PUBLICATIONS])
     make_resume_main(profile, has_publications)
 
     for section in RESUME_SECTIONS:
         make_resume_section(profile, section)
 
 
-def make_publication_section(profile):
-    if profile[PUBLICATIONS]:
-        references = make_references(profile[PUBLICATIONS])
+def make_skill_section(skills, languages):
+    if skills or languages:
+        lines = [f'\\cvsection{{{SKILLS}}}\n', '\\begin{cvskills}']
+
+        if skills:
+            prog_languages = set()
+            with open('../utils/prog_languages.txt') as f:
+                for line in f:
+                    prog_languages.add(line.strip())
+
+            prog = []
+            tech = []
+
+            for skill in skills:
+                if skill.lower() in prog_languages:
+                    prog.append(skill)
+                else:
+                    tech.append(skill)
+
+            lines += make_skill_subsection(prog, 'Programming')
+            lines += make_skill_subsection(tech, 'Technologies')
+
+        lines += make_skill_subsection(languages, 'Languages')
+        lines.append('\\end{cvskills}')
+
+        with open(f'{SKILLS}.tex', 'w') as f:
+            f.write('\n'.join(lines))
+
+
+def make_skill_subsection(skills, skills_type):
+    lines = []
+    if skills:
+        lines.append(f'{INDENT}\\cvskill')
+        lines.append(f'{INDENT * 2}{{{skills_type}}}')
+        lines.append(f'{INDENT * 2}{{{", ".join(skills)}}}')
+
+    return lines
+
+
+def make_publication_section(publications):
+    if publications:
+        references = make_references(publications)
         lines = [f'\\cvsection{{{PUBLICATIONS.title()}}}\n', '\\begin{refsection}']
 
         for reference in references:
@@ -62,7 +102,7 @@ def make_references(publications):
 
         reference = cn.content_negotiation(doi)
         lines.append(reference)
-        references.append(re.sub('^@.*\{', '', reference.split('\n')[0]).strip(','))
+        references.append(re.sub('^@.*{', '', reference.split('\n')[0]).strip(','))
 
     with open('references.bib', 'w') as f:
         f.write('\n\n'.join(lines))
