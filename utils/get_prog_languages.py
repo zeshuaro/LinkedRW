@@ -1,3 +1,4 @@
+import re
 import requests
 
 from bs4 import BeautifulSoup
@@ -13,7 +14,11 @@ def main():
         divs = soup.find_all('div', {'class': 'div-col columns column-width'})
 
         for div in divs:
-            languages += [x.text.lower() for x in div.find_all('li')]
+            for li in div.find_all('li'):
+                language = li.text.strip().lower()
+                language = re.sub('\s+\(.*', '', language)
+                language = re.sub('\s+–.*', '', language)
+                languages.append(language)
 
     with open('prog_languages.txt', 'w') as f:
         f.write('\n'.join(languages))

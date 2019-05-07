@@ -9,7 +9,7 @@ abset
 absys
 acc
 accent
-ace dasl (distributed application specification language)
+ace dasl
 acl2
 act-iii
 action!
@@ -63,7 +63,7 @@ basic
 bc
 bcpl
 beanshell
-batch file (windows/msdos)
+batch file
 bertrand
 beta
 bliss
@@ -71,17 +71,17 @@ blockly
 bloop
 boo
 boomerang
-bourne shell (including bash and ksh)
+bourne shell
 bpel
 business basic
 c
 c--
-c++ (c plus plus) – iso/iec 14882
+c++
 c*
-c# – iso/iec 23270
+c#
 c/al
 caché objectscript
- c shell (csh)
+c shell
 caml
 cayenne
 cduce
@@ -101,7 +101,7 @@ chomski
 chuck
 cilk
 citrine
-cl (ibm)
+cl
 claire
 clarion
 clean
@@ -111,19 +111,19 @@ clist
 clojure
 clu
 cms-2
-cobol – iso/iec 1989
-cobolscript – cobol scripting language
+cobol
+cobolscript
 cobra
 coffeescript
 coldfusion
 comal
-combined programming language (cpl)
+combined programming language
 comit
-common intermediate language (cil)
-common lisp (also known as cl)
+common intermediate language
+common lisp
 compass
 component pascal
-constraint handling rules (chr)
+constraint handling rules
 comtran
 cool
 coq
@@ -132,7 +132,7 @@ corvision
 cowsel
 cpl
 cryptol
- crystal
+crystal
 csound
 csp
 cuneiform
@@ -143,7 +143,7 @@ cyclone
 cython
 css
 d
-dasl (datapoint's advanced systems language)
+dasl
 dart
 darwin
 dataflex
@@ -160,7 +160,7 @@ dragon
 drakon
 dylan
 dynamo
-dax (data analysis expressions)
+dax
 e
 ease
 easy pl/i
@@ -176,8 +176,8 @@ elm
 emacs lisp
 emerald
 epigram
- epl (easy programming language)
- epl (eltron programming language)
+epl
+epl
 erlang
 es
 escher
@@ -188,7 +188,7 @@ euclid
 euler
 euphoria
 euslisp robot programming language
-cms exec (exec)
+cms exec
 exec 2
 executable uml
 ezhil
@@ -211,7 +211,7 @@ foil
 formac
 @formula
 forth
-fortran – iso/iec 1539
+fortran
 fortress
 foxpro
 fp
@@ -234,7 +234,7 @@ go!
 goal
 gödel
 golo
-gom (good old mad)
+gom
 google apps script
 gosu
 gotran
@@ -246,7 +246,7 @@ groovy
 hack
 haggis
 hal/s
-halide (programming language)
+halide
 hamilton c shell
 harbour
 hartmann pipelines
@@ -278,8 +278,8 @@ j#
 j++
 jade
 jal
-janus (concurrent constraint programming language)
-janus (time-reversible computing programming language)
+janus
+janus
 jass
 java
 javafx script
@@ -307,9 +307,9 @@ kojo
 kotlin
 krc
 krl
-krl (kuka robot language)
+krl
 krypton
-korn shell (ksh)
+korn shell
 kodu
 kv
 labview
@@ -329,7 +329,7 @@ lingo
 linq
 lis
 lisa
-lisp – iso/iec 13816
+lisp
 lite-c
 lithe
 little b
@@ -347,39 +347,39 @@ lucid
 lustre
 lyapas
 lynx
-m (alternative name for the mumps programming language)
+m
 m2001
 m4
 m#
 machine code
-mad (michigan algorithm decoder)
+mad
 mad/i
 magik
 magma
 make
 maude system
 maple
-mapper (now part of bis)
-mark-iv (now vision:builder)
+mapper
+mark-iv
 mary
 masm microsoft assembly x86
 math-matic
 mathematica
 matlab
-maxima (see also macsyma)
-max (max msp – graphical programming environment)
+maxima
+max
 maxscript internal language 3d studio max
-maya (mel)
+maya
 mdl
 mercury
 mesa
 metafont
-metaquotes language (mql4/mql5)
-mheg-5 (interactive tv programming language)
+metaquotes language
+mheg-5
 microcode
 microscript
 miis
-milk (programming language)
+milk
 mimic
 mirah
 miranda
@@ -396,12 +396,12 @@ mortran
 mouse
 mpd
 mathcad
-msil – deprecated name for cil
+msil
 msl
 mumps
 mupad
 mutan
-mystic programming language (mpl)
+mystic programming language
 nasm
 napier88
 neko
@@ -416,11 +416,11 @@ newspeak
 newtonscript
 nial
 nice
-nickle (nitin)
+nickle
 nim
 npl
-not exactly c (nxc)
-not quite c (nqc)
+not exactly c
+not quite c
 nsis
 nu
 nwscript
@@ -459,9 +459,9 @@ oz
 p
 p4
 p′′
-parasail (programming language)
+parasail
 pari/gp
-pascal – iso 7185
+pascal
 pcastl
 pcf
 pearl
@@ -474,7 +474,7 @@ php
 pico
 picolisp
 pict
-pig (programming tool)
+pig
 pike
 pikt
 pilot
@@ -484,7 +484,7 @@ pl-11
 pl/0
 pl/b
 pl/c
-pl/i – iso 6160
+pl/i
 pl/m
 pl/p
 pl/sql
@@ -501,7 +501,7 @@ postscript
 portable
 pov-ray sdl
 powerhouse
-powerbuilder – 4gl gui application generator from sybase
+powerbuilder
 powershell
 ppl
 processing
@@ -519,8 +519,8 @@ pure
 purebasic
 pure data
 python
-q (programming language from kx systems)
-q# (microsoft programming language)
+q
+q#
 qalb
 qtscript
 quakec
@@ -589,7 +589,7 @@ smalltalk
 sml
 strongtalk
 snap!
-snobol (spitbol)
+snobol
 snowball
 sol
 solidity
@@ -614,8 +614,8 @@ subtext
 sbl
 supercollider
 supertalk
-swift (apple programming language)
-swift (parallel scripting language)
+swift
+swift
 sympl
 systemverilog
 t
@@ -683,12 +683,12 @@ x10
 xbase
 xbase++
 xbl
-xc (targets xmos architecture)
+xc
 xharbour
 xl
 xojo
 xotcl
-xod (programming language)
+xod
 xpath
 xpl
 xpl0
