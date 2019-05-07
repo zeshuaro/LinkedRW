@@ -1,5 +1,7 @@
 import json
+import re
 
+from habanero import Crossref, cn
 from urllib.parse import urlparse
 
 from globals import *
@@ -9,12 +11,66 @@ def main():
     with open('../profile.json') as f:
         profile = json.load(f)
 
-    make_resume_main(profile)
+    has_publications = make_publication_section(profile)
+    make_resume_main(profile, has_publications)
+
     for section in RESUME_SECTIONS:
         make_resume_section(profile, section)
 
 
-def make_resume_main(profile):
+def make_publication_section(profile):
+    if profile[PUBLICATIONS]:
+        references = make_references(profile[PUBLICATIONS])
+        lines = [f'\\cvsection{{{PUBLICATIONS.title()}}}\n', '\\begin{refsection}']
+
+        for reference in references:
+            lines.append(f'{INDENT}\\nocite{{{reference}}}')
+
+        lines.append(f'{INDENT}\\printbibligraphy[heading=none]')
+        lines.append('\\end{refsection}')
+
+        with open(f'{PUBLICATIONS}.tex', 'w') as f:
+            f.write('\n'.join(lines))
+
+        return True
+
+    return False
+
+
+def make_references(publications):
+    cr = Crossref()
+    lines = []
+    references = []
+
+    for i, publication in enumerate(publications):
+        print(f'Querying and formatting {i + 1} out of {len(publications)} publications...')
+        link = publication[LINK]
+
+        if link and 'doi.org' in link:
+            doi = urlparse(link).path.strip('/')
+        else:
+            title = publication[TITLE]
+            results = cr.works(query_title=title, limit=1)
+
+            if results['message']['total-results'] == 0 or \
+                    results['message']['items'][0]['title'][0].lower() != title.lower():
+                print(f'Could not find the doi for "{title}"')
+
+                continue
+
+            doi = results['message']['items'][0]['DOI']
+
+        reference = cn.content_negotiation(doi)
+        lines.append(reference)
+        references.append(re.sub('^@.*\{', '', reference.split('\n')[0]).strip(','))
+
+    with open('references.bib', 'w') as f:
+        f.write('\n\n'.join(lines))
+
+    return references
+
+
+def make_resume_main(profile, has_publications):
     lines = []
     with open('resume_template.tex') as f:
         for line in f:
@@ -23,6 +79,8 @@ def make_resume_main(profile):
                 lines += make_personal_info(profile)
             elif 'resume-content-here' in line:
                 lines += make_resume_content(profile)
+            elif 'addbibresource' in line and has_publications:
+                lines.append(line.lstrip('% '))
             else:
                 if line.startswith('\\makecvfooter'):
                     line += f'{{\\today}}{{{profile["name"]}~~~·~~~Resume}}{{\\thepage}}'
