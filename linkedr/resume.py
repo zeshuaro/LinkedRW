@@ -5,7 +5,7 @@ from globals import *
 
 def make_resume_main(profile, has_publications):
     lines = []
-    with open('resume_template.tex') as f:
+    with open(RESUME_TEMPLATE) as f:
         for line in f:
             line = line.strip()
             if 'personal-info-here' in line:
