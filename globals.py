@@ -4,7 +4,7 @@ INDENT = '  '
 NAME = 'name'
 POSITION = 'position'
 CONTACT = 'contact'
-SUMMARY = 'summary'
+SUMMARY = 'about'
 EXPERIENCE = 'experience'
 EDUCATION = 'education'
 VOLUNTEERING = 'volunteering'
@@ -51,3 +51,6 @@ SECTION_ITEMS = {
     PROJECTS: ['', NAME, '', DATES, DESCRIPTION],
     VOLUNTEERING: [TITLE, NAME, LOCATION, DATES, DESCRIPTION]
 }
+
+PORTFOLIO_TEMPLATE = 'index_template.html'
+PORTFOLIO_SECTIONS = [SUMMARY, EXPERIENCE, EDUCATION, PROJECTS, SKILLS, CONTACT]

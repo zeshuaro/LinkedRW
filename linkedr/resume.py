@@ -30,7 +30,7 @@ def make_personal_info(profile):
         if info_type in (NAME, POSITION):
             value = profile[info_type]
         else:
-            value = profile['contact'][info_type]
+            value = profile[CONTACT][info_type]
 
         line = f'\\{info_type}'
         if value:
