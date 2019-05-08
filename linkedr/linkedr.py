@@ -66,7 +66,7 @@ def make_publication_section(publications):
         for reference in references:
             lines.append(f'{INDENT}\\nocite{{{reference}}}')
 
-        lines.append(f'{INDENT}\\printbibligraphy[heading=none]')
+        lines.append(f'{INDENT}\\printbibliography[heading=none]')
         lines.append('\\end{refsection}')
 
         with open(f'{PUBLICATIONS}.tex', 'w') as f:
@@ -205,10 +205,9 @@ def make_resume_section(profile, section):
 def make_resume_section_grouped(profile, section):
     lines = []
     for entry in profile[section]:
-        lines.append(f'{INDENT}\\cventry')
         name = entry[NAME]
-
         for i, item in enumerate(entry[ENTRIES]):
+            lines.append(f'{INDENT}\\cventry')
             for key in SECTION_ITEMS[section]:
                 if key == NAME and i == 0:
                     lines.append(f'{INDENT * 2}{{{name}}} % {NAME}')
