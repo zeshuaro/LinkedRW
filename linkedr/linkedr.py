@@ -189,14 +189,15 @@ def make_resume_content(profile):
 
 def make_resume_section(profile, section):
     title = 'Honors \\& Awards' if section == HONORS else section.title()
-    lines = [f'\\cvsection{{{title}}}\n', '\\begin{cventries}']
+    entries = 'cvhonors' if section == HONORS else 'cventries'
+    lines = [f'\\cvsection{{{title}}}\n', f'\\begin{{{entries}}}']
 
     if section in (EDUCATION, EXPERIENCE, VOLUNTEERING):
         lines += make_resume_section_grouped(profile, section)
     else:
         lines += make_resume_section_ungrouped(profile, section)
 
-    lines.append('\\end{cventries}')
+    lines.append(f'\\end{{{entries}}}')
     with open(f'{section}.tex', 'w') as f:
         f.write('\n'.join(lines))
 
@@ -235,7 +236,11 @@ def make_resume_section_grouped(profile, section):
 def make_resume_section_ungrouped(profile, section):
     lines = []
     for entry in profile[section]:
-        lines.append(f'{INDENT}\\cventry')
+        if section == HONORS:
+            lines.append(f'{INDENT}\\cvhonor')
+        else:
+            lines.append(f'{INDENT}\\cventry')
+
         for key in SECTION_ITEMS[section]:
             if key == DESCRIPTION:
                 if entry[key]:
