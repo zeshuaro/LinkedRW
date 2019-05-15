@@ -13,7 +13,7 @@ def main():
         profile = json.load(f)
 
     lines = []
-    comment_line = has_sum = has_exp = has_edu = has_prj = has_skl = False
+    comment_line = has_sum = has_exp = has_edu = has_prj = has_skl = has_con = False
 
     with open(PORTFOLIO_TEMPLATE) as f:
         for line in f:
@@ -82,6 +82,19 @@ def main():
                     lines.append(line)
             elif has_skl and 'skills-here' in line:
                 lines += make_skills_section(profile[SKILLS], indent)
+
+            # Contact section
+            elif 'email-here' in line:
+                lines.append(line.replace('email-here', profile[CONTACT][EMAIL]))
+            elif 'col-sm-5 social' in line:
+                if all(not profile[CONTACT][x] for x in CONTACTS):
+                    comment_line = True
+                    lines += make_comment_line(line)
+                else:
+                    has_con = True
+                    lines.append(line)
+            elif has_con and 'contact-here' in line:
+                lines += make_contact_section(profile[CONTACT], indent)
 
             # Comment out sections
             elif comment_line and any(x in line for x in ['End #about', 'End #experience', 'End #education']):
@@ -172,6 +185,20 @@ def make_skills_section(skls, indent):
     lines = []
     for skl in skls:
         lines.append(f'{indent}<li>{skl}</li>')
+
+    return lines
+
+
+def make_contact_section(cons, indent):
+    lines = []
+    for con in CONTACTS:
+        if cons[con]:
+            lines += [
+                f'{indent}<li>',
+                f'{indent}{HTML_INDENT}'
+                f'<a href="{cons[con]}" target="_blank"><i class="fa fa-{con}" aria-hidden="true"></i></a>',
+                f'{indent}</li>'
+            ]
 
     return lines
 
