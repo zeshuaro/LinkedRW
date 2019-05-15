@@ -2,6 +2,7 @@ import arrow
 import json
 import re
 
+from datetime import datetime
 from queue import PriorityQueue
 
 from globals import *
@@ -12,7 +13,7 @@ def main():
         profile = json.load(f)
 
     lines = []
-    comment_line = has_summary = has_experience = False
+    comment_line = has_sum = has_exp = has_edu = False
 
     with open(PORTFOLIO_TEMPLATE) as f:
         for line in f:
@@ -33,9 +34,9 @@ def main():
                     comment_line = True
                     lines += make_comment_line(line)
                 else:
-                    has_summary = True
+                    has_sum = True
                     lines.append(line)
-            elif has_summary and 'summary-here' in line:
+            elif has_sum and 'summary-here' in line:
                 lines += make_summary_section(profile[SUMMARY], indent)
 
             # Experience section
@@ -44,13 +45,24 @@ def main():
                     comment_line = True
                     lines += make_comment_line(line)
                 else:
-                    has_experience = True
+                    has_exp = True
                     lines.append(line)
-            elif has_experience and 'experience-here' in line:
+            elif has_exp and 'experience-here' in line:
                 lines += make_experience_section(profile[EXPERIENCE], indent)
 
+            # Education section
+            elif 'id="education"' in line:
+                if not profile[EDUCATION]:
+                    comment_line = True
+                    lines += make_comment_line(line)
+                else:
+                    has_edu = True
+                    lines.append(line)
+            elif has_edu and 'education-here' in line:
+                lines += make_education_section(profile[EDUCATION], indent)
+
             # Comment out sections
-            elif comment_line and any(x in line for x in ['End #about', 'End #experience']):
+            elif comment_line and any(x in line for x in ['End #about', 'End #experience', 'End #education']):
                 comment_line = False
             elif comment_line:
                 lines += make_comment_line(line)
@@ -81,15 +93,11 @@ def make_summary_section(summary, indent):
 
 
 def make_experience_section(exps, indent):
-    sorted_exps = sort_experiences(exps)
-    all_exps = []
-
-    while not sorted_exps.empty():
-        all_exps.append(sorted_exps.get()[1])
-
+    sorted_exps = sort_entries(exps)
     lines = []
-    while all_exps:
-        exp = all_exps.pop()
+
+    while sorted_exps:
+        exp = sorted_exps.pop()
         lines += [
             f'{indent}<div data-date="{exp[DATES]}">',
             f'{indent}{HTML_INDENT}<h3>{exp[NAME]}</h3>',
@@ -101,9 +109,27 @@ def make_experience_section(exps, indent):
     return lines
 
 
-def sort_experiences(exps):
-    sorted_exps = PriorityQueue()
-    for exp in exps:
+def make_education_section(edus, indent):
+    sorted_edus = sort_entries(edus, date_format='YYYY')
+    lines = []
+
+    while sorted_edus:
+        edu = sorted_edus.pop()
+        lines += [
+            f'{indent}<div class="education-block">',
+            f'{indent}{HTML_INDENT}<h3>{edu[NAME]}</h3>',
+            f'{indent}{HTML_INDENT}<span class="education-date">{edu[DATES]}</span>',
+            f'{indent}{HTML_INDENT}<h4>{edu[DEGREE]}</h4>'
+        ]
+        lines += get_description(edu[DESCRIPTION], indent)
+        lines += [f'{indent}</div>', '']
+
+    return lines
+
+
+def sort_entries(entries, date_format='MMM YYYY'):
+    sorted_entries = PriorityQueue()
+    for exp in entries:
         name = exp[NAME]
         for entry in exp[ENTRIES]:
             entry[NAME] = name
@@ -111,12 +137,18 @@ def sort_experiences(exps):
 
             if date.lower() == 'present':
                 arrow_date = arrow.utcnow()
+            elif date:
+                arrow_date = arrow.get(date, date_format)
             else:
-                arrow_date = arrow.get(date, 'MMM YYYY')
+                arrow_date = arrow.get(datetime.min)
 
-            sorted_exps.put((arrow_date, entry))
+            sorted_entries.put((arrow_date, entry))
 
-    return sorted_exps
+    all_entries = []
+    while not sorted_entries.empty():
+        all_entries.append(sorted_entries.get()[1])
+
+    return all_entries
 
 
 def get_description(descs, indent):
