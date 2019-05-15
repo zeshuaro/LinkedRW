@@ -1,5 +1,8 @@
+import arrow
 import json
 import re
+
+from queue import PriorityQueue
 
 from globals import *
 
@@ -31,6 +34,7 @@ def main():
                     lines += make_comment_line(line)
                 else:
                     has_summary = True
+                    lines.append(line)
             elif has_summary and 'summary-here' in line:
                 lines += make_summary_section(profile[SUMMARY], indent)
 
@@ -41,6 +45,9 @@ def main():
                     lines += make_comment_line(line)
                 else:
                     has_experience = True
+                    lines.append(line)
+            elif has_experience and 'experience-here' in line:
+                lines += make_experience_section(profile[EXPERIENCE], indent)
 
             # Comment out sections
             elif comment_line and any(x in line for x in ['End #about', 'End #experience']):
@@ -71,6 +78,58 @@ def make_summary_section(summary, indent):
     line = [f'{indent}{text}']
 
     return line
+
+
+def make_experience_section(exps, indent):
+    sorted_exps = sort_experiences(exps)
+    all_exps = []
+
+    while not sorted_exps.empty():
+        all_exps.append(sorted_exps.get()[1])
+
+    lines = []
+    while all_exps:
+        exp = all_exps.pop()
+        lines += [
+            f'{indent}<div data-date="{exp[DATES]}">',
+            f'{indent}{HTML_INDENT}<h3>{exp[NAME]}</h3>',
+            f'{indent}{HTML_INDENT}<h4>{exp[TITLE]}</h4>',
+        ]
+        lines += get_description(exp[DESCRIPTION], indent)
+        lines += [f'{indent}</div>', '']
+
+    return lines
+
+
+def sort_experiences(exps):
+    sorted_exps = PriorityQueue()
+    for exp in exps:
+        name = exp[NAME]
+        for entry in exp[ENTRIES]:
+            entry[NAME] = name
+            date = entry[DATES].split(' - ')[-1]
+
+            if date.lower() == 'present':
+                arrow_date = arrow.utcnow()
+            else:
+                arrow_date = arrow.get(date, 'MMM YYYY')
+
+            sorted_exps.put((arrow_date, entry))
+
+    return sorted_exps
+
+
+def get_description(descs, indent):
+    lines = []
+    if descs:
+        lines.append(f'{indent}{HTML_INDENT}<ul>')
+        for desc in descs.split('\n'):
+            desc = desc.strip('-').strip()
+            lines.append(f'{indent}{HTML_INDENT * 2}<li>{desc}')
+
+        lines.append(f'{indent}{HTML_INDENT}</ul>')
+
+    return lines
 
 
 def make_comment_line(line):
