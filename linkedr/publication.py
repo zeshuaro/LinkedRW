@@ -12,9 +12,9 @@ def make_publication_section(publications):
         lines = [f'\\cvsection{{{PUBLICATIONS.title()}}}\n', '\\begin{refsection}']
 
         for reference in references:
-            lines.append(f'{INDENT}\\nocite{{{reference}}}')
+            lines.append(f'{LATEX_INDENT}\\nocite{{{reference}}}')
 
-        lines.append(f'{INDENT}\\printbibliography[heading=none]')
+        lines.append(f'{LATEX_INDENT}\\printbibliography[heading=none]')
         lines.append('\\end{refsection}')
 
         with open(f'{PUBLICATIONS}.tex', 'w') as f:

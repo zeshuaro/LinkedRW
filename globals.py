@@ -1,5 +1,5 @@
 TIMEOUT = 10
-INDENT = '  '
+LATEX_INDENT = '  '
 
 NAME = 'name'
 POSITION = 'position'

@@ -1,4 +1,4 @@
-from globals import SKILLS, INDENT
+from globals import SKILLS, LATEX_INDENT
 
 
 def make_skill_section(skills, languages):
@@ -35,8 +35,8 @@ def make_skill_section(skills, languages):
 def make_skill_subsection(skills, skills_type):
     lines = []
     if skills:
-        lines.append(f'{INDENT}\\cvskill')
-        lines.append(f'{INDENT * 2}{{{skills_type}}}')
-        lines.append(f'{INDENT * 2}{{{", ".join(skills)}}}')
+        lines.append(f'{LATEX_INDENT}\\cvskill')
+        lines.append(f'{LATEX_INDENT * 2}{{{skills_type}}}')
+        lines.append(f'{LATEX_INDENT * 2}{{{", ".join(skills)}}}')
 
     return lines

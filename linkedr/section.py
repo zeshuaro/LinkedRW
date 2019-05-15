@@ -21,16 +21,16 @@ def make_grouped_section(profile, section):
     for entry in profile[section]:
         name = entry[NAME]
         for i, item in enumerate(entry[ENTRIES]):
-            lines.append(f'{INDENT}\\cventry')
+            lines.append(f'{LATEX_INDENT}\\cventry')
             for key in SECTION_ITEMS[section]:
                 if key == NAME and i == 0:
-                    lines.append(f'{INDENT * 2}{{{name}}} % {NAME}')
+                    lines.append(f'{LATEX_INDENT * 2}{{{name}}} % {NAME}')
                 elif key == DESCRIPTION:
                     lines += get_descriptions(item)
                 elif key and key != NAME:
-                    lines.append(f'{INDENT * 2}{{{item[key]}}} % {key}')
+                    lines.append(f'{LATEX_INDENT * 2}{{{item[key]}}} % {key}')
                 else:
-                    lines.append(f'{INDENT * 2}{{}}')
+                    lines.append(f'{LATEX_INDENT * 2}{{}}')
 
     return lines
 
@@ -39,17 +39,17 @@ def make_ungrouped_section(profile, section):
     lines = []
     for entry in profile[section]:
         if section == HONORS:
-            lines.append(f'{INDENT}\\cvhonor')
+            lines.append(f'{LATEX_INDENT}\\cvhonor')
         else:
-            lines.append(f'{INDENT}\\cventry')
+            lines.append(f'{LATEX_INDENT}\\cventry')
 
         for key in SECTION_ITEMS[section]:
             if key == DESCRIPTION:
                 lines += get_descriptions(entry)
             elif key:
-                lines.append(f'{INDENT * 2}{{{entry[key]}}} % {key}')
+                lines.append(f'{LATEX_INDENT * 2}{{{entry[key]}}} % {key}')
             else:
-                lines.append(f'{INDENT * 2}{{}}')
+                lines.append(f'{LATEX_INDENT * 2}{{}}')
 
     return lines
 
@@ -57,16 +57,16 @@ def make_ungrouped_section(profile, section):
 def get_descriptions(item):
     lines = []
     if item[DESCRIPTION]:
-        lines.append(f'{INDENT * 2}{{')
-        lines.append(f'{INDENT * 3}\\begin{{cvitems}}')
+        lines.append(f'{LATEX_INDENT * 2}{{')
+        lines.append(f'{LATEX_INDENT * 3}\\begin{{cvitems}}')
 
         for description in item[DESCRIPTION].split('\n'):
             description = description.strip('-').strip()
-            lines.append(f'{INDENT * 4}\\item{{{description}}}')
+            lines.append(f'{LATEX_INDENT * 4}\\item{{{description}}}')
 
-        lines.append(f'{INDENT * 3}\\end{{cvitems}}')
-        lines.append(f'{INDENT * 2}}}\n')
+        lines.append(f'{LATEX_INDENT * 3}\\end{{cvitems}}')
+        lines.append(f'{LATEX_INDENT * 2}}}\n')
     else:
-        lines.append(f'{INDENT * 2}{{}} % {DESCRIPTION}\n')
+        lines.append(f'{LATEX_INDENT * 2}{{}} % {DESCRIPTION}\n')
 
     return lines
