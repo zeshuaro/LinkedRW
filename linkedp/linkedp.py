@@ -27,6 +27,12 @@ def main():
                 for section in PORTFOLIO_SECTIONS:
                     if section == CONTACT or profile[section]:
                         lines += make_section_header(section, indent)
+            elif 'name-here' in line:
+                lines.append(line.replace('name-here', profile[NAME]))
+            elif 'title-here' in line:
+                lines.append(line.replace('title-here', profile[POSITION]))
+            elif 'copyright-here' in line:
+                lines.append(line.replace('copyright-here', f'{arrow.now().year} {profile[NAME]}'))
 
             # About section
             elif 'id="about"' in line:
