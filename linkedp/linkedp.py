@@ -13,7 +13,7 @@ def main():
         profile = json.load(f)
 
     lines = []
-    comment_line = has_sum = has_exp = has_edu = False
+    comment_line = has_sum = has_exp = has_edu = has_prj = False
 
     with open(PORTFOLIO_TEMPLATE) as f:
         for line in f:
@@ -60,6 +60,17 @@ def main():
                     lines.append(line)
             elif has_edu and 'education-here' in line:
                 lines += make_education_section(profile[EDUCATION], indent)
+
+            # Projects section
+            elif 'id="projects"' in line:
+                if not profile[PROJECTS]:
+                    comment_line = True
+                    lines += make_comment_line(line)
+                else:
+                    has_prj = True
+                    lines.append(line)
+            elif has_prj and 'projects-here' in line:
+                lines += make_projects_section(profile[PROJECTS], indent)
 
             # Comment out sections
             elif comment_line and any(x in line for x in ['End #about', 'End #experience', 'End #education']):
@@ -123,6 +134,25 @@ def make_education_section(edus, indent):
         ]
         lines += get_description(edu[DESCRIPTION], indent)
         lines += [f'{indent}</div>', '']
+
+    return lines
+
+
+def make_projects_section(prjs, indent):
+    lines = []
+    for prj in prjs:
+        lines += [
+            f'{indent}<div class="project shadow-large">',
+            f'{indent}{HTML_INDENT}<div class="project no-image">',
+            f'{indent}{HTML_INDENT * 2}<div class="project-info">',
+            f'{indent}{HTML_INDENT * 3}<h3>{prj[NAME]}</h3>'
+        ]
+
+        lines += get_description(prj[DESCRIPTION], indent + HTML_INDENT * 2)
+        if prj[LINK]:
+            lines.append(f'{indent}{HTML_INDENT * 3}<a href="{prj[LINK]}" target="_blank">View Project</a>')
+
+        lines += [f'{indent}{HTML_INDENT * x}</div>' for x in range(2, -1, -1)] + ['']
 
     return lines
 
