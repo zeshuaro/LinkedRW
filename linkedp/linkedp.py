@@ -13,7 +13,7 @@ def main():
         profile = json.load(f)
 
     lines = []
-    comment_line = has_sum = has_exp = has_edu = has_prj = False
+    comment_line = has_sum = has_exp = has_edu = has_prj = has_skl = False
 
     with open(PORTFOLIO_TEMPLATE) as f:
         for line in f:
@@ -71,6 +71,17 @@ def main():
                     lines.append(line)
             elif has_prj and 'projects-here' in line:
                 lines += make_projects_section(profile[PROJECTS], indent)
+
+            # Skills section
+            elif 'id="skills"' in line:
+                if not profile[SKILLS]:
+                    comment_line = True
+                    lines += make_comment_line(line)
+                else:
+                    has_skl = True
+                    lines.append(line)
+            elif has_skl and 'skills-here' in line:
+                lines += make_skills_section(profile[SKILLS], indent)
 
             # Comment out sections
             elif comment_line and any(x in line for x in ['End #about', 'End #experience', 'End #education']):
@@ -153,6 +164,14 @@ def make_projects_section(prjs, indent):
             lines.append(f'{indent}{HTML_INDENT * 3}<a href="{prj[LINK]}" target="_blank">View Project</a>')
 
         lines += [f'{indent}{HTML_INDENT * x}</div>' for x in range(2, -1, -1)] + ['']
+
+    return lines
+
+
+def make_skills_section(skls, indent):
+    lines = []
+    for skl in skls:
+        lines.append(f'{indent}<li>{skl}</li>')
 
     return lines
 
