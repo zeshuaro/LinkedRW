@@ -1,5 +1,6 @@
 TIMEOUT = 10
 LATEX_INDENT = '  '
+HTML_INDENT = '    '
 
 NAME = 'name'
 POSITION = 'position'
