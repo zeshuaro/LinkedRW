@@ -5,14 +5,32 @@ import shutil
 from selenium.common.exceptions import NoSuchElementException
 
 
-def make_dir(output_dir):
+def make_dir(dir_name):
+    """
+    Make directory
+    Args:
+        dir_name: the directory name to be created
+
+    Returns:
+        None
+    """
     try:
-        os.mkdir(output_dir)
+        os.mkdir(dir_name)
     except FileExistsError:
         pass
 
 
 def copy_files(mod_name, dir_name, output_dir):
+    """
+    Copy files under dir_name to output_dir
+    Args:
+        mod_name: the module name
+        dir_name: the directory name of the files to be copied
+        output_dir: the directory name for the files to be copied to
+
+    Returns:
+        None
+    """
     files = pkg_resources.resource_filename(mod_name, dir_name)
     for filename in os.listdir(files):
         full_filename = os.path.join(files, filename)
@@ -26,10 +44,29 @@ def copy_files(mod_name, dir_name, output_dir):
 
 
 def get_span_text(element, name):
+    """
+    Scrape text inside the span element
+    Args:
+        element: the element containing the text
+        name: the class name
+
+    Returns:
+        A string of text
+    """
     return element.find_element_by_css_selector(name).find_elements_by_tag_name('span')[1].text.replace('–', '-')
 
 
 def get_optional_text(element, name, is_span=True):
+    """
+    Scrape text that may or may not exist
+    Args:
+        element: the element containing the text
+        name: the class name
+        is_span: the bool if the text is wrapped inside span tags
+
+    Returns:
+        A string of text
+    """
     text = ''
     try:
         if is_span:
@@ -43,6 +80,16 @@ def get_optional_text(element, name, is_span=True):
 
 
 def get_optional_text_replace(element, name, text):
+    """
+    Scrape text that may or may not exist and remove a specific text
+    Args:
+        element: the element containing the text
+        name: the class name
+        text: the text to be removed
+
+    Returns:
+        A string of text
+    """
     try:
         return element.find_element_by_class_name(name).text.replace(text, '').strip()
     except NoSuchElementException:
@@ -50,6 +97,15 @@ def get_optional_text_replace(element, name, text):
 
 
 def get_description(element, name):
+    """
+    Scrape the description
+    Args:
+        element: the element containing the description
+        name: the class name
+
+    Returns:
+        A string of description
+    """
     try:
         section = element.find_element_by_css_selector(name)
         btn_section = section.find_elements_by_class_name('lt-line-clamp__ellipsis')
@@ -67,6 +123,14 @@ def get_description(element, name):
 
 
 def get_accomplishment_link(element):
+    """
+    Scrape the accomplishment link
+    Args:
+        element: the element containing the link
+
+    Returns:
+        A string of link
+    """
     try:
         return element.find_element_by_class_name('pv-accomplishment-entity__external-source').get_attribute('href')
     except NoSuchElementException:
