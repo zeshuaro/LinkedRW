@@ -1,5 +1,6 @@
 import os
 import pkg_resources
+import shutil
 
 from logbook import Logger
 from urllib.parse import urlparse
@@ -26,6 +27,18 @@ def make_resume_files(profile, output_dir):
 
     output_dir = os.path.join(output_dir, 'resume')
     make_dir(output_dir)
+    awesome_cv_files = pkg_resources.resource_filename(__name__, 'awesome_cv_files')
+
+    for filename in os.listdir(awesome_cv_files):
+        full_filename = os.path.join(awesome_cv_files, filename)
+        if os.path.isdir(full_filename):
+            try:
+                shutil.copytree(full_filename, os.path.join(output_dir, filename))
+            except FileExistsError:
+                continue
+        else:
+            shutil.copy(full_filename, output_dir)
+
     has_publications = make_publication_section(profile[PUBLICATIONS], output_dir)
     make_skill_section(profile[SKILLS], profile[LANGUAGES], output_dir)
 
