@@ -1,4 +1,6 @@
 import os
+import pkg_resources
+import shutil
 
 from selenium.common.exceptions import NoSuchElementException
 
@@ -8,6 +10,19 @@ def make_dir(output_dir):
         os.mkdir(output_dir)
     except FileExistsError:
         pass
+
+
+def copy_files(mod_name, dir_name, output_dir):
+    files = pkg_resources.resource_filename(mod_name, dir_name)
+    for filename in os.listdir(files):
+        full_filename = os.path.join(files, filename)
+        if os.path.isdir(full_filename):
+            try:
+                shutil.copytree(full_filename, os.path.join(output_dir, filename))
+            except FileExistsError:
+                continue
+        else:
+            shutil.copy(full_filename, output_dir)
 
 
 def get_span_text(element, name):

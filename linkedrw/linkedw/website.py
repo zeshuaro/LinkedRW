@@ -9,7 +9,7 @@ from logbook import Logger
 from queue import PriorityQueue
 
 from linkedrw.globals import *
-from linkedrw.utils import make_dir
+from linkedrw.utils import make_dir, copy_files
 
 
 def make_website_files(profile, output_dir):
@@ -27,17 +27,7 @@ def make_website_files(profile, output_dir):
 
     output_dir = os.path.join(output_dir, 'website')
     make_dir(output_dir)
-    dev_portfolio_files = pkg_resources.resource_filename(__name__, 'dev_portfolio_files')
-
-    for filename in os.listdir(dev_portfolio_files):
-        full_filename = os.path.join(dev_portfolio_files, filename)
-        if os.path.isdir(full_filename):
-            try:
-                shutil.copytree(full_filename, os.path.join(output_dir, filename))
-            except FileExistsError:
-                continue
-        else:
-            shutil.copy(full_filename, output_dir)
+    copy_files(__name__, 'dev_portfolio_files', output_dir)
 
     lines = []
     comment_line = has_sum = has_exp = has_edu = has_prj = has_skl = has_con = False

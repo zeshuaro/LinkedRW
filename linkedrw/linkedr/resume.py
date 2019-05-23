@@ -6,7 +6,7 @@ from logbook import Logger
 from urllib.parse import urlparse
 
 from linkedrw.globals import *
-from linkedrw.utils import make_dir
+from linkedrw.utils import make_dir, copy_files
 from publication import make_publication_section
 from section import make_resume_section
 from skill import make_skill_section
@@ -27,17 +27,7 @@ def make_resume_files(profile, output_dir):
 
     output_dir = os.path.join(output_dir, 'resume')
     make_dir(output_dir)
-    awesome_cv_files = pkg_resources.resource_filename(__name__, 'awesome_cv_files')
-
-    for filename in os.listdir(awesome_cv_files):
-        full_filename = os.path.join(awesome_cv_files, filename)
-        if os.path.isdir(full_filename):
-            try:
-                shutil.copytree(full_filename, os.path.join(output_dir, filename))
-            except FileExistsError:
-                continue
-        else:
-            shutil.copy(full_filename, output_dir)
+    copy_files(__name__, 'awesome_cv_files', output_dir)
 
     has_publications = make_publication_section(profile[PUBLICATIONS], output_dir)
     make_skill_section(profile[SKILLS], profile[LANGUAGES], output_dir)
