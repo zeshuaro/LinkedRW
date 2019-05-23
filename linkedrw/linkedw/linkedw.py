@@ -5,7 +5,7 @@ import re
 from datetime import datetime
 from queue import PriorityQueue
 
-from globals import *
+from linkedrw.globals import *
 
 
 def main():

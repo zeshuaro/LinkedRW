@@ -1,4 +1,4 @@
-from globals import *
+from linkedrw.globals import *
 
 
 def make_resume_section(profile, section):

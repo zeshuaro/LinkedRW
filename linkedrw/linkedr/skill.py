@@ -1,4 +1,4 @@
-from globals import SKILLS, LATEX_INDENT
+from linkedrw.globals import SKILLS, LATEX_INDENT
 
 
 def make_skill_section(skills, languages):

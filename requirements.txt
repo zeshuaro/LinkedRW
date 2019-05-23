@@ -1,5 +1,6 @@
-arrow==0.13.1
-beautifulsoup4==4.7.1
-habanero==0.6.2
-requests==2.21.0
-selenium==3.141.0
+arrow>=0.13.1
+beautifulsoup4>=4.7.1
+habanero>=0.6.2
+logbook>=1.4.3
+requests>=2.21.0
+selenium>=3.141.0

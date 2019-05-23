@@ -1,6 +1,6 @@
 from urllib.parse import urlparse
 
-from globals import *
+from linkedrw.globals import *
 
 
 def make_resume_main(profile, has_publications):

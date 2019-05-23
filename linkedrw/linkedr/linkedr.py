@@ -1,6 +1,6 @@
 import json
 
-from globals import *
+from linkedrw.globals import *
 from publication import make_publication_section
 from resume import make_resume_main
 from section import make_resume_section

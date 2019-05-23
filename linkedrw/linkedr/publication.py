@@ -3,7 +3,7 @@ import re
 from habanero import Crossref, cn
 from urllib.parse import urlparse
 
-from globals import *
+from linkedrw.globals import *
 
 
 def make_publication_section(publications):
