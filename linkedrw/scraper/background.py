@@ -7,7 +7,18 @@ from linkedrw.globals import *
 from linkedrw.utils import get_span_text, get_optional_text, get_description
 
 
-def get_background_details(driver, by, section_identifier, section_type):
+def get_background_details(driver, by, section_id, section_type):
+    """
+    Scrape background details
+    Args:
+        driver: the selenium details
+        by: the strategy to locate an element
+        section_id: the section identifier
+        section_type: the section type
+
+    Returns:
+        A list of details of all the items under the given section
+    """
     # Load background section
     if section_type == EXPERIENCE:
         background = driver.find_element_by_id('oc-background-section')
@@ -25,7 +36,7 @@ def get_background_details(driver, by, section_identifier, section_type):
 
     # Check if the section exists
     try:
-        section = driver.find_element(by, section_identifier)
+        section = driver.find_element(by, section_id)
     except NoSuchElementException:
         return []
 
@@ -40,6 +51,14 @@ def get_background_details(driver, by, section_identifier, section_type):
 
 
 def get_experience(section):
+    """
+    Scrape experience details
+    Args:
+        section: the experience section
+
+    Returns:
+        A list of details of all experiences
+    """
     divs = section.find_elements_by_css_selector(
         '.pv-entity__position-group-pager.pv-profile-section__list-item.ember-view')
     exps = []
@@ -59,6 +78,15 @@ def get_experience(section):
 
 
 def get_single_role(div, summary):
+    """
+    Scrape details of a single role
+    Args:
+        div: the div element
+        summary: the summary section
+
+    Returns:
+        A dict of the details for a single role
+    """
     title = summary.find_element_by_css_selector('.t-16.t-black.t-bold').text
     company = summary.find_element_by_class_name('pv-entity__secondary-title').text
     dates = get_span_text(summary, '.pv-entity__date-range.t-14.t-black--light.t-normal')
@@ -79,6 +107,15 @@ def get_single_role(div, summary):
 
 
 def get_multiple_roles(div, summary):
+    """
+    Scrape details of multiple roles
+    Args:
+        div: the div element
+        summary: the summary section
+
+    Returns:
+        A dict of the details for multiple roles
+    """
     company = get_span_text(summary, '.t-16.t-black.t-bold')
 
     # Show all roles
@@ -111,6 +148,16 @@ def get_multiple_roles(div, summary):
 
 
 def get_education(section):
+    """
+    Scrape education details
+    Args:
+        section: the education section
+
+    Returns:
+        A list of details of all educations
+    """
+
+    # The ul element can appear in two different classes
     try:
         ul = section.find_element_by_css_selector(
             '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-no-more.ember-view')
@@ -126,17 +173,8 @@ def get_education(section):
         dates = get_optional_text(li, '.pv-entity__dates.t-14.t-black--light.t-normal')
         description = get_description(li, '.pv-entity__description.t-14.t-black--light.t-normal.mt4')
 
-        # Check for field of study
-        try:
-            field = get_span_text(
-                li,
-                '.pv-entity__secondary-title.pv-entity__fos.pv-entity__secondary-title.t-14.t-black--light.t-normal')
-            degree = f'{degree_name} - {field}'
-        except NoSuchElementException:
-            degree = degree_name
-
         edu_dict[school].append({
-            DEGREE: degree,
+            DEGREE: get_degree(li, degree_name),
             LOCATION: '',
             DATES: dates,
             DESCRIPTION: description
@@ -152,7 +190,38 @@ def get_education(section):
     return edu_list
 
 
+def get_degree(li, degree_name):
+    """
+    Get the full degree description
+    Args:
+        li: the li element
+        degree_name: the degree name
+
+    Returns:
+        A string of the degree description
+    """
+
+    # Check if there is a field of study
+    try:
+        field = get_span_text(
+            li,
+            '.pv-entity__secondary-title.pv-entity__fos.pv-entity__secondary-title.t-14.t-black--light.t-normal')
+        degree = f'{degree_name} - {field}'
+    except NoSuchElementException:
+        degree = degree_name
+
+    return degree
+
+
 def get_volunteering(section):
+    """
+    Scrape volunteering details
+    Args:
+        section: the volunteering section
+
+    Returns:
+        A list of details of all volunteering
+    """
     ul = section.find_element_by_css_selector(
         '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-no-more.ember-view')
     vol_dict = defaultdict(list)
@@ -182,6 +251,15 @@ def get_volunteering(section):
 
 
 def get_skills(section):
+    """
+    Scrape skills
+    Args:
+        section: the skills section
+
+    Returns:
+        A list of skills
+    """
+
     # Show all skills
     try:
         section.find_element_by_class_name('pv-skills-section__chevron-icon').click()

@@ -5,6 +5,16 @@ from linkedrw.globals import SKILLS, LATEX_INDENT, PACKAGE_NAME
 
 
 def make_skill_section(skills, languages, output_dir):
+    """
+    Generate skill latex files
+    Args:
+        skills: the list of skills
+        languages: the list of languages
+        output_dir: the output directory
+
+    Returns:
+        None
+    """
     if skills or languages:
         lines = [f'\\cvsection{{{SKILLS}}}\n', '\\begin{cvskills}']
 
@@ -36,6 +46,15 @@ def make_skill_section(skills, languages, output_dir):
 
 
 def make_skill_subsection(skills, skills_type):
+    """
+    Generate the lines for the skill subsection
+    Args:
+        skills: the list of skills
+        skills_type: the skill type
+
+    Returns:
+        A list of lines for the skill subsection
+    """
     lines = []
     if skills:
         lines.append(f'{LATEX_INDENT}\\cvskill')

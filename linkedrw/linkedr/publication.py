@@ -10,6 +10,15 @@ from linkedrw.globals import *
 
 
 def make_publication_section(publications, output_dir):
+    """
+    Generate publication latex file
+    Args:
+        publications: the list of publications
+        output_dir: the output directory
+
+    Returns:
+        A bool if there are any publications
+    """
     if publications:
         references = make_references(publications, output_dir)
         lines = [f'\\cvsection{{{PUBLICATIONS.title()}}}\n', '\\begin{refsection}']
@@ -29,6 +38,15 @@ def make_publication_section(publications, output_dir):
 
 
 def make_references(publications, output_dir):
+    """
+    Generate reference bib file
+    Args:
+        publications: the list of publications
+        output_dir: the output directory
+
+    Returns:
+        A list of reference identifiers
+    """
     log = Logger()
     cr = Crossref()
     lines = []

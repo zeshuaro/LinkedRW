@@ -12,6 +12,15 @@ from skill import make_skill_section
 
 
 def make_resume_files(profile, output_dir):
+    """
+    Generate resume files
+    Args:
+        profile: the dict of the profile
+        output_dir: the output directory
+
+    Returns:
+        None
+    """
     log = Logger()
     log.notice('Generating resume files...')
 
@@ -27,6 +36,16 @@ def make_resume_files(profile, output_dir):
 
 
 def make_resume_main(profile, has_publications, output_dir):
+    """
+    Generate the main resume file
+    Args:
+        profile: the dict of the profile
+        has_publications: the bool if there are publications
+        output_dir: the output directory
+
+    Returns:
+        None
+    """
     lines = []
     with open(pkg_resources.resource_filename(__name__, RESUME_TEMPLATE)) as f:
         for line in f:
@@ -48,6 +67,14 @@ def make_resume_main(profile, has_publications, output_dir):
 
 
 def make_personal_info(profile):
+    """
+    Generate lines about the personal info
+    Args:
+        profile: the dict of the profile
+
+    Returns:
+        A list of lines about the personal info
+    """
     lines = []
     for info_type in PERSONAL_INFO:
         if info_type in (NAME, POSITION):
@@ -59,7 +86,7 @@ def make_personal_info(profile):
         if value:
             if info_type == NAME:
                 names = value.split()
-                line += f'{{{names[0]}}}{{{names[-1]}}}'
+                line += f'{{{names[0]}}}{{{names[1:]}}}'
             elif info_type == STACKOVERFLOW:
                 user_id, username = urlparse(value).path.lstrip('/users/').strip('/').split('/')
                 line += f'{{{user_id}}}{{{username}}}'
@@ -95,6 +122,14 @@ def make_personal_info(profile):
 
 
 def make_resume_content(profile):
+    """
+    Generate lines about additional section
+    Args:
+        profile: the dict of the profile
+
+    Returns:
+        A list of lines about additional section
+    """
     lines = []
     for section in RESUME_CONTENT:
         if profile[section]:

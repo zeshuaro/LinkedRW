@@ -12,6 +12,15 @@ from linkedrw.utils import make_dir
 
 
 def make_website_files(profile, output_dir):
+    """
+    Generate website files
+    Args:
+        profile: the dict of the profile
+        output_dir: the output directory
+
+    Returns:
+        None
+    """
     log = Logger()
     log.notice('Generate website files...')
 
@@ -122,6 +131,15 @@ def make_website_files(profile, output_dir):
 
 
 def make_section_header(section, indent):
+    """
+    Generate the lines for the section header
+    Args:
+        section: the section
+        indent: the original indentation
+
+    Returns:
+        A list of lines for the section header
+    """
     lines = [
         f'{indent}<li>',
         f'{indent}{HTML_INDENT}<a href="#{section}">{section.title()}</a>',
@@ -132,6 +150,15 @@ def make_section_header(section, indent):
 
 
 def make_summary_section(summary, indent):
+    """
+    Generate the summary line
+    Args:
+        summary: the summary text
+        indent: the original indentation
+
+    Returns:
+        A string of the summary line
+    """
     text = summary.replace('\n', '<br>')
     line = [f'{indent}{text}']
 
@@ -139,6 +166,15 @@ def make_summary_section(summary, indent):
 
 
 def make_experience_section(exps, indent):
+    """
+    Generate the lines of the experience section
+    Args:
+        exps: the list of experiences
+        indent: the original indentation
+
+    Returns:
+        A list of lines of the experience section
+    """
     sorted_exps = sort_entries(exps)
     lines = []
 
@@ -156,6 +192,15 @@ def make_experience_section(exps, indent):
 
 
 def make_education_section(edus, indent):
+    """
+    Generate the lines of the education section
+    Args:
+        edus: the list of educations
+        indent: the original indentation
+
+    Returns:
+        A list of lines of the education section
+    """
     sorted_edus = sort_entries(edus, date_format='YYYY')
     lines = []
 
@@ -174,6 +219,15 @@ def make_education_section(edus, indent):
 
 
 def make_projects_section(prjs, indent):
+    """
+    Generate the lines of the project section
+    Args:
+        prjs: the list of projects
+        indent: the original indentation
+
+    Returns:
+        A list of lines of the project section
+    """
     lines = []
     for prj in prjs:
         lines += [
@@ -193,6 +247,15 @@ def make_projects_section(prjs, indent):
 
 
 def make_skills_section(skls, indent):
+    """
+    Generate the liens of the skill section
+    Args:
+        skls: the list of skills
+        indent: the original indentation
+
+    Returns:
+        A list of lines of the skill section
+    """
     lines = []
     for skl in skls:
         lines.append(f'{indent}<li>{skl}</li>')
@@ -201,6 +264,15 @@ def make_skills_section(skls, indent):
 
 
 def make_contact_section(cons, indent):
+    """
+    Generate the lines of the contact section
+    Args:
+        cons: the list of contacts
+        indent: the original indentation
+
+    Returns:
+        A list of lines of the contact section
+    """
     lines = []
     for con in CONTACTS:
         if cons[con]:
@@ -215,6 +287,15 @@ def make_contact_section(cons, indent):
 
 
 def sort_entries(entries, date_format='MMM YYYY'):
+    """
+    Sort entries by date
+    Args:
+        entries: the list of entries to be sorted
+        date_format: the format of the date in the entries
+
+    Returns:
+        A list of sorted entries
+    """
     sorted_entries = PriorityQueue()
     for exp in entries:
         name = exp[NAME]
@@ -239,6 +320,15 @@ def sort_entries(entries, date_format='MMM YYYY'):
 
 
 def get_description(descs, indent):
+    """
+    Generate the lines of the description
+    Args:
+        descs: the list of descriptions
+        indent: the original indentation
+
+    Returns:
+        A list of lines of the description
+    """
     lines = []
     if descs:
         lines.append(f'{indent}{HTML_INDENT}<ul>')

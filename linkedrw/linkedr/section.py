@@ -4,6 +4,16 @@ from linkedrw.globals import *
 
 
 def make_resume_section(profile, section, output_dir):
+    """
+    Generate the latex file for the given section
+    Args:
+        profile: the dict of the profile
+        section: the section to generate
+        output_dir: the output directory
+
+    Returns:
+        None
+    """
     title = 'Honors \\& Awards' if section == HONORS else section.title()
     cv_type = 'cvhonors' if section == HONORS else 'cventries'
     lines = [f'\\cvsection{{{title}}}\n', f'\\begin{{{cv_type}}}']
@@ -19,6 +29,15 @@ def make_resume_section(profile, section, output_dir):
 
 
 def make_grouped_section(profile, section):
+    """
+    Generate the lines for grouped entries
+    Args:
+        profile: the dict of the profile
+        section: the section
+
+    Returns:
+        A list of lines for the given section
+    """
     lines = []
     for entry in profile[section]:
         name = entry[NAME]
@@ -38,6 +57,15 @@ def make_grouped_section(profile, section):
 
 
 def make_ungrouped_section(profile, section):
+    """
+    Generate the lines for ungrouped entries
+    Args:
+        profile: the dict of the profile
+        section: the section
+
+    Returns:
+        A list of lines for the given section
+    """
     lines = []
     for entry in profile[section]:
         if section == HONORS:
@@ -57,6 +85,14 @@ def make_ungrouped_section(profile, section):
 
 
 def get_descriptions(item):
+    """
+    Generate the lines for the description
+    Args:
+        item: the item
+
+    Returns:
+        A list of lines for the description
+    """
     lines = []
     if item[DESCRIPTION]:
         lines.append(f'{LATEX_INDENT * 2}{{')

@@ -24,6 +24,7 @@ def scrape(email, password, output_dir, **kwargs):
     driver.find_element_by_id('password').send_keys(password)
     driver.find_element_by_class_name('login__form_action_container').submit()
 
+    # Check if login is successful
     html = driver.page_source.lower()
     if any(x in html for x in ['we don\'t recognize that email', 'that\'s not the right password']):
         driver.quit()
@@ -41,6 +42,7 @@ def scrape(email, password, output_dir, **kwargs):
     driver.find_element_by_xpath("//a[@data-control-name='identity_welcome_message']").click()
     WebDriverWait(driver, TIMEOUT).until(ec.presence_of_element_located((By.ID, 'oc-background-section')))
 
+    # Scrape profile
     profile = {
         NAME: get_personal_details(driver, NAME),
         POSITION: get_personal_details(driver, POSITION),

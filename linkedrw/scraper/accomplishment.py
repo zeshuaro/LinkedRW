@@ -5,6 +5,15 @@ from linkedrw.utils import get_optional_text, get_optional_text_replace, get_des
 
 
 def get_accomplishment_details(driver, section_type):
+    """
+    Scrape accomplishment details
+    Args:
+        driver: the selenium driver
+        section_type: the section type
+
+    Returns:
+        A list of details of all the items under the given section
+    """
     # Check if the section exists
     section = driver.find_element_by_css_selector(
         f'.accordion-panel.pv-profile-section.pv-accomplishments-block.{section_type}.ember-view')
@@ -37,6 +46,14 @@ def get_accomplishment_details(driver, section_type):
 
 
 def get_projects(ul):
+    """
+    Scrape projects details
+    Args:
+        ul: the ul element
+
+    Returns:
+        A list of details of all projects
+    """
     projects = []
     for li in ul.find_elements_by_tag_name('li'):
         name = li.find_element_by_class_name('pv-accomplishment-entity__title').text.replace('Project name', '').strip()
@@ -57,6 +74,14 @@ def get_projects(ul):
 
 
 def get_publications(ul):
+    """
+    Scrape publications details
+    Args:
+        ul: the ul element
+
+    Returns:
+        A list of details of all publications
+    """
     publications = []
     for li in ul.find_elements_by_tag_name('li'):
         title = li.find_element_by_class_name('pv-accomplishment-entity__title').text.\
@@ -76,6 +101,14 @@ def get_publications(ul):
 
 
 def get_honors(ul):
+    """
+    Scrape honors/awards details
+    Args:
+        ul: the ul element
+
+    Returns:
+        A list of details of all honors/awards
+    """
     awards = []
     for li in ul.find_elements_by_tag_name('li'):
         title = li.find_element_by_class_name('pv-accomplishment-entity__title').text.\
@@ -94,4 +127,12 @@ def get_honors(ul):
 
 
 def get_languages(section):
+    """
+    Scrape languages
+    Args:
+        section: the languages section
+
+    Returns:
+        A list of languages
+    """
     return [x.text for x in section.find_elements_by_tag_name('li')]

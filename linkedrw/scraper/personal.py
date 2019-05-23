@@ -9,6 +9,15 @@ from linkedrw.globals import *
 
 
 def get_personal_details(driver, section_type):
+    """
+    Scrape personal details
+    Args:
+        driver: the selenium driver
+        section_type: the section type
+
+    Returns:
+        A list of details of all the items under the given section
+    """
     if section_type == NAME:
         return driver.find_element_by_css_selector('.pv-top-card-section__name.inline.t-24.t-black.t-normal').text
     elif section_type == POSITION:
@@ -20,18 +29,37 @@ def get_personal_details(driver, section_type):
 
 
 def get_position(driver):
+    """
+    Scrape position
+    Args:
+        driver: the selenium driver
+
+    Returns:
+        A string of the position
+    """
     position = driver.find_element_by_css_selector('.pv-top-card-section__headline.mt1.t-18.t-black.t-normal').text
 
-    return re.sub('\s+at.*', '', position)
+    return re.sub(r'\s+at.*', '', position)
 
 
 def get_contact(driver):
+    """
+    Scrape contact details
+    Args:
+        driver: the selenium driver
+
+    Returns:
+        A dict of contact details
+    """
+
+    # Show contact details
     driver.find_element_by_xpath("//a[@data-control-name='contact_see_more']").click()
 
     linkedin_id = WebDriverWait(driver, TIMEOUT).until(ec.presence_of_element_located((
         By.CLASS_NAME, 'pv-contact-info__ci-container'))).find_element_by_tag_name('a').get_attribute('href')
     email = driver.find_element_by_css_selector('.pv-contact-info__contact-type.ci-email').\
         find_element_by_tag_name('a').text
+    social_media = get_social_media(driver)
 
     try:
         mobile = driver.find_element_by_css_selector('.pv-contact-info__contact-type.ci-phone').\
@@ -45,7 +73,31 @@ def get_contact(driver):
     except NoSuchElementException:
         address = ''
 
-    # Extract social media
+    # Close contact details
+    driver.find_element_by_xpath("//button[@aria-label='Dismiss']").click()
+
+    results = {
+        ADDRESS: address,
+        MOBILE: mobile,
+        EMAIL: email,
+        HOMEPAGE: '',
+        LINKEDIN: linkedin_id,
+        SKYPE: '',
+    }
+    results.update(social_media)
+
+    return results
+
+
+def get_social_media(driver):
+    """
+    Get social media details
+    Args:
+        driver: the selenium driver
+
+    Returns:
+        A dict of social media details
+    """
     github = gitlab = stackoverflow = twitter = reddit = medium = scholar = ''
     try:
         websites_section = driver.find_element_by_css_selector('.pv-contact-info__contact-type.ci-websites')
@@ -68,18 +120,11 @@ def get_contact(driver):
     except NoSuchElementException:
         pass
 
-    driver.find_element_by_xpath("//button[@aria-label='Dismiss']").click()
     results = {
-        ADDRESS: address,
-        MOBILE: mobile,
-        EMAIL: email,
-        HOMEPAGE: '',
         GITHUB: github,
-        LINKEDIN: linkedin_id,
         GITLAB: gitlab,
         STACKOVERFLOW: stackoverflow,
         TWITTER: twitter,
-        SKYPE: '',
         REDDIT: reddit,
         MEDIUM: medium,
         GOOGLE_SCHOLAR: scholar
@@ -89,6 +134,14 @@ def get_contact(driver):
 
 
 def get_summary(driver):
+    """
+    Scrape summary
+    Args:
+        driver: the selenium driver
+
+    Returns:
+        A string of summary
+    """
     # Check if summary section exists
     try:
         driver.find_element_by_css_selector(
