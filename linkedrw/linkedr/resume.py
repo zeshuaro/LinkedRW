@@ -5,6 +5,7 @@ from logbook import Logger
 from urllib.parse import urlparse
 
 from linkedrw.globals import *
+from linkedrw.utils import make_dir
 from publication import make_publication_section
 from section import make_resume_section
 from skill import make_skill_section
@@ -14,6 +15,8 @@ def make_resume_files(profile, output_dir):
     log = Logger()
     log.notice('Generating resume files...')
 
+    output_dir = os.path.join(output_dir, 'resume')
+    make_dir(output_dir)
     has_publications = make_publication_section(profile[PUBLICATIONS], output_dir)
     make_skill_section(profile[SKILLS], profile[LANGUAGES], output_dir)
 

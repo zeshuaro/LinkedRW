@@ -7,8 +7,9 @@ import sys
 from logbook import Logger, StreamHandler
 
 from linkedrw.globals import PACKAGE_NAME, CREDENTIALS_FILE
-from linkedrw.scraper import scrape
 from linkedrw.linkedr import make_resume_files
+from linkedrw.scraper import scrape
+from linkedrw.utils import make_dir
 
 
 def main(email, password, keep_credentials, output_dir, scrape_only, resume_only, website_only, profile_file, **kwargs):
@@ -17,7 +18,7 @@ def main(email, password, keep_credentials, output_dir, scrape_only, resume_only
     StreamHandler(sys.stdout, format_string=format_string).push_application()
     log = Logger()
 
-    make_output_dir(output_dir)
+    make_dir(output_dir)
 
     if profile_file is None:
         credentials_file = os.path.expanduser(CREDENTIALS_FILE)
@@ -46,13 +47,6 @@ def main(email, password, keep_credentials, output_dir, scrape_only, resume_only
             pass
         else:
             make_resume_files(profile, output_dir)
-
-
-def make_output_dir(output_dir):
-    try:
-        os.mkdir(output_dir)
-    except FileExistsError:
-        pass
 
 
 def check_credentials(email, password):

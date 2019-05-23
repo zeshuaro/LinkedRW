@@ -1,4 +1,13 @@
+import os
+
 from selenium.common.exceptions import NoSuchElementException
+
+
+def make_dir(output_dir):
+    try:
+        os.mkdir(output_dir)
+    except FileExistsError:
+        pass
 
 
 def get_span_text(element, name):
