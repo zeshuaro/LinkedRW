@@ -31,17 +31,7 @@ def main(email, password, keep_credentials, output_dir, scrape_only, resume_only
         profile = scrape(email, password)
 
         if keep_credentials:
-            log.warn(f'It is highly NOT recommended to keep your login credentials, '
-                     f'you can always remove the file {CREDENTIALS_FILE} to remove them')
-            credentials = {'email': email, 'password': password}
-
-            try:
-                os.mkdir(os.path.expanduser(f'~/.{PACKAGE_NAME}'))
-            except FileExistsError:
-                pass
-
-            with open(credentials_file, 'w') as f:
-                json.dump(credentials, f)
+            store_credentials(email, password, credentials_file)
 
 
 def check_credentials(email, password):
@@ -49,6 +39,21 @@ def check_credentials(email, password):
         raise argparse.ArgumentError(None, 'Email must be provided')
     elif password is None:
         raise argparse.ArgumentError(None, 'Password must be provided')
+
+
+def store_credentials(email, password, credentials_file):
+    log = Logger()
+    log.warn(f'It is highly NOT recommended to keep your login credentials, '
+             f'you can always remove the file {CREDENTIALS_FILE} to remove them')
+    credentials = {'email': email, 'password': password}
+
+    try:
+        os.mkdir(os.path.expanduser(f'~/.{PACKAGE_NAME}'))
+    except FileExistsError:
+        pass
+
+    with open(credentials_file, 'w') as f:
+        json.dump(credentials, f)
 
 
 if __name__ == '__main__':
