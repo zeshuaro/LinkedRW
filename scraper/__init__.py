@@ -1,3 +1,4 @@
+import argparse
 import json
 
 from selenium import webdriver
@@ -6,23 +7,27 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 
+from exceptions import LoginError
 from globals import *
 from accomplishment import get_accomplishment_details
 from background import get_background_details
 from personal import get_personal_details
 
 
-def main():
-    with open('../config.json') as f:
-        credentials = json.load(f)
-
+def scrape(email, password, **kwargs):
     driver = webdriver.Chrome()
     driver.get('https://www.linkedin.com/login/')
 
     # Login to LinkedIn
-    driver.find_element_by_id('username').send_keys(credentials['email'])
-    driver.find_element_by_id('password').send_keys(credentials['password'])
+    driver.find_element_by_id('username').send_keys(email)
+    driver.find_element_by_id('password').send_keys(password)
     driver.find_element_by_class_name('login__form_action_container').submit()
+
+    html = driver.page_source.lower()
+    if any(x in html for x in ['we don\'t recognize that email', 'that\'s not the right password']):
+        driver.quit()
+
+        raise LoginError('Invalid login credentials')
 
     # Skip adding a phone number
     try:
@@ -57,6 +62,15 @@ def main():
     with open('profile.json', 'w') as f:
         json.dump(profile, f, indent=4)
 
+    return profile
+
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description='Scrape your LinkedIn profile')
+    parser.set_defaults(method=scrape)
+
+    parser.add_argument('email', help='Your LinkedIn login email')
+    parser.add_argument('password', help='Your LinkedIn login password')
+
+    args = parser.parse_args()
+    args.method(**vars(args))
