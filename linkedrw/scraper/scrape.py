@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
@@ -14,7 +15,7 @@ from background import get_background_details
 from personal import get_personal_details
 
 
-def scrape(email, password, **kwargs):
+def scrape(email, password, output_dir, **kwargs):
     driver = webdriver.Chrome()
     driver.get('https://www.linkedin.com/login/')
 
@@ -59,7 +60,7 @@ def scrape(email, password, **kwargs):
     }
 
     driver.quit()
-    with open('profile.json', 'w') as f:
+    with open(os.path.join(output_dir, 'profile.json'), 'w') as f:
         json.dump(profile, f, indent=4)
 
     return profile
@@ -71,6 +72,7 @@ if __name__ == '__main__':
 
     parser.add_argument('email', help='Your LinkedIn login email')
     parser.add_argument('password', help='Your LinkedIn login password')
+    parser.add_argument('--output_dir', '-o', default='.', help='The output directory (default: current directory)')
 
     args = parser.parse_args()
     args.method(**vars(args))

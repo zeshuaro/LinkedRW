@@ -1,11 +1,31 @@
+import os
+import pkg_resources
+
+from logbook import Logger
 from urllib.parse import urlparse
 
 from linkedrw.globals import *
+from publication import make_publication_section
+from section import make_resume_section
+from skill import make_skill_section
 
 
-def make_resume_main(profile, has_publications):
+def make_resume_files(profile, output_dir):
+    log = Logger()
+    log.notice('Generating resume files...')
+
+    has_publications = make_publication_section(profile[PUBLICATIONS], output_dir)
+    make_skill_section(profile[SKILLS], profile[LANGUAGES], output_dir)
+
+    for section in RESUME_SECTIONS:
+        make_resume_section(profile, section, output_dir)
+
+    make_resume_main(profile, has_publications, output_dir)
+
+
+def make_resume_main(profile, has_publications, output_dir):
     lines = []
-    with open(RESUME_TEMPLATE) as f:
+    with open(pkg_resources.resource_filename(__name__, RESUME_TEMPLATE)) as f:
         for line in f:
             line = line.strip()
             if 'personal-info-here' in line:
@@ -20,7 +40,7 @@ def make_resume_main(profile, has_publications):
 
                 lines.append(line)
 
-    with open('resume.tex', 'w') as f:
+    with open(os.path.join(output_dir, 'resume.tex'), 'w') as f:
         f.write('\n'.join(lines))
 
 

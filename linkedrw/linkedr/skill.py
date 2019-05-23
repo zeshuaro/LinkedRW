@@ -1,14 +1,17 @@
-from linkedrw.globals import SKILLS, LATEX_INDENT
+import os
+import pkg_resources
+
+from linkedrw.globals import SKILLS, LATEX_INDENT, PACKAGE_NAME
 
 
-def make_skill_section(skills, languages):
+def make_skill_section(skills, languages, output_dir):
     if skills or languages:
         lines = [f'\\cvsection{{{SKILLS}}}\n', '\\begin{cvskills}']
 
         if skills:
             # Get and store a set of programming languages
             prog_languages = set()
-            with open('../utils/prog_languages.txt') as f:
+            with open(pkg_resources.resource_filename(PACKAGE_NAME, 'utils/prog_languages.txt')) as f:
                 for line in f:
                     prog_languages.add(line.strip())
 
@@ -28,7 +31,7 @@ def make_skill_section(skills, languages):
         lines += make_skill_subsection(languages, 'Languages')
         lines.append('\\end{cvskills}')
 
-        with open(f'{SKILLS}.tex', 'w') as f:
+        with open(os.path.join(output_dir, f'{SKILLS}.tex'), 'w') as f:
             f.write('\n'.join(lines))
 
 

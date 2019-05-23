@@ -8,15 +8,18 @@ from logbook import Logger, StreamHandler
 
 from linkedrw.globals import PACKAGE_NAME, CREDENTIALS_FILE
 from linkedrw.scraper import scrape
+from linkedrw.linkedr import make_resume_files
 
 
-def main(email, password, keep_credentials, output_dir, scrape_only, resume_only, website_only, profile, **kwargs):
+def main(email, password, keep_credentials, output_dir, scrape_only, resume_only, website_only, profile_file, **kwargs):
     logbook.set_datetime_format('local')
     format_string = '[{record.time:%Y-%m-%d %H:%M:%S}] {record.level_name}: {record.message}'
     StreamHandler(sys.stdout, format_string=format_string).push_application()
     log = Logger()
 
-    if profile is None:
+    make_output_dir(output_dir)
+
+    if profile_file is None:
         credentials_file = os.path.expanduser(CREDENTIALS_FILE)
         if os.path.exists(credentials_file):
             with open(credentials_file) as f:
@@ -28,10 +31,28 @@ def main(email, password, keep_credentials, output_dir, scrape_only, resume_only
 
         log.notice('Scraping LinkedIn profile...')
         log.notice('Please keep the browser window on top')
-        profile = scrape(email, password)
+        profile = scrape(email, password, output_dir)
 
         if keep_credentials:
             store_credentials(email, password, credentials_file)
+    else:
+        with open(profile_file) as f:
+            profile = json.load(f)
+
+    if not scrape_only:
+        if resume_only:
+            make_resume_files(profile, output_dir)
+        elif website_only:
+            pass
+        else:
+            make_resume_files(profile, output_dir)
+
+
+def make_output_dir(output_dir):
+    try:
+        os.mkdir(output_dir)
+    except FileExistsError:
+        pass
 
 
 def check_credentials(email, password):
@@ -69,7 +90,7 @@ if __name__ == '__main__':
     parser.add_argument('--scrape_only', '-s', action='store_true', help='Only scrape LinkedIn profile')
     parser.add_argument('--resume_only', '-r', action='store_true', help='Only generate resume')
     parser.add_argument('--website_only', '-w', action='store_true', help='Only generate personal website')
-    parser.add_argument('--profile', '-j', help='The profile json file')
+    parser.add_argument('--profile', '-j', dest='profile_file', help='The profile json file')
 
     args = parser.parse_args()
     args.method(**vars(args))

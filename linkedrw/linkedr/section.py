@@ -1,7 +1,9 @@
+import os
+
 from linkedrw.globals import *
 
 
-def make_resume_section(profile, section):
+def make_resume_section(profile, section, output_dir):
     title = 'Honors \\& Awards' if section == HONORS else section.title()
     cv_type = 'cvhonors' if section == HONORS else 'cventries'
     lines = [f'\\cvsection{{{title}}}\n', f'\\begin{{{cv_type}}}']
@@ -12,7 +14,7 @@ def make_resume_section(profile, section):
         lines += make_ungrouped_section(profile, section)
 
     lines.append(f'\\end{{{cv_type}}}')
-    with open(f'{section}.tex', 'w') as f:
+    with open(os.path.join(output_dir, f'{section}.tex'), 'w') as f:
         f.write('\n'.join(lines))
 
 
