@@ -68,7 +68,7 @@ def get_contact(driver):
     except NoSuchElementException:
         pass
 
-    driver.find_element_by_class_name('artdeco-dismiss').click()
+    driver.find_element_by_xpath("//button[@aria-label='Dismiss']").click()
     results = {
         ADDRESS: address,
         MOBILE: mobile,

@@ -51,7 +51,8 @@ def get_experience(section):
                 '.pv-entity__summary-info.pv-entity__summary-info--background-section')
             exps.append(get_single_role(div, summary))
         except NoSuchElementException:
-            summary = div.find_element_by_class_name('pv-entity__company-summary-info-v2')
+            summary = div.find_element_by_css_selector(
+                '.pv-profile-section__card-item-v2.pv-profile-section.pv-position-entity.ember-view')
             exps.append(get_multiple_roles(div, summary))
 
     return exps
