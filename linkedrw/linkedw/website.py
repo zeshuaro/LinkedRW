@@ -1,21 +1,26 @@
 import arrow
-import json
+import os
+import pkg_resources
 import re
 
 from datetime import datetime
+from logbook import Logger
 from queue import PriorityQueue
 
 from linkedrw.globals import *
+from linkedrw.utils import make_dir
 
 
-def main():
-    with open('../profile.json') as f:
-        profile = json.load(f)
+def make_website_files(profile, output_dir):
+    log = Logger()
+    log.notice('Generate website files...')
 
+    output_dir = os.path.join(output_dir, 'website')
+    make_dir(output_dir)
     lines = []
     comment_line = has_sum = has_exp = has_edu = has_prj = has_skl = has_con = False
 
-    with open(PORTFOLIO_TEMPLATE) as f:
+    with open(pkg_resources.resource_filename(__name__, PORTFOLIO_TEMPLATE)) as f:
         for line in f:
             line = line.strip('\n')
             indent = re.match(r'\s+', line)
@@ -112,7 +117,7 @@ def main():
             else:
                 lines.append(line)
 
-    with open('index.html', 'w') as f:
+    with open(os.path.join(output_dir, 'index.html'), 'w') as f:
         f.write('\n'.join(lines))
 
 
@@ -248,7 +253,3 @@ def get_description(descs, indent):
 
 def make_comment_line(line):
     return [f'<!-- {line} -->']
-
-
-if __name__ == '__main__':
-    main()

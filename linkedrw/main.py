@@ -10,6 +10,7 @@ from linkedrw.globals import PACKAGE_NAME, CREDENTIALS_FILE
 from linkedrw.linkedr import make_resume_files
 from linkedrw.scraper import scrape
 from linkedrw.utils import make_dir
+from linkedrw.linkedw import make_website_files
 
 
 def main(email, password, keep_credentials, output_dir, scrape_only, resume_only, website_only, profile_file, **kwargs):
@@ -44,9 +45,10 @@ def main(email, password, keep_credentials, output_dir, scrape_only, resume_only
         if resume_only:
             make_resume_files(profile, output_dir)
         elif website_only:
-            pass
+            make_website_files(profile, output_dir)
         else:
             make_resume_files(profile, output_dir)
+            make_website_files(profile, output_dir)
 
 
 def check_credentials(email, password):
