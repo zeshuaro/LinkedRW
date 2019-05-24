@@ -41,14 +41,19 @@ This will create three outputs:
 
 ### Options
 
-| Options | Descriptions |
-| --- | --- |
-| -h, --help | Show help message and exit |
-| -e, --email | Your LinkedIn login email |
-| -p, --password | Your LinkedIn login password |
-| -k, --keep_creds | Store your LinkedIn login credentials under ~/.linkedrw/credentials.json |
-| -o, --output_dir | The output directory (default: current directory) |
-| -s, --scrape_only | Only scrape LinkedIn profile |
-| -r, --resume_only | Only create resume files |
-| -w, --website_only | Only create personal website files |
-| -j, --profile | Your profile json file |
+```bash
+  -h, --help            show this help message and exit
+  --email EMAIL, -e EMAIL
+                        Your LinkedIn login email
+  --password PASSWORD, -p PASSWORD
+                        Your LinkedIn login password
+  --keep_creds, -k      Store LinkedIn login credentials under
+                        ~/.linkedrw/credentials.json
+  --output_dir OUTPUT_DIR, -o OUTPUT_DIR
+                        The output directory (default: current directory)
+  --scrape_only, -s     Only scrape LinkedIn profile
+  --resume_only, -r     Only generate resume
+  --website_only, -w    Only generate personal website
+  --profile PROFILE_FILE, -j PROFILE_FILE
+                        The profile json file
+```
