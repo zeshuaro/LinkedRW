@@ -41,6 +41,8 @@ This will create three outputs:
 
 ### Options
 
+| Options | Descriptions |
+| --- | --- |
 | -h, --help | Show help message and exit |
 | -e, --email | Your LinkedIn login email |
 | -p, --password | Your LinkedIn login password |
