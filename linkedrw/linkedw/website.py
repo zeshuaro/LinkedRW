@@ -7,8 +7,8 @@ from datetime import datetime
 from logbook import Logger
 from queue import PriorityQueue
 
-from globals import *
-from utils import make_dir, copy_files
+from ..globals import *
+from ..utils import make_dir, copy_files
 
 
 def make_website_files(profile, output_dir):

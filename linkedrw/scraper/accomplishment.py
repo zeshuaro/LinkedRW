@@ -1,7 +1,7 @@
 from selenium.common.exceptions import NoSuchElementException
 
-from globals import *
-from utils import get_optional_text, get_optional_text_replace, get_description, get_accomplishment_link
+from ..globals import *
+from ..utils import get_optional_text, get_optional_text_replace, get_description, get_accomplishment_link
 
 
 def get_accomplishment_details(driver, section_type):

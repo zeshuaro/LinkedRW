@@ -3,8 +3,8 @@ import time
 from collections import defaultdict
 from selenium.common.exceptions import NoSuchElementException
 
-from globals import *
-from utils import get_span_text, get_optional_text, get_description
+from ..globals import *
+from ..utils import get_span_text, get_optional_text, get_description
 
 
 def get_background_details(driver, by, section_id, section_type):

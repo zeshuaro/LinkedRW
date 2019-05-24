@@ -1,6 +1,6 @@
 import os
 
-from globals import *
+from ..globals import *
 
 
 def make_resume_section(profile, section, output_dir):

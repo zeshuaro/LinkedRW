@@ -6,11 +6,11 @@ import sys
 
 from logbook import Logger, StreamHandler
 
-from globals import PACKAGE_NAME, CREDENTIALS_FILE
-from linkedr import make_resume_files
-from scraper import scrape
-from utils import make_dir
-from linkedw import make_website_files
+from .globals import PACKAGE_NAME, CREDENTIALS_FILE
+from .utils import make_dir
+from .linkedr import make_resume_files
+from .scraper import scrape
+from .linkedw import make_website_files
 
 
 def main():
