@@ -1,7 +1,7 @@
 import os
 import pkg_resources
 
-from linkedrw.globals import SKILLS, LATEX_INDENT, PACKAGE_NAME
+from globals import SKILLS, LATEX_INDENT, PACKAGE_NAME
 
 
 def make_skill_section(skills, languages, output_dir):

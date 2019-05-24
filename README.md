@@ -41,7 +41,7 @@ This will create three outputs:
 
 ### Options
 
-```bash
+```
   -h, --help            show this help message and exit
   --email EMAIL, -e EMAIL
                         Your LinkedIn login email

@@ -6,7 +6,7 @@ from logbook import Logger
 from requests.exceptions import HTTPError
 from urllib.parse import urlparse
 
-from linkedrw.globals import *
+from globals import *
 
 
 def make_publication_section(publications, output_dir):

@@ -1,15 +1,14 @@
 import os
 import pkg_resources
-import shutil
 
 from logbook import Logger
 from urllib.parse import urlparse
 
-from linkedrw.globals import *
-from linkedrw.utils import make_dir, copy_files
-from publication import make_publication_section
-from section import make_resume_section
-from skill import make_skill_section
+from globals import *
+from utils import make_dir, copy_files
+from .publication import make_publication_section
+from .section import make_resume_section
+from .skill import make_skill_section
 
 
 def make_resume_files(profile, output_dir):

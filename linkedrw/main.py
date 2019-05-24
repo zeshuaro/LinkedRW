@@ -6,14 +6,33 @@ import sys
 
 from logbook import Logger, StreamHandler
 
-from linkedrw.globals import PACKAGE_NAME, CREDENTIALS_FILE
-from linkedrw.linkedr import make_resume_files
-from linkedrw.scraper import scrape
-from linkedrw.utils import make_dir
-from linkedrw.linkedw import make_website_files
+from globals import PACKAGE_NAME, CREDENTIALS_FILE
+from linkedr import make_resume_files
+from scraper import scrape
+from utils import make_dir
+from linkedw import make_website_files
 
 
-def main(email, password, keep_creds, output_dir, scrape_only, resume_only, website_only, profile_file, **kwargs):
+def main():
+    parser = argparse.ArgumentParser(
+        description='Generates a resume and a personal website based on your LinkedIn profile')
+    parser.set_defaults(method=run)
+
+    parser.add_argument('--email', '-e', help='Your LinkedIn login email')
+    parser.add_argument('--password', '-p', help='Your LinkedIn login password')
+    parser.add_argument('--keep_creds', '-k', action='store_true',
+                        help=f'Store LinkedIn login credentials under {CREDENTIALS_FILE}')
+    parser.add_argument('--output_dir', '-o', default='.', help='The output directory (default: current directory)')
+    parser.add_argument('--scrape_only', '-s', action='store_true', help='Only scrape LinkedIn profile')
+    parser.add_argument('--resume_only', '-r', action='store_true', help='Only generate resume')
+    parser.add_argument('--website_only', '-w', action='store_true', help='Only generate personal website')
+    parser.add_argument('--profile', '-j', dest='profile_file', help='The profile json file')
+
+    args = parser.parse_args()
+    args.method(**vars(args))
+
+
+def run(email, password, keep_creds, output_dir, scrape_only, resume_only, website_only, profile_file, **kwargs):
     # Setup logging
     logbook.set_datetime_format('local')
     format_string = '[{record.time:%Y-%m-%d %H:%M:%S}] {record.level_name}: {record.message}'
@@ -95,19 +114,4 @@ def store_creds(email, password, creds_file):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        description='Generates a resume and a personal website based on your LinkedIn profile')
-    parser.set_defaults(method=main)
-
-    parser.add_argument('--email', '-e', help='Your LinkedIn login email')
-    parser.add_argument('--password', '-p', help='Your LinkedIn login password')
-    parser.add_argument('--keep_creds', '-k', action='store_true',
-                        help=f'Store LinkedIn login credentials under {CREDENTIALS_FILE}')
-    parser.add_argument('--output_dir', '-o', default='.', help='The output directory (default: current directory)')
-    parser.add_argument('--scrape_only', '-s', action='store_true', help='Only scrape LinkedIn profile')
-    parser.add_argument('--resume_only', '-r', action='store_true', help='Only generate resume')
-    parser.add_argument('--website_only', '-w', action='store_true', help='Only generate personal website')
-    parser.add_argument('--profile', '-j', dest='profile_file', help='The profile json file')
-
-    args = parser.parse_args()
-    args.method(**vars(args))
+    main()
