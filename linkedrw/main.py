@@ -4,6 +4,7 @@ import logbook
 import os
 import sys
 
+from getpass import getpass
 from logbook import Logger, StreamHandler
 
 from .globals import PACKAGE_NAME, CREDENTIALS_FILE
@@ -52,8 +53,9 @@ def run(email, password, keep_creds, output_dir, scrape_only, resume_only, websi
                 credentials = json.load(f)
                 email = credentials['email']
                 password = credentials['password']
-        else:
-            check_creds(email, password)
+        elif email is None and password is None:
+            email = input('Please enter your LinkedIn login email:\n')
+            password = getpass('Please enter your LinkedIn login password:\n')
 
         log.notice('Scraping LinkedIn profile...')
         log.notice('Please keep the browser window on top')
@@ -73,22 +75,6 @@ def run(email, password, keep_creds, output_dir, scrape_only, resume_only, websi
         else:
             make_resume_files(profile, output_dir)
             make_website_files(profile, output_dir)
-
-
-def check_creds(email, password):
-    """
-    Check login credentials arguments
-    Args:
-        email: the LinkedIn login email
-        password: the LinkedIn login password
-
-    Returns:
-        Raise an exception if any of the parameters is None
-    """
-    if email is None:
-        raise argparse.ArgumentError(None, 'Email must be provided')
-    elif password is None:
-        raise argparse.ArgumentError(None, 'Password must be provided')
 
 
 def store_creds(email, password, creds_file):
