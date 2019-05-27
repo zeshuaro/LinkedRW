@@ -54,8 +54,8 @@ def run(email, password, keep_creds, output_dir, scrape_only, resume_only, websi
                 email = credentials['email']
                 password = credentials['password']
         elif email is None and password is None:
-            email = input('Please enter your LinkedIn login email:\n')
-            password = getpass('Please enter your LinkedIn login password:\n')
+            email = input('Enter your LinkedIn login email: ')
+            password = getpass('Enter your LinkedIn login password: ')
 
         log.notice('Scraping LinkedIn profile')
         log.notice('Please keep the browser window on top')

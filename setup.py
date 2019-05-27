@@ -41,6 +41,8 @@ setup(
     license='MIT License',
     description='A simple CLI for you to create your resume and personal website based on your LinkedIn profile',
     long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
+    url='https://github.com/zeshuaro/LinkedRW',
     packages=find_packages(),
     python_requires='>=3.6',
     install_requires=requirements(),
