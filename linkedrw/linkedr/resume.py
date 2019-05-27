@@ -158,7 +158,7 @@ def compile_resume(output_dir, has_pubs):
     curr_dir = os.getcwd()
     os.chdir(output_dir)
 
-    if run_cmd('xelatex resumes.tex'):
+    if run_cmd('xelatex resume.tex'):
         if has_pubs and (not run_cmd('biber resume') or not run_cmd('xelatex resume.tex')):
             log.warn('Failed to compile resume files, please compile them manually')
     else:
