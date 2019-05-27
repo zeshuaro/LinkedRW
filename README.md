@@ -8,27 +8,17 @@ based on your LinkedIn profile.
 
 Install through pip:
 
-`pip install linkedrw`
-
-Install through Github:
-
-`pip install git+https://github.com/zeshuaro/LinkedRW`
-
-Or
-
 ```bash
-git clone https://github.com/zeshuaro/LinkedRW
-cd LinkedRW
-python setup.py install
+pip install linkedrw
 ```
+
+You will also need to download the ChromeDriver from 
+[here](https://sites.google.com/a/chromium.org/chromedriver/downloads) and put it in path (e.g. /usr/local/bin/)
+
 
 ## Usage
 
-Simply run the following command to create your resume and personal webiste:
-
-```
-linkedrw -e example@email.com -p password
-```
+Simply run `linkedrw` to create your resume and personal webiste:
 
 This will create three outputs:
 
@@ -38,8 +28,38 @@ This will create three outputs:
 
 `website/` - The directory containing your personal website files
 
+### Compiling Your Resume
+
+The `resume/` directory contains a list of Latex files that can be compiled into a PDF resume file. 
+As per the instructions and requirements from [Awesome-CV](https://github.com/posquit0/Awesome-CV), 
+a full TeX distribution must be installed. 
+You can download and install it from [here](https://www.latex-project.org/get/#tex-distributions).
+Afterwards, run the following commands to compile your resume:
+
+```bash
+cd resume/
+xelatex resume.tex
+```
+
+This should create your PDF resume file `resume.pdf`
+
+If your resume contains a publication section, run the following commands instead:
+
+```bash
+cd resume/
+xelatex resume.tex
+biber resume
+xelatex resume.tex
+```
+
+### Personal Website
+
+Simply navigate to the `website/` directory and open `index.html` in a web browser, 
+and you should be able to see your personal website.
 
 ### Options
+
+Below is the list of options:
 
 ```
   -h, --help            show this help message and exit
