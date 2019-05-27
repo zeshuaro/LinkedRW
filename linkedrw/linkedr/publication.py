@@ -11,7 +11,7 @@ from linkedrw.constants import *
 
 def make_publication_section(publications, output_dir):
     """
-    Generate publication latex file
+    Create publication latex file
     Args:
         publications: the list of publications
         output_dir: the output directory
@@ -39,7 +39,7 @@ def make_publication_section(publications, output_dir):
 
 def make_references(publications, output_dir):
     """
-    Generate reference bib file
+    Create reference bib file
     Args:
         publications: the list of publications
         output_dir: the output directory
@@ -53,7 +53,7 @@ def make_references(publications, output_dir):
     references = []
 
     for i, publication in enumerate(publications):
-        log.notice(f'Querying and formatting {i + 1} out of {len(publications)} publications...')
+        log.notice(f'Querying and formatting {i + 1} out of {len(publications)} publications')
         link = publication[LINK]
         title = publication[TITLE]
 
@@ -77,7 +77,7 @@ def make_references(publications, output_dir):
             lines.append(reference)
             references.append(re.sub('^@.*{', '', reference.split('\n')[0]).strip(','))
         except HTTPError:
-            log.warn(f'Could not generate reference for "{title}"')
+            log.warn(f'Could not Create reference for "{title}"')
 
     with open(os.path.join(output_dir, 'references.bib'), 'w') as f:
         f.write('\n\n'.join(lines))

@@ -16,7 +16,7 @@ from linkedrw.linkedw import make_website_files
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Generates a resume and a personal website based on your LinkedIn profile')
+        description='Creates a resume and a personal website based on your LinkedIn profile')
     parser.set_defaults(method=run)
 
     parser.add_argument('--email', '-e', help='Your LinkedIn login email')
@@ -25,8 +25,8 @@ def main():
                         help=f'Store LinkedIn login credentials under {CREDENTIALS_FILE}')
     parser.add_argument('--output_dir', '-o', default='.', help='The output directory (default: current directory)')
     parser.add_argument('--scrape_only', '-s', action='store_true', help='Only scrape LinkedIn profile')
-    parser.add_argument('--resume_only', '-r', action='store_true', help='Only generate resume')
-    parser.add_argument('--website_only', '-w', action='store_true', help='Only generate personal website')
+    parser.add_argument('--resume_only', '-r', action='store_true', help='Only create resume')
+    parser.add_argument('--website_only', '-w', action='store_true', help='Only create personal website')
     parser.add_argument('--profile', '-j', dest='profile_file', help='The profile json file')
 
     args = parser.parse_args()
@@ -57,7 +57,7 @@ def run(email, password, keep_creds, output_dir, scrape_only, resume_only, websi
             email = input('Please enter your LinkedIn login email:\n')
             password = getpass('Please enter your LinkedIn login password:\n')
 
-        log.notice('Scraping LinkedIn profile...')
+        log.notice('Scraping LinkedIn profile')
         log.notice('Please keep the browser window on top')
         profile = scrape(email, password, output_dir)
 

@@ -1,7 +1,9 @@
 import os
 import pkg_resources
+import shlex
 
 from logbook import Logger
+from subprocess import Popen, PIPE, TimeoutExpired
 from urllib.parse import urlparse
 
 from linkedrw.constants import *
@@ -13,7 +15,7 @@ from linkedrw.linkedr.skill import make_skill_section
 
 def make_resume_files(profile, output_dir):
     """
-    Generate resume files
+    Create resume files
     Args:
         profile: the dict of the profile
         output_dir: the output directory
@@ -22,7 +24,7 @@ def make_resume_files(profile, output_dir):
         None
     """
     log = Logger()
-    log.notice('Generating resume files...')
+    log.notice('Creating resume files')
 
     output_dir = os.path.join(output_dir, 'resume')
     make_dir(output_dir)
@@ -35,11 +37,12 @@ def make_resume_files(profile, output_dir):
         make_resume_section(profile, section, output_dir)
 
     make_resume_main(profile, has_publications, output_dir)
+    compile_resume(output_dir, has_publications)
 
 
 def make_resume_main(profile, has_publications, output_dir):
     """
-    Generate the main resume file
+    Create the main resume file
     Args:
         profile: the dict of the profile
         has_publications: the bool if there are publications
@@ -70,7 +73,7 @@ def make_resume_main(profile, has_publications, output_dir):
 
 def make_personal_info(profile):
     """
-    Generate lines about the personal info
+    Create lines about the personal info
     Args:
         profile: the dict of the profile
 
@@ -125,7 +128,7 @@ def make_personal_info(profile):
 
 def make_resume_content(profile):
     """
-    Generate lines about additional section
+    Create lines about additional section
     Args:
         profile: the dict of the profile
 
@@ -138,3 +141,49 @@ def make_resume_content(profile):
             lines.append(f'\\input{{{section}.tex}}')
 
     return lines
+
+
+def compile_resume(output_dir, has_pubs):
+    """
+    Compile resume files
+    Args:
+        output_dir: The resume output directory
+        has_pubs: The boolean whether there is a publication section
+
+    Returns:
+        None
+    """
+    log = Logger()
+    log.notice('Compiling resume files')
+    curr_dir = os.getcwd()
+    os.chdir(output_dir)
+
+    if run_cmd('xelatex resumes.tex'):
+        if has_pubs and (not run_cmd('biber resume') or not run_cmd('xelatex resume.tex')):
+            log.warn('Failed to compile resume files, please compile them manually')
+    else:
+        log.warn('Failed to compile resume files, please compile them manually')
+
+    os.chdir(curr_dir)
+
+
+def run_cmd(cmd):
+    """
+    Run a shell command
+    Args:
+        cmd: the string of command to run
+
+    Returns:
+        A boolean whether the command has been successful or not
+    """
+    success = True
+    try:
+        proc = Popen(shlex.split(cmd), stdout=PIPE, stderr=PIPE)
+        out, err = proc.communicate(timeout=TIMEOUT)
+
+        if proc.returncode != 0 or err:
+            success = False
+    except (FileNotFoundError, TimeoutExpired):
+        success = False
+
+    return success

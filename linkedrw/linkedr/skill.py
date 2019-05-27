@@ -6,7 +6,7 @@ from linkedrw.constants import SKILLS, LATEX_INDENT, PACKAGE_NAME
 
 def make_skill_section(skills, languages, output_dir):
     """
-    Generate skill latex files
+    Create skill latex files
     Args:
         skills: the list of skills
         languages: the list of languages
@@ -47,7 +47,7 @@ def make_skill_section(skills, languages, output_dir):
 
 def make_skill_subsection(skills, skills_type):
     """
-    Generate the lines for the skill subsection
+    Create the lines for the skill subsection
     Args:
         skills: the list of skills
         skills_type: the skill type

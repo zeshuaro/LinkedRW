@@ -13,7 +13,7 @@ from linkedrw.utils import make_dir, copy_files
 
 def make_website_files(profile, output_dir):
     """
-    Generate website files
+    Create website files
     Args:
         profile: the dict of the profile
         output_dir: the output directory
@@ -22,7 +22,7 @@ def make_website_files(profile, output_dir):
         None
     """
     log = Logger()
-    log.notice('Generate website files...')
+    log.notice('Creating website files...')
 
     output_dir = os.path.join(output_dir, 'website')
     make_dir(output_dir)
@@ -134,7 +134,7 @@ def make_website_files(profile, output_dir):
 
 def make_section_header(section, indent):
     """
-    Generate the lines for the section header
+    Create the lines for the section header
     Args:
         section: the section
         indent: the original indentation
@@ -153,7 +153,7 @@ def make_section_header(section, indent):
 
 def make_summary_section(summary, indent):
     """
-    Generate the summary line
+    Create the summary line
     Args:
         summary: the summary text
         indent: the original indentation
@@ -169,7 +169,7 @@ def make_summary_section(summary, indent):
 
 def make_experience_section(exps, indent):
     """
-    Generate the lines of the experience section
+    Create the lines of the experience section
     Args:
         exps: the list of experiences
         indent: the original indentation
@@ -195,7 +195,7 @@ def make_experience_section(exps, indent):
 
 def make_education_section(edus, indent):
     """
-    Generate the lines of the education section
+    Create the lines of the education section
     Args:
         edus: the list of educations
         indent: the original indentation
@@ -222,7 +222,7 @@ def make_education_section(edus, indent):
 
 def make_projects_section(prjs, indent):
     """
-    Generate the lines of the project section
+    Create the lines of the project section
     Args:
         prjs: the list of projects
         indent: the original indentation
@@ -250,7 +250,7 @@ def make_projects_section(prjs, indent):
 
 def make_skills_section(skls, indent):
     """
-    Generate the liens of the skill section
+    Create the liens of the skill section
     Args:
         skls: the list of skills
         indent: the original indentation
@@ -267,7 +267,7 @@ def make_skills_section(skls, indent):
 
 def make_contact_section(cons, indent):
     """
-    Generate the lines of the contact section
+    Create the lines of the contact section
     Args:
         cons: the list of contacts
         indent: the original indentation
@@ -323,7 +323,7 @@ def sort_entries(entries, date_format='MMM YYYY'):
 
 def get_description(descs, indent):
     """
-    Generate the lines of the description
+    Create the lines of the description
     Args:
         descs: the list of descriptions
         indent: the original indentation

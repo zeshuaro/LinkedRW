@@ -5,10 +5,10 @@ from linkedrw.constants import *
 
 def make_resume_section(profile, section, output_dir):
     """
-    Generate the latex file for the given section
+    Create the latex file for the given section
     Args:
         profile: the dict of the profile
-        section: the section to generate
+        section: the section to Create
         output_dir: the output directory
 
     Returns:
@@ -30,7 +30,7 @@ def make_resume_section(profile, section, output_dir):
 
 def make_grouped_section(profile, section):
     """
-    Generate the lines for grouped entries
+    Create the lines for grouped entries
     Args:
         profile: the dict of the profile
         section: the section
@@ -58,7 +58,7 @@ def make_grouped_section(profile, section):
 
 def make_ungrouped_section(profile, section):
     """
-    Generate the lines for ungrouped entries
+    Create the lines for ungrouped entries
     Args:
         profile: the dict of the profile
         section: the section
@@ -86,7 +86,7 @@ def make_ungrouped_section(profile, section):
 
 def get_descriptions(item):
     """
-    Generate the lines for the description
+    Create the lines for the description
     Args:
         item: the item
 

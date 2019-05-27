@@ -34,7 +34,10 @@ The `resume/` directory contains a list of LaTex files that can be compiled into
 As per the instructions and requirements from [Awesome-CV](https://github.com/posquit0/Awesome-CV), 
 a full TeX distribution needs to be installed to compile the LaTex files. 
 You can download and install it from [here](https://www.latex-project.org/get/#tex-distributions).
-Afterwards, run the following commands to compile your resume:
+
+Please note that `linkedrw` will try to compile the LaTex files for you if the requirements are met.
+
+After installing the TeX distribution, run the following commands to compile your resume:
 
 ```bash
 cd resume/
