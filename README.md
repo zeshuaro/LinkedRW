@@ -1,7 +1,7 @@
 # LinkedRW
 
 A simple CLI for you to create your resume using the [Awesome CV](https://github.com/posquit0/Awesome-CV) template, 
-and your personal website using the [Dev Portfolio](https://github.com/RyanFitzgerald/devportfolio) template 
+and your personal website using the [Dev Portfolio](https://github.com/RyanFitzgerald/devportfolio) template, 
 based on your LinkedIn profile.
 
 ## Installation
@@ -13,7 +13,7 @@ pip install linkedrw
 ```
 
 You will also need to download the ChromeDriver from 
-[here](https://sites.google.com/a/chromium.org/chromedriver/downloads) and put it in path (e.g. /usr/local/bin/)
+[here](https://sites.google.com/a/chromium.org/chromedriver/downloads) and put it in path (e.g. `/usr/local/bin/`)
 
 
 ## Usage
@@ -22,7 +22,7 @@ Simply run `linkedrw` to create your resume and personal webiste:
 
 This will create three outputs:
 
-`profile.json` - Your LinkedIn profile is scraped and stored in this file
+`profile.json` - Your LinkedIn profile is being scraped and stored in this file
 
 `resume/` - The directory containing your resume files
 
@@ -30,9 +30,9 @@ This will create three outputs:
 
 ### Compiling Your Resume
 
-The `resume/` directory contains a list of Latex files that can be compiled into a PDF resume file. 
+The `resume/` directory contains a list of LaTex files that can be compiled into a PDF resume file. 
 As per the instructions and requirements from [Awesome-CV](https://github.com/posquit0/Awesome-CV), 
-a full TeX distribution must be installed. 
+a full TeX distribution needs to be installed to compile the LaTex files. 
 You can download and install it from [here](https://www.latex-project.org/get/#tex-distributions).
 Afterwards, run the following commands to compile your resume:
 
