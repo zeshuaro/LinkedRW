@@ -39,7 +39,9 @@ def scrape(email, password, output_dir, **kwargs):
         pass
 
     # Navigate to profile page
-    driver.find_element_by_xpath("//a[@data-control-name='identity_welcome_message']").click()
+    elem = WebDriverWait(driver, TIMEOUT).until(ec.presence_of_element_located(
+        (By.XPATH, "//a[@data-control-name='identity_welcome_message']")))
+    elem.click()
     WebDriverWait(driver, TIMEOUT).until(ec.presence_of_element_located((By.ID, 'oc-background-section')))
 
     # Scrape profile
