@@ -7,7 +7,7 @@ import sys
 from getpass import getpass
 from logbook import Logger, StreamHandler
 
-from .globals import PACKAGE_NAME, CREDENTIALS_FILE
+from .constants import PACKAGE_NAME, CREDENTIALS_FILE
 from .utils import make_dir
 from .linkedr import make_resume_files
 from .scraper import scrape

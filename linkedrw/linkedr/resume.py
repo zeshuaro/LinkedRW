@@ -4,7 +4,7 @@ import pkg_resources
 from logbook import Logger
 from urllib.parse import urlparse
 
-from ..globals import *
+from ..constants import *
 from ..utils import make_dir, copy_files
 from .publication import make_publication_section
 from .section import make_resume_section

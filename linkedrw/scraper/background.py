@@ -3,7 +3,7 @@ import time
 from collections import defaultdict
 from selenium.common.exceptions import NoSuchElementException
 
-from ..globals import *
+from ..constants import *
 from ..utils import get_span_text, get_optional_text, get_description
 
 

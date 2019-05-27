@@ -9,7 +9,7 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 
 from ..exceptions import LoginError
-from ..globals import *
+from ..constants import *
 from .accomplishment import get_accomplishment_details
 from .background import get_background_details
 from .personal import get_personal_details

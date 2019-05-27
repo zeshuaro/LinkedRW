@@ -7,7 +7,7 @@ from datetime import datetime
 from logbook import Logger
 from queue import PriorityQueue
 
-from ..globals import *
+from ..constants import *
 from ..utils import make_dir, copy_files
 
 
