@@ -97,7 +97,3 @@ def store_creds(email, password, creds_file):
 
     with open(creds_file, 'w') as f:
         json.dump(credentials, f)
-
-
-if __name__ == '__main__':
-    main()
