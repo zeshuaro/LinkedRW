@@ -39,10 +39,11 @@ setup(
     author='Joshua Tang',
     author_email='zeshuaro@gmail.com',
     license='MIT License',
+    url='https://github.com/zeshuaro/LinkedRW',
+    keywords='python scraper cv resume portfolio profile website',
     description='A simple CLI for you to create your resume and personal website based on your LinkedIn profile',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    url='https://github.com/zeshuaro/LinkedRW',
     packages=find_packages(),
     python_requires='>=3.6',
     install_requires=requirements(),
@@ -50,4 +51,13 @@ setup(
     entry_points={
         'console_scripts': ['linkedrw=linkedrw:main'],
     },
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7'
+    ]
 )
