@@ -46,7 +46,9 @@ xelatex resume.tex
 
 This should create your PDF resume file `resume.pdf`
 
-If your resume contains a publication section, run the following commands instead:
+If your resume contains a publication section, 
+[**BibLaTeX**](https://www.ctan.org/pkg/biblatex) and [**biber**](https://www.ctan.org/pkg/biber) should also be available. 
+And run the following commands instead:
 
 ```bash
 cd resume/
