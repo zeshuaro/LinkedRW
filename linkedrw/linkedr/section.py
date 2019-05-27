@@ -1,6 +1,6 @@
 import os
 
-from ..constants import *
+from linkedrw.constants import *
 
 
 def make_resume_section(profile, section, output_dir):

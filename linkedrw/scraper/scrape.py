@@ -8,11 +8,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 
-from ..exceptions import LoginError
-from ..constants import *
-from .accomplishment import get_accomplishment_details
-from .background import get_background_details
-from .personal import get_personal_details
+from linkedrw.exceptions import LoginError
+from linkedrw.constants import *
+from linkedrw.scraper.accomplishment import get_accomplishment_details
+from linkedrw.scraper.background import get_background_details
+from linkedrw.scraper.personal import get_personal_details
 
 
 def scrape(email, password, output_dir, **kwargs):

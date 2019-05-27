@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 
-from ..constants import *
+from linkedrw.constants import *
 
 
 def get_personal_details(driver, section_type):

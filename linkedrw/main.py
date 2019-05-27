@@ -7,11 +7,11 @@ import sys
 from getpass import getpass
 from logbook import Logger, StreamHandler
 
-from .constants import PACKAGE_NAME, CREDENTIALS_FILE
-from .utils import make_dir
-from .linkedr import make_resume_files
-from .scraper import scrape
-from .linkedw import make_website_files
+from linkedrw.constants import PACKAGE_NAME, CREDENTIALS_FILE
+from linkedrw.utils import make_dir
+from linkedrw.scraper import scrape
+from linkedrw.linkedr import make_resume_files
+from linkedrw.linkedw import make_website_files
 
 
 def main():

@@ -7,8 +7,8 @@ from datetime import datetime
 from logbook import Logger
 from queue import PriorityQueue
 
-from ..constants import *
-from ..utils import make_dir, copy_files
+from linkedrw.constants import *
+from linkedrw.utils import make_dir, copy_files
 
 
 def make_website_files(profile, output_dir):
