@@ -1,5 +1,10 @@
 # LinkedRW
 
+[![PyPi Package Version](https://img.shields.io/pypi/v/linkedrw.svg)](https://pypi.org/project/linkedrw/)
+[![Supported Python Versions](https://img.shields.io/pypi/pyversions/linkedrw.svg)](https://pypi.org/project/linkedrw/)
+[![MIT License](https://img.shields.io/pypi/l/linkedrw.svg)](https://github.com/zeshuaro/LinkedRW/blob/master/LICENSE)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/04b86b6463f749f79378ca580257fbb7)](https://www.codacy.com/app/joshuaystang/LinkedRW?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zeshuaro/LinkedRW&amp;utm_campaign=Badge_Grade)
+
 A simple CLI for you to create your resume using the [Awesome CV](https://github.com/posquit0/Awesome-CV) template, 
 and your personal website using the [Dev Portfolio](https://github.com/RyanFitzgerald/devportfolio) template, 
 based on your LinkedIn profile.
@@ -14,7 +19,6 @@ pip install linkedrw
 
 You will also need to download the ChromeDriver from 
 [here](https://sites.google.com/a/chromium.org/chromedriver/downloads) and put it in path (e.g. `/usr/local/bin/`)
-
 
 ## Usage
 
@@ -66,7 +70,7 @@ and you should be able to see your personal website.
 
 Below is the list of options:
 
-```
+```text
   -h, --help            show this help message and exit
   --email EMAIL, -e EMAIL
                         Your LinkedIn login email
