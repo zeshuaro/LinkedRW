@@ -80,3 +80,26 @@ Below is the list of options:
   --profile PROFILE_FILE, -j PROFILE_FILE
                         The profile json file
 ```
+
+## Customisation
+
+### Customising Your Resume
+
+The comments in `resume.pdf` give you guidelines on customising your resume.
+
+### Customising Your Personal Website
+
+Run the following commands to install the dependencies first:
+
+```bash
+cd website/
+npm install
+```
+
+Then run the following command so that it can be auto compiled when there are changes made to `js/scripts.js` or `sass/styles.css`:
+
+```bash
+npm run watch
+```
+
+For more customisation instructions, please refer to the original [repo](https://github.com/RyanFitzgerald/devportfolio).
