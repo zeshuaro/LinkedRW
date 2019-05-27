@@ -36,9 +36,13 @@ def grep(attrname):
 setup(
     name='linkedrw',
     version=grep("__version__"),
-    packages=find_packages(),
+    author='Joshua Tang',
+    author_email='zeshuaro@gmail.com',
     license='MIT License',
+    description='A simple CLI for you to create your resume and personal website based on your LinkedIn profile',
     long_description=open('README.md').read(),
+    packages=find_packages(),
+    python_requires='>=3.6',
     install_requires=requirements(),
     include_package_data=True,
     entry_points={
