@@ -17,8 +17,12 @@ Install through pip:
 pip install linkedrw
 ```
 
-You will also need to download the ChromeDriver from 
-[here](https://sites.google.com/a/chromium.org/chromedriver/downloads) and put it in path (e.g. `/usr/local/bin/`)
+You will also need to download a web driver and put it in path (e.g. `/usr/local/bin/`), `linkedrw` supports the following: 
+
+* [Chrome Driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+* [Firefox Driver](https://github.com/mozilla/geckodriver/releases)
+* [Opera Driver](https://github.com/operasoftware/operachromiumdriver/releases)
+* Safari Driver ([Instructions](https://webkit.org/blog/6900/webdriver-support-in-safari-10/) to configure Safari to allow automation)
 
 ## Usage
 

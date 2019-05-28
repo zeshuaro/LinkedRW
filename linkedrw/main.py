@@ -7,7 +7,7 @@ import sys
 from getpass import getpass
 from logbook import Logger, StreamHandler
 
-from linkedrw.constants import PACKAGE_NAME, CREDENTIALS_FILE
+from linkedrw.constants import PACKAGE_NAME, CREDENTIALS_FILE, CHROME, DRIVERS
 from linkedrw.utils import make_dir
 from linkedrw.scraper import scrape
 from linkedrw.linkedr import make_resume_files
@@ -28,12 +28,15 @@ def main():
     parser.add_argument('--resume_only', '-r', action='store_true', help='Only create resume')
     parser.add_argument('--website_only', '-w', action='store_true', help='Only create personal website')
     parser.add_argument('--profile', '-j', dest='profile_file', help='The profile json file')
+    parser.add_argument('--driver', '-d', default=CHROME,
+                        help=f'The web driver: {", ".join(DRIVERS)} (default: %(default)s)')
 
     args = parser.parse_args()
     args.method(**vars(args))
 
 
-def run(email, password, keep_creds, output_dir, scrape_only, resume_only, website_only, profile_file, **kwargs):
+def run(driver, email, password, keep_creds, output_dir, scrape_only, resume_only, website_only, profile_file,
+        **kwargs):
     # Setup logging
     logbook.set_datetime_format('local')
     format_string = '[{record.time:%Y-%m-%d %H:%M:%S}] {record.level_name}: {record.message}'
@@ -59,7 +62,7 @@ def run(email, password, keep_creds, output_dir, scrape_only, resume_only, websi
 
         log.notice('Scraping LinkedIn profile')
         log.notice('Please keep the browser window on top')
-        profile = scrape(email, password, output_dir)
+        profile = scrape(driver.lower(), email, password, output_dir)
 
         if keep_creds:
             store_creds(email, password, credentials_file)
