@@ -85,10 +85,15 @@ Below is the list of options:
   --output_dir OUTPUT_DIR, -o OUTPUT_DIR
                         The output directory (default: current directory)
   --scrape_only, -s     Only scrape LinkedIn profile
-  --resume_only, -r     Only generate resume
-  --website_only, -w    Only generate personal website
+  --resume_only, -r     Only create resume
+  --website_only, -w    Only create personal website
   --profile PROFILE_FILE, -j PROFILE_FILE
                         The profile json file
+  --driver DRIVER, -d DRIVER
+                        The web driver: chrome, firefox, safari, opera
+                        (default: chrome)
+  --timeout TIMEOUT, -t TIMEOUT
+                        The timeout value (default: 10)
 ```
 
 ## Customisation
@@ -113,3 +118,8 @@ npm run watch
 ```
 
 For more customisation instructions, please refer to the original [repo](https://github.com/RyanFitzgerald/devportfolio).
+
+## Issues
+
+If `NoSuchElementException` is raised, try increasing the timeout value by specifying `-t/--timeout` option.
+If the problem remains, please raise an issue.
