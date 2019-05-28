@@ -1,5 +1,4 @@
 PACKAGE_NAME = 'linkedrw'
-TIMEOUT = 20
 LATEX_INDENT = '  '
 HTML_INDENT = '    '
 CREDENTIALS_FILE = f'~/.{PACKAGE_NAME}/credentials.json'
