@@ -36,6 +36,18 @@ This will create three outputs:
 
 `website/` - The directory containing your personal website files
 
+### Running Without LinkedIn
+
+Scraping from LinkedIn allows you to only manage and update your profile there 
+while keeping your resume and personal website up-to-date. 
+However, you can also create your resume and personal website by using a JSON file.
+Check out the example [here](example.json) for the JSON format that `linkedrw` accepts.
+Once you have your JSON profile ready, run the following command to create your resume and personal website:
+
+```bash
+linkedrw -j example.json
+```
+
 ### Compiling Your Resume
 
 The `resume/` directory contains a list of LaTex files that can be compiled into a PDF resume file. 
