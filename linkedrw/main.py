@@ -48,9 +48,11 @@ def run(driver, email, password, keep_creds, output_dir, scrape_only, resume_onl
 
     # Check if user has provided the profile json file
     if profile_file is None:
-        credentials_file = os.path.expanduser(CREDENTIALS_FILE)
+        if driver.lower() not in DRIVERS:
+            raise ValueError(f'Browser driver has to be one of these: {", ".join(DRIVERS)}')
 
         # Check if credentials file exists
+        credentials_file = os.path.expanduser(CREDENTIALS_FILE)
         if os.path.exists(credentials_file):
             with open(credentials_file) as f:
                 credentials = json.load(f)
