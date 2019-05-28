@@ -36,7 +36,7 @@ This will create three outputs:
 
 `website/` - The directory containing your personal website files
 
-### Running without LinkedIn
+### Running Without LinkedIn
 
 Scraping from LinkedIn allows you to only manage and update your profile there 
 while keeping your resume and personal website up-to-date. 
