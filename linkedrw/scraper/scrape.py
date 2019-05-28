@@ -15,11 +15,20 @@ from linkedrw.scraper.background import get_background_details
 from linkedrw.scraper.personal import get_personal_details
 
 
-def scrape(email, password, output_dir, **kwargs):
-    driver = webdriver.Chrome()
-    driver.get('https://www.linkedin.com/login/')
+def scrape(browser_driver, email, password, output_dir, **kwargs):
+    if browser_driver == CHROME:
+        driver = webdriver.Chrome()
+    elif browser_driver == FIREFOX:
+        driver = webdriver.Firefox()
+    elif browser_driver == SAFARI:
+        driver = webdriver.Safari()
+    elif browser_driver == OPERA:
+        driver = webdriver.Opera()
+    else:
+        raise ValueError(f'Browser driver has to be one of these: {", ".join(DRIVERS)}')
 
     # Login to LinkedIn
+    driver.get('https://www.linkedin.com/login/')
     driver.find_element_by_id('username').send_keys(email)
     driver.find_element_by_id('password').send_keys(password)
     driver.find_element_by_class_name('login__form_action_container').submit()

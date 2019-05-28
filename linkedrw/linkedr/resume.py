@@ -178,7 +178,7 @@ def run_cmd(cmd):
     """
     success = True
     try:
-        proc = Popen(shlex.split(cmd), stdout=PIPE, stderr=PIPE, shell=True)
+        proc = Popen(shlex.split(cmd), stdout=PIPE, stderr=PIPE)
         _, err = proc.communicate(timeout=TIMEOUT)
 
         if proc.returncode != 0 or err:

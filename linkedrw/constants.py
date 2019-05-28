@@ -1,8 +1,14 @@
 PACKAGE_NAME = 'linkedrw'
-TIMEOUT = 10
+TIMEOUT = 20
 LATEX_INDENT = '  '
 HTML_INDENT = '    '
 CREDENTIALS_FILE = f'~/.{PACKAGE_NAME}/credentials.json'
+
+CHROME = 'chrome'
+FIREFOX = 'firefox'
+SAFARI = 'safari'
+OPERA = 'opera'
+DRIVERS = [CHROME, FIREFOX, SAFARI, OPERA]
 
 NAME = 'name'
 POSITION = 'position'
