@@ -1,0 +1,90 @@
+{
+    "name": "Your Name",
+    "position": "Current position",
+    "contact": {
+        "address": "",
+        "mobile": "",
+        "email": "",
+        "homepage": "",
+        "linkedin": "",
+        "skype": "",
+        "github": "",
+        "gitlab": "",
+        "stack-overflow": "",
+        "twitter": "",
+        "reddit": "",
+        "medium": "",
+        "googlescholar": ""
+    },
+    "about": "I love coding!",
+    "experience": [
+        {
+            "name": "Company",
+            "entries": [
+                {
+                    "title": "Software Engineer",
+                    "dates": "Jan 2019 - Present",
+                    "location": "Mars",
+                    "description": "Developed blah blah blah"
+                }
+            ]
+        }
+    ],
+    "education": [
+        {
+            "name": "School",
+            "entries": [
+                {
+                    "degree": "Bachelor",
+                    "location": "Mercury",
+                    "dates": "2018 - 2019",
+                    "description": "Participated blah blah blah"
+                }
+            ]
+        }
+    ],
+    "volunteering": [
+        {
+            "name": "Volunteering Centre",
+            "entries": [
+                {
+                    "title": "Volunteer",
+                    "dates": "Jan 2018 - Dec 2018",
+                    "location": "Venus",
+                    "description": "Helped blah blah blah"
+                }
+            ]
+        }
+    ],
+    "skills": [
+        "Python",
+        "Java"
+    ],
+    "projects": [
+        {
+            "name": "Project Name",
+            "dates": "Jan 2018 - Present",
+            "description": "Created blah blah blah",
+            "link": "Link to project"
+        }
+    ],
+    "publications": [
+        {
+            "title": "Paper Title",
+            "date": "Jan 1, 2019",
+            "publisher": "Nature",
+            "link": "Link to paper"
+        }
+    ],
+    "honors": [
+        {
+            "title": "Award Title",
+            "date": "2019",
+            "location": "Jupiter",
+            "issuer": "Faculty"
+        }
+    ],
+    "languages": [
+        "English"
+    ]
+}
