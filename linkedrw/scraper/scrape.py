@@ -15,7 +15,7 @@ from linkedrw.scraper.background import get_background_details
 from linkedrw.scraper.personal import get_personal_details
 
 
-def scrape(browser_driver, email, password, output_dir, **kwargs):
+def scrape(browser_driver, email, password, output_dir, timeout):
     if browser_driver == CHROME:
         driver = webdriver.Chrome()
     elif browser_driver == FIREFOX:
@@ -48,16 +48,16 @@ def scrape(browser_driver, email, password, output_dir, **kwargs):
         pass
 
     # Navigate to profile page
-    elem = WebDriverWait(driver, TIMEOUT).until(ec.presence_of_element_located(
+    elem = WebDriverWait(driver, timeout).until(ec.presence_of_element_located(
         (By.XPATH, "//a[@data-control-name='identity_welcome_message']")))
     elem.click()
-    WebDriverWait(driver, TIMEOUT).until(ec.presence_of_element_located((By.ID, 'oc-background-section')))
+    WebDriverWait(driver, timeout).until(ec.presence_of_element_located((By.ID, 'oc-background-section')))
 
     # Scrape profile
     profile = {
         NAME: get_personal_details(driver, NAME),
         POSITION: get_personal_details(driver, POSITION),
-        CONTACT: get_personal_details(driver, CONTACT),
+        CONTACT: get_personal_details(driver, CONTACT, timeout),
         SUMMARY: get_personal_details(driver, SUMMARY),
         EXPERIENCE: get_background_details(driver, By.ID, 'experience-section', EXPERIENCE),
         EDUCATION: get_background_details(driver, By.ID, 'education-section', EDUCATION),

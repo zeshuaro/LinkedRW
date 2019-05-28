@@ -30,12 +30,13 @@ def main():
     parser.add_argument('--profile', '-j', dest='profile_file', help='The profile json file')
     parser.add_argument('--driver', '-d', default=CHROME,
                         help=f'The web driver: {", ".join(DRIVERS)} (default: %(default)s)')
+    parser.add_argument('--timeout', '-t', type=int, default=10, help='The timeout value (default: %(default)s)')
 
     args = parser.parse_args()
     args.method(**vars(args))
 
 
-def run(driver, email, password, keep_creds, output_dir, scrape_only, resume_only, website_only, profile_file,
+def run(driver, email, password, keep_creds, output_dir, scrape_only, resume_only, website_only, profile_file, timeout,
         **kwargs):
     # Setup logging
     logbook.set_datetime_format('local')
@@ -64,7 +65,7 @@ def run(driver, email, password, keep_creds, output_dir, scrape_only, resume_onl
 
         log.notice('Scraping LinkedIn profile')
         log.notice('Please keep the browser window on top')
-        profile = scrape(driver.lower(), email, password, output_dir)
+        profile = scrape(driver.lower(), email, password, output_dir, timeout)
 
         if keep_creds:
             store_creds(email, password, credentials_file)
@@ -74,11 +75,11 @@ def run(driver, email, password, keep_creds, output_dir, scrape_only, resume_onl
 
     if not scrape_only:
         if resume_only:
-            make_resume_files(profile, output_dir)
+            make_resume_files(profile, output_dir, timeout)
         elif website_only:
             make_website_files(profile, output_dir)
         else:
-            make_resume_files(profile, output_dir)
+            make_resume_files(profile, output_dir, timeout)
             make_website_files(profile, output_dir)
 
 

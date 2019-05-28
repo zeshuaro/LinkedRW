@@ -13,12 +13,13 @@ from linkedrw.linkedr.section import make_resume_section
 from linkedrw.linkedr.skill import make_skill_section
 
 
-def make_resume_files(profile, output_dir):
+def make_resume_files(profile, output_dir, timeout):
     """
     Create resume files
     Args:
         profile: the dict of the profile
         output_dir: the output directory
+        timeout: the timeout value
 
     Returns:
         None
@@ -37,7 +38,7 @@ def make_resume_files(profile, output_dir):
         make_resume_section(profile, section, output_dir)
 
     make_resume_main(profile, has_publications, output_dir)
-    compile_resume(output_dir, has_publications)
+    compile_resume(output_dir, has_publications, timeout)
 
 
 def make_resume_main(profile, has_publications, output_dir):
@@ -143,12 +144,13 @@ def make_resume_content(profile):
     return lines
 
 
-def compile_resume(output_dir, has_pubs):
+def compile_resume(output_dir, has_pubs, timeout):
     """
     Compile resume files
     Args:
-        output_dir: The resume output directory
-        has_pubs: The boolean whether there is a publication section
+        output_dir: the resume output directory
+        has_pubs: the boolean whether there is a publication section
+        timeout: the timeout value
 
     Returns:
         None
@@ -158,8 +160,8 @@ def compile_resume(output_dir, has_pubs):
     curr_dir = os.getcwd()
     os.chdir(output_dir)
 
-    if run_cmd('xelatex resume.tex'):
-        if has_pubs and (not run_cmd('biber resume') or not run_cmd('xelatex resume.tex')):
+    if run_cmd('xelatex resume.tex', timeout):
+        if has_pubs and (not run_cmd('biber resume', timeout) or not run_cmd('xelatex resume.tex', timeout)):
             log.warn('Failed to compile resume files, please compile them manually')
     else:
         log.warn('Failed to compile resume files, please compile them manually')
@@ -167,11 +169,12 @@ def compile_resume(output_dir, has_pubs):
     os.chdir(curr_dir)
 
 
-def run_cmd(cmd):
+def run_cmd(cmd, timeout):
     """
     Run a shell command
     Args:
         cmd: the string of command to run
+        timeout: the timeout value
 
     Returns:
         A boolean whether the command has been successful or not
@@ -179,7 +182,7 @@ def run_cmd(cmd):
     success = True
     try:
         proc = Popen(shlex.split(cmd), stdout=PIPE, stderr=PIPE)
-        _, err = proc.communicate(timeout=TIMEOUT)
+        out, err = proc.communicate(timeout=timeout)
 
         if proc.returncode != 0 or err:
             success = False

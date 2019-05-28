@@ -8,12 +8,13 @@ from selenium.webdriver.support.ui import WebDriverWait
 from linkedrw.constants import *
 
 
-def get_personal_details(driver, section_type):
+def get_personal_details(driver, section_type, timeout=None):
     """
     Scrape personal details
     Args:
         driver: the selenium driver
         section_type: the section type
+        timeout: the timeout value
 
     Returns:
         A list of details of all the items under the given section
@@ -23,7 +24,10 @@ def get_personal_details(driver, section_type):
     elif section_type == POSITION:
         return get_position(driver)
     elif section_type == CONTACT:
-        return get_contact(driver)
+        if timeout is None:
+            raise ValueError('timeout needs to be provided')
+
+        return get_contact(driver, timeout)
     elif section_type == SUMMARY:
         return get_summary(driver)
 
@@ -42,11 +46,12 @@ def get_position(driver):
     return re.sub(r'\s+at.*', '', position)
 
 
-def get_contact(driver):
+def get_contact(driver, timeout):
     """
     Scrape contact details
     Args:
         driver: the selenium driver
+        timeout: the timeout value
 
     Returns:
         A dict of contact details
@@ -55,7 +60,7 @@ def get_contact(driver):
     # Show contact details
     driver.find_element_by_xpath("//a[@data-control-name='contact_see_more']").click()
 
-    linkedin_id = WebDriverWait(driver, TIMEOUT).until(ec.presence_of_element_located((
+    linkedin_id = WebDriverWait(driver, timeout).until(ec.presence_of_element_located((
         By.CLASS_NAME, 'pv-contact-info__ci-container'))).find_element_by_tag_name('a').get_attribute('href')
     email = driver.find_element_by_css_selector('.pv-contact-info__contact-type.ci-email').\
         find_element_by_tag_name('a').text
