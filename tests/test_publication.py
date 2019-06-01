@@ -60,28 +60,6 @@ def test_make_publication_section_multi():
 
         assert cites == set(CITES)
 
-
-def test_make_references_empty():
-    with tempfile.TemporaryDirectory() as dirname:
-        assert len(make_references([], dirname)) == 0
-        with open(os.path.join(dirname, 'references.bib')) as f:
-            assert f.read() == ''
-
-
-def test_make_references_one():
-    with tempfile.TemporaryDirectory() as dirname:
-        assert make_references(PUBS[:1], dirname) == CITES[:1]
-        with open(os.path.join(dirname, 'references.bib')) as f:
-            assert f.read() != ''
-
-
-def test_make_references_multiple():
-    with tempfile.TemporaryDirectory() as dirname:
-        assert make_references(PUBS, dirname) == CITES
-        with open(os.path.join(dirname, 'references.bib')) as f:
-            assert f.read() != ''
-
-
 def test_make_references_no_doi():
     pub = PUBS[0]
     pub[LINK] = ''

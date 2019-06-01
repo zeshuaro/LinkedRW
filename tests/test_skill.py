@@ -1,7 +1,7 @@
 import os
 import tempfile
 
-from linkedrw.linkedr.skill import make_skill_section, make_skill_subsection
+from linkedrw.linkedr.skill import make_skill_section
 from linkedrw.constants import SKILLS
 
 PROG_LANGS = ['Python', 'Javascript', 'C++']
