@@ -14,18 +14,19 @@ def make_resume_section(profile, section, output_dir):
     Returns:
         None
     """
-    title = 'Honors \\& Awards' if section == HONORS else section.title()
-    cv_type = 'cvhonors' if section == HONORS else 'cventries'
-    lines = [f'\\cvsection{{{title}}}\n', f'\\begin{{{cv_type}}}']
+    if section in SECTION_ITEMS and profile[section]:
+        title = 'Honors \\& Awards' if section == HONORS else section.title()
+        cv_type = 'cvhonors' if section == HONORS else 'cventries'
+        lines = [f'\\cvsection{{{title}}}\n', f'\\begin{{{cv_type}}}']
 
-    if section in (EDUCATION, EXPERIENCE, VOLUNTEERING):
-        lines += make_grouped_section(profile, section)
-    else:
-        lines += make_ungrouped_section(profile, section)
+        if section in (EDUCATION, EXPERIENCE, VOLUNTEERING):
+            lines += make_grouped_section(profile, section)
+        else:
+            lines += make_ungrouped_section(profile, section)
 
-    lines.append(f'\\end{{{cv_type}}}')
-    with open(os.path.join(output_dir, f'{section}.tex'), 'w') as f:
-        f.write('\n'.join(lines))
+        lines.append(f'\\end{{{cv_type}}}')
+        with open(os.path.join(output_dir, f'{section}.tex'), 'w') as f:
+            f.write('\n'.join(lines))
 
 
 def make_grouped_section(profile, section):
