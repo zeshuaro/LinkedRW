@@ -59,9 +59,11 @@ def run(driver, email, password, keep_creds, output_dir, scrape_only, resume_onl
                 credentials = json.load(f)
                 email = credentials['email']
                 password = credentials['password']
-        elif email is None and password is None:
-            email = input('Enter your LinkedIn login email: ')
-            password = getpass('Enter your LinkedIn login password: ')
+        else:
+            if email is None:
+                email = input('Enter your LinkedIn login email: ')
+            if password is None:
+                password = getpass('Enter your LinkedIn login password: ')
 
         log.notice('Scraping LinkedIn profile')
         log.notice('Please keep the browser window on top')
