@@ -20,7 +20,7 @@ def get_personal_details(driver, section_type, timeout=None):
         A list of details of all the items under the given section
     """
     if section_type == NAME:
-        return driver.find_element_by_css_selector('.pv-top-card-section__name.inline.t-24.t-black.t-normal').text
+        return get_name(driver)
     elif section_type == POSITION:
         return get_position(driver)
     elif section_type == CONTACT:
@@ -32,6 +32,21 @@ def get_personal_details(driver, section_type, timeout=None):
         return get_summary(driver)
 
 
+def get_name(driver):
+    """
+    Scrape name
+    Args:
+        driver: the selenium driver
+
+    Returns:
+        A string of name
+    """
+    try:
+        return driver.find_element_by_css_selector('.pv-top-card-section__name.inline.t-24.t-black.t-normal').text
+    except NoSuchElementException:
+        return driver.find_element_by_css_selector('.inline.t-24.t-black.t-normal.break-words').text
+
+
 def get_position(driver):
     """
     Scrape position
@@ -41,7 +56,10 @@ def get_position(driver):
     Returns:
         A string of the position
     """
-    position = driver.find_element_by_css_selector('.pv-top-card-section__headline.mt1.t-18.t-black.t-normal').text
+    try:
+        position = driver.find_element_by_css_selector('.pv-top-card-section__headline.mt1.t-18.t-black.t-normal').text
+    except NoSuchElementException:
+        position = driver.find_element_by_css_selector('.mt1.inline-block.t-18.t-black.t-normal').text
 
     return re.sub(r'\s+at.*', '', position)
 
