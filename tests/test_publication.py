@@ -35,20 +35,7 @@ def test_make_publication_section_empty():
         assert os.path.exists(os.path.join(dirname, f'{PUBLICATIONS}.tex')) is False
 
 
-def test_make_publication_section_one():
-    with tempfile.TemporaryDirectory() as dirname:
-        assert make_publication_section(PUBS[:1], dirname) is True
-
-        cites = set()
-        with open(os.path.join(dirname, f'{PUBLICATIONS}.tex')) as f:
-            for line in f:
-                if '\\nocite' in line:
-                    cites.add(line.strip().lstrip('\\nocite').strip('{}'))
-
-        assert cites == set(CITES[:1])
-
-
-def test_make_publication_section_multi():
+def test_make_publication_section():
     with tempfile.TemporaryDirectory() as dirname:
         assert make_publication_section(PUBS, dirname) is True
 
@@ -59,6 +46,7 @@ def test_make_publication_section_multi():
                     cites.add(line.strip().lstrip('\\nocite').strip('{}'))
 
         assert cites == set(CITES)
+
 
 def test_make_references_no_doi():
     pub = PUBS[0]
