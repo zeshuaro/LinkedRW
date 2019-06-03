@@ -99,8 +99,7 @@ def make_personal_info(profile):
         if value:
             if info_type == NAME:
                 names = value.split()
-                last_name = ' '.join(names[1:])
-                line += f'{{{names[0]}}}{{{last_name}}}'
+                line += f'{{{names[0]}}}{{{names[1:]}}}'
             elif info_type == STACKOVERFLOW:
                 user_id, username = urlparse(value).path.lstrip('/users/').strip('/').split('/')
                 line += f'{{{user_id}}}{{{username}}}'
