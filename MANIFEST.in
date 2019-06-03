@@ -1,2 +1,3 @@
 include LICENSE requirements.txt linkedrw/utils/* linkedrw/linkedr/* linkedrw/linkedw/*
-recursive-include linkedrw/linkedr/awesome_cv_files/ * linkedrw/linkedw/dev_portfolio_files/ *
+recursive-include linkedrw/linkedr/awesome_cv_files/ *
+recursive-include linkedrw/linkedw/dev_portfolio_files/ *
