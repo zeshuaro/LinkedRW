@@ -102,13 +102,13 @@ def make_personal_info(profile):
                 last_name = ' '.join(names[1:])
                 line += f'{{{names[0]}}}{{{last_name}}}'
             elif info_type == STACKOVERFLOW:
-                user_id, username = urlparse(value).path.lstrip('/users/').strip('/').split('/')
+                user_id, username = urlparse(value).path.replace('/users/', '').strip('/').split('/')
                 line += f'{{{user_id}}}{{{username}}}'
             elif info_type == GOOGLE_SCHOLAR:
                 queries = urlparse(value).query.split('&')
                 for query in queries:
                     if 'user=' in query:
-                        user_id = query.lstrip('user=').strip('/')
+                        user_id = query.replace('user=', '').strip('/')
                         line += f'{{{user_id}}}{{}}'
 
                         break
@@ -122,7 +122,7 @@ def make_personal_info(profile):
                     user_id = url_path.strip('/')
                     value = f'@{user_id}'
                 elif info_type == REDDIT:
-                    value = url_path.lstrip('/user/').strip('/')
+                    value = url_path.replace('/user/', '').strip('/')
                 elif info_type == MEDIUM:
                     value = url_path.lstrip('/@').strip('/')
 
