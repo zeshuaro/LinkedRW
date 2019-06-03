@@ -7,12 +7,12 @@ assignees: ''
 
 ---
 
-### What happened?
+### What happened
 
-### Did you keep your browser window on top when `linkedrw` is running?
+### Did you keep your browser window on top when `linkedrw` is running
 
-### Did you try increasing the timeout by using `-t/--timeout` option?
+### Did you try increasing the timeout by using `-t/--timeout` option
 
-### Which web driver did you use?
+### Which web driver did you use
 
 ### Logs
