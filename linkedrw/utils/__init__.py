@@ -53,7 +53,10 @@ def get_span_text(element, name):
     Returns:
         A string of text
     """
-    return element.find_element_by_css_selector(name).find_elements_by_tag_name('span')[1].text.replace('–', '-')
+    try:
+        return element.find_element_by_css_selector(name).find_elements_by_tag_name('span')[1].text.replace('–', '-')
+    except NoSuchElementException:
+        return ''
 
 
 def get_optional_text(element, name, is_span=True):
