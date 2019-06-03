@@ -156,22 +156,19 @@ def get_education(section):
     Returns:
         A list of details of all educations
     """
-
-    # The ul element can appear in two different classes
-    try:
-        ul = section.find_element_by_css_selector(
-            '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-no-more.ember-view')
-    except NoSuchElementException:
-        ul = section.find_element_by_css_selector(
-            '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-no-more')
-
+    ul = get_edu_sec(section)
     edu_dict = defaultdict(list)
+
     for li in ul.find_elements_by_tag_name('li'):
         school = li.find_element_by_css_selector('.pv-entity__school-name.t-16.t-black.t-bold').text
         degree_name = get_span_text(
             li, '.pv-entity__secondary-title.pv-entity__degree-name.pv-entity__secondary-title.t-14.t-black.t-normal')
         dates = get_optional_text(li, '.pv-entity__dates.t-14.t-black--light.t-normal')
         description = get_description(li, '.pv-entity__description.t-14.t-black--light.t-normal.mt4')
+
+        # Check if there is a degree name, if not, skip this entry
+        if not degree_name:
+            continue
 
         edu_dict[school].append({
             DEGREE: get_degree(li, degree_name),
@@ -188,6 +185,42 @@ def get_education(section):
         })
 
     return edu_list
+
+
+def get_edu_sec(section):
+    """
+    Get the education items section
+    Args:
+        section: the education section
+
+    Returns:
+        The education items section
+    """
+    # Check if the section is expandable, if so expand the section and get the ul element
+    try:
+        section.find_element_by_css_selector(
+            '.pv-profile-section__see-more-inline.pv-profile-section__text-truncate-toggle.link').click()
+        time.sleep(1)
+
+        try:
+            elem = section.find_element_by_css_selector(
+                '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-more.ember-view')
+        except NoSuchElementException:
+            elem = section.find_element_by_css_selector(
+                '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-more')
+
+    # The section is not expandable, simply get the ul element
+    except NoSuchElementException:
+        # The ul element can appear in two different classes
+        try:
+            elem = section.find_element_by_css_selector(
+                '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-no-more.'
+                'ember-view')
+        except NoSuchElementException:
+            elem = section.find_element_by_css_selector(
+                '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-no-more')
+
+    return elem
 
 
 def get_degree(li, degree_name):
