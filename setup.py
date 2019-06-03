@@ -47,6 +47,8 @@ setup(
     packages=find_packages(),
     python_requires='>=3.6',
     install_requires=requirements(),
+    setup_requires=["pytest-runner"],
+    tests_require=["pytest"],
     include_package_data=True,
     entry_points={
         'console_scripts': ['linkedrw=linkedrw:main'],
