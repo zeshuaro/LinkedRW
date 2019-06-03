@@ -31,8 +31,13 @@ def make_resume_files(profile, output_dir, timeout):
     make_dir(output_dir)
     copy_files(__name__, 'awesome_cv_files', output_dir)
 
-    has_publications = make_publication_section(profile[PUBLICATIONS], output_dir)
-    make_skill_section(profile[SKILLS], profile[LANGUAGES], output_dir)
+    if PUBLICATIONS in profile:
+        has_publications = make_publication_section(profile[PUBLICATIONS], output_dir)
+    else:
+        has_publications = False
+
+    if SKILLS in profile and LANGUAGES in profile:
+        make_skill_section(profile[SKILLS], profile[LANGUAGES], output_dir)
 
     for section in RESUME_SECTIONS:
         make_resume_section(profile, section, output_dir)
@@ -83,10 +88,12 @@ def make_personal_info(profile):
     """
     lines = []
     for info_type in PERSONAL_INFO:
-        if info_type in (NAME, POSITION):
+        if info_type in (NAME, POSITION) and info_type in profile:
             value = profile[info_type]
-        else:
+        elif CONTACT in profile and info_type in profile[CONTACT]:
             value = profile[CONTACT][info_type]
+        else:
+            value = ''
 
         line = f'\\{info_type}'
         if value:
@@ -138,7 +145,7 @@ def make_resume_content(profile):
     """
     lines = []
     for section in RESUME_CONTENT:
-        if profile[section]:
+        if section in profile and profile[section]:
             lines.append(f'\\input{{{section}.tex}}')
 
     return lines
