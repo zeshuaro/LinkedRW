@@ -14,7 +14,7 @@ def make_resume_section(profile, section, output_dir):
     Returns:
         None
     """
-    if section in SECTION_ITEMS and profile[section]:
+    if section in SECTION_ITEMS and section in profile and profile[section]:
         title = 'Honors \\& Awards' if section == HONORS else section.title()
         cv_type = 'cvhonors' if section == HONORS else 'cventries'
         lines = [f'\\cvsection{{{title}}}\n', f'\\begin{{{cv_type}}}']
