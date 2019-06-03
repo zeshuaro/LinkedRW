@@ -68,8 +68,8 @@ def make_resume_main(profile, has_publications, output_dir):
             elif 'addbibresource' in line and has_publications:
                 lines.append(line.lstrip('% '))
             else:
-                if line.startswith('\\makecvfooter'):
-                    line += f'{{\\today}}{{{profile["name"]}~~~·~~~Resume}}{{\\thepage}}'
+                if line.startswith('\\makecvfooter') and NAME in profile:
+                    line += f'{{\\today}}{{{profile[NAME]}~~~·~~~Resume}}{{\\thepage}}'
 
                 lines.append(line)
 
