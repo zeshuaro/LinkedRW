@@ -29,7 +29,7 @@ def make_resume_files(profile, output_dir, timeout):
 
     output_dir = os.path.join(output_dir, 'resume')
     make_dir(output_dir)
-    copy_files(__name__, 'awesome_cv_files', output_dir)
+    copy_files(__name__.split('.')[0], 'templates/awesome_cv_files', output_dir)
 
     if PUBLICATIONS in profile:
         has_publications = make_publication_section(profile[PUBLICATIONS], output_dir)
@@ -58,7 +58,7 @@ def make_resume_main(profile, has_publications, output_dir):
         None
     """
     lines = []
-    with open(pkg_resources.resource_filename(__name__, RESUME_TEMPLATE)) as f:
+    with open(pkg_resources.resource_filename(__name__.split('.')[0], RESUME_TEMPLATE)) as f:
         for line in f:
             line = line.strip()
             if 'personal-info-here' in line:

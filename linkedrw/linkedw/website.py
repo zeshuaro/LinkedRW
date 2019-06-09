@@ -26,12 +26,12 @@ def make_website_files(profile, output_dir):
 
     output_dir = os.path.join(output_dir, 'website')
     make_dir(output_dir)
-    copy_files(__name__, 'dev_portfolio_files', output_dir)
+    copy_files(__name__.split('.')[0], 'templates/dev_portfolio_files', output_dir)
 
     lines = []
     comment_line = has_sum = has_exp = has_edu = has_prj = has_skl = has_con = False
 
-    with open(pkg_resources.resource_filename(__name__, PORTFOLIO_TEMPLATE)) as f:
+    with open(pkg_resources.resource_filename(__name__.split('.')[0], PORTFOLIO_TEMPLATE)) as f:
         for line in f:
             line = line.strip('\n')
             indent = re.match(r'\s+', line)
