@@ -3,53 +3,56 @@
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
 version: 2
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test-3.7
+      - test-3.6
 jobs:
-  build:
+  test-3.7: &test-template
     docker:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
-      - image: circleci/python:3.6.8
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
+      - image: circleci/python:3.7.3
 
     working_directory: ~/repo
 
     steps:
       - checkout
+#       - run: sudo chown -R circleci:circleci /usr/local/bin
+#       - run: sudo chown -R circleci:circleci /usr/local/lib/python3.6/site-packages
 
-      # Download and cache dependencies
       - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "requirements.txt" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+      # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
 
       - run:
-          name: install dependencies
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
+            sudo pip install pipenv
+            pipenv install
 
-      - save_cache:
+      - save_cache: # cache Python dependencies using checksum of Pipfile as the cache-key
+          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
           paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
+            - ".venv"
+            - "/usr/local/bin"
+            - "/usr/local/lib/python3.6/site-packages"
 
       # run tests!
-      # this example uses Django's built-in test-runner
-      # other common Python testing frameworks include pytest and nose
-      # https://pytest.org
-      # https://nose.readthedocs.io
       - run:
-          name: run tests
+          name: Running tests
           command: |
-            . venv/bin/activate
-            python setup.py test
+            pipenv run python setup.py test
 
-      - store_artifacts:
+      - store_test_results: # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: test-reports
-          destination: test-reports
+
+      - store_artifacts: # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
+          path: test-reports
+          destination: tr1
+
+  test-3.6:
+      <<: *test-template
+      docker:
+        - image: circleci/python:3.6.8
