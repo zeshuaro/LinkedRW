@@ -122,6 +122,8 @@ def get_description(element, name):
     except NoSuchElementException:
         description = ''
 
+    description = description.replace('•', '-')
+
     return description
 
 
