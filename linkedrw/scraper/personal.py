@@ -59,10 +59,7 @@ def get_position(driver):
     try:
         position = driver.find_element_by_css_selector('.pv-top-card-section__headline.mt1.t-18.t-black.t-normal').text
     except NoSuchElementException:
-        try:
-            position = driver.find_element_by_css_selector('.mt1.inline-block.t-18.t-black.t-normal').text
-        except NoSuchElementException:
-            position = driver.find_element_by_css_selector('.mt1.t-18.t-black.t-normal').text
+        position = driver.find_element_by_css_selector('.mt1.inline-block.t-18.t-black.t-normal').text
 
     return re.sub(r'\s+at.*', '', position)
 
