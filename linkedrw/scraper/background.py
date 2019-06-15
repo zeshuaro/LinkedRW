@@ -273,7 +273,7 @@ def get_skills(section):
             '.pv-skill-category-entity__top-skill.pv-skill-category-entity.pb3.pt4.pv-skill-endorsedSkill-entity.'
             'relative.ember-view'):
         skill = top_skill.find_element_by_css_selector('.pv-skill-category-entity__name-text.t-16.t-black.t-bold').text
-        skills.append(skill)
+        skills.append(skill.split('\n')[0])
 
     # Locate Tools & Technologies section
     target_div = None
@@ -287,7 +287,7 @@ def get_skills(section):
     # Extract the rest of the skills
     if target_div is not None:
         for li in target_div.find_elements_by_tag_name('li'):
-            skills.append(li.text)
+            skills.append(li.text.split('\n')[0])
 
     return skills
 
