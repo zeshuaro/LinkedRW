@@ -1,6 +1,7 @@
 import os
 
 from linkedrw.constants import *
+from linkedrw.utils import escape_latex
 
 
 def make_resume_section(profile, section, output_dir):
@@ -46,11 +47,11 @@ def make_grouped_section(profile, section):
             lines.append(f'{LATEX_INDENT}\\cventry')
             for key in SECTION_ITEMS[section]:
                 if key == NAME and i == 0:
-                    lines.append(f'{LATEX_INDENT * 2}{{{name}}} % {NAME}')
+                    lines.append(f'{LATEX_INDENT * 2}{{{escape_latex(name)}}} % {NAME}')
                 elif key == DESCRIPTION:
                     lines += get_descriptions(item)
                 elif key and key != NAME:
-                    lines.append(f'{LATEX_INDENT * 2}{{{item[key]}}} % {key}')
+                    lines.append(f'{LATEX_INDENT * 2}{{{escape_latex(item[key])}}} % {key}')
                 else:
                     lines.append(f'{LATEX_INDENT * 2}{{}}')
 
@@ -78,7 +79,7 @@ def make_ungrouped_section(profile, section):
             if key == DESCRIPTION:
                 lines += get_descriptions(entry)
             elif key:
-                lines.append(f'{LATEX_INDENT * 2}{{{entry[key]}}} % {key}')
+                lines.append(f'{LATEX_INDENT * 2}{{{escape_latex(entry[key])}}} % {key}')
             else:
                 lines.append(f'{LATEX_INDENT * 2}{{}}')
 
@@ -101,7 +102,9 @@ def get_descriptions(item):
 
         for description in item[DESCRIPTION].split('\n'):
             description = description.strip('-').strip()
-            lines.append(f'{LATEX_INDENT * 4}\\item{{{description}}}')
+            if description:
+                description = escape_latex(description)
+                lines.append(f'{LATEX_INDENT * 4}\\item{{{description}}}')
 
         lines.append(f'{LATEX_INDENT * 3}\\end{{cvitems}}')
         lines.append(f'{LATEX_INDENT * 2}}}\n')

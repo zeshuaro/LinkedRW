@@ -3,12 +3,14 @@ import os
 import pkg_resources
 import re
 
+from collections import defaultdict
 from datetime import datetime
 from logbook import Logger
-from queue import PriorityQueue
 
 from linkedrw.constants import *
 from linkedrw.utils import make_dir, copy_files
+
+SECTION_ENDS = ['End #about', 'End #experience', 'End #education', 'End #projects', 'End #skills']
 
 
 def make_website_files(profile, output_dir):
@@ -119,7 +121,7 @@ def make_website_files(profile, output_dir):
                 lines += make_contact_section(profile[CONTACT], indent)
 
             # Comment out sections
-            elif comment_line and any(x in line for x in ['End #about', 'End #experience', 'End #education']):
+            elif comment_line and any(x in line for x in SECTION_ENDS):
                 comment_line = False
             elif comment_line:
                 lines += make_comment_line(line)
@@ -180,8 +182,7 @@ def make_experience_section(exps, indent):
     sorted_exps = sort_entries(exps)
     lines = []
 
-    while sorted_exps:
-        exp = sorted_exps.pop()
+    for exp in sorted_exps:
         lines += [
             f'{indent}<div data-date="{exp[DATES]}">',
             f'{indent}{HTML_INDENT}<h3>{exp[NAME]}</h3>',
@@ -206,8 +207,7 @@ def make_education_section(edus, indent):
     sorted_edus = sort_entries(edus, date_format='YYYY')
     lines = []
 
-    while sorted_edus:
-        edu = sorted_edus.pop()
+    for edu in sorted_edus:
         lines += [
             f'{indent}<div class="education-block">',
             f'{indent}{HTML_INDENT}<h3>{edu[NAME]}</h3>',
@@ -298,7 +298,7 @@ def sort_entries(entries, date_format='MMM YYYY'):
     Returns:
         A list of sorted entries
     """
-    sorted_entries = PriorityQueue()
+    all_entries = defaultdict(list)
     for exp in entries:
         name = exp[NAME]
         for entry in exp[ENTRIES]:
@@ -306,19 +306,19 @@ def sort_entries(entries, date_format='MMM YYYY'):
             date = entry[DATES].split(' - ')[-1]
 
             if date.lower() == 'present':
-                arrow_date = arrow.utcnow()
+                arrow_date = arrow.utcnow().date()
             elif date:
-                arrow_date = arrow.get(date, date_format)
+                arrow_date = arrow.get(date, date_format).date()
             else:
-                arrow_date = arrow.get(datetime.min)
+                arrow_date = arrow.get(datetime.min).date()
 
-            sorted_entries.put((arrow_date, entry))
+            all_entries[arrow_date].append(entry)
 
-    all_entries = []
-    while not sorted_entries.empty():
-        all_entries.append(sorted_entries.get()[1])
+    sorted_entries = []
+    for key in sorted(all_entries, reverse=True):
+        sorted_entries += all_entries[key]
 
-    return all_entries
+    return sorted_entries
 
 
 def get_description(descs, indent):
@@ -336,7 +336,8 @@ def get_description(descs, indent):
         lines.append(f'{indent}{HTML_INDENT}<ul>')
         for desc in descs.split('\n'):
             desc = desc.strip('-').strip()
-            lines.append(f'{indent}{HTML_INDENT * 2}<li>{desc}')
+            if desc:
+                lines.append(f'{indent}{HTML_INDENT * 2}<li>{desc}')
 
         lines.append(f'{indent}{HTML_INDENT}</ul>')
 
