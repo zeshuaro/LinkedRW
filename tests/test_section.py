@@ -36,7 +36,7 @@ def test_make_resume_section_grouped():
                     assert title == entry[TITLE]
                     assert name == profile[EXPERIENCE][0][NAME]
                     assert location == entry[LOCATION]
-                    assert dates == entry[DATES]
+                    assert dates == entry[DATES].replace('-', '{-}')
 
                     break
 
@@ -63,7 +63,7 @@ def test_make_resume_section_ungrouped():
                     dates = get_text(next(f))
 
                     assert name == entry[NAME]
-                    assert dates == entry[DATES]
+                    assert dates == entry[DATES].replace('-', '{-}')
 
                     break
 
@@ -98,4 +98,4 @@ def test_make_resume_section_honors():
 
 
 def get_text(line):
-    return re.sub(r'[}%].*', '', line.strip().strip('{}')).strip()
+    return re.sub(r'(.*)[}%][^.]*', '\\1', line.strip().strip('{}')).strip().strip('}')
