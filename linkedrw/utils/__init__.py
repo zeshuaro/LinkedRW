@@ -4,6 +4,8 @@ import shutil
 
 from selenium.common.exceptions import NoSuchElementException
 
+from linkedrw.constants import LATEX_CHARS
+
 
 def make_dir(dir_name):
     """
@@ -140,3 +142,15 @@ def get_accomplishment_link(element):
         return element.find_element_by_class_name('pv-accomplishment-entity__external-source').get_attribute('href')
     except NoSuchElementException:
         return ''
+
+
+def escape_latex(s):
+    """
+    Escape LaTeX special characters
+    Args:
+        s: the string
+
+    Returns:
+        a string with escaped LaTeX special characters
+    """
+    return ''.join(LATEX_CHARS.get(c, c) for c in s)

@@ -50,14 +50,32 @@ ISSUER = 'issuer'
 RESUME_TEMPLATE = 'templates/resume_template.tex'
 PERSONAL_INFO = [NAME, POSITION, ADDRESS, MOBILE, EMAIL, HOMEPAGE, GITHUB, LINKEDIN, GITLAB, STACKOVERFLOW, TWITTER,
                  SKYPE, REDDIT, MEDIUM, GOOGLE_SCHOLAR]
-RESUME_CONTENT = [EDUCATION, EXPERIENCE, PUBLICATIONS, HONORS, PROJECTS, VOLUNTEERING, SKILLS]
-RESUME_SECTIONS = [EDUCATION, EXPERIENCE, HONORS, PROJECTS, VOLUNTEERING]
+RESUME_CONTENT = [EXPERIENCE, EDUCATION, PUBLICATIONS, HONORS, PROJECTS, VOLUNTEERING, SKILLS]
+RESUME_SECTIONS = [EXPERIENCE, EDUCATION, HONORS, PROJECTS, VOLUNTEERING]
 SECTION_ITEMS = {
     EDUCATION: [DEGREE, NAME, LOCATION, DATES, DESCRIPTION],
     EXPERIENCE: [TITLE, NAME, LOCATION, DATES, DESCRIPTION],
     HONORS: [TITLE, ISSUER, LOCATION, DATE],
     PROJECTS: ['', NAME, '', DATES, DESCRIPTION],
     VOLUNTEERING: [TITLE, NAME, LOCATION, DATES, DESCRIPTION]
+}
+
+LATEX_CHARS = {
+    '&': r'\&',
+    '%': r'\%',
+    '$': r'\$',
+    '#': r'\#',
+    '_': r'\_',
+    '{': r'\{',
+    '}': r'\}',
+    '~': r'\textasciitilde{}',
+    '^': r'\^{}',
+    '\\': r'\textbackslash{}',
+    '\n': '\\newline%\n',
+    '-': r'{-}',
+    '\xA0': '~',  # Non-breaking space
+    '[': r'{[}',
+    ']': r'{]}',
 }
 
 PORTFOLIO_TEMPLATE = 'templates/index_template.html'

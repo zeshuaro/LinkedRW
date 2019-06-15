@@ -2,6 +2,7 @@ import os
 import pkg_resources
 
 from linkedrw.constants import SKILLS, LATEX_INDENT, PACKAGE_NAME
+from linkedrw.utils import escape_latex
 
 
 def make_skill_section(skills, languages, output_dir):
@@ -59,6 +60,6 @@ def make_skill_subsection(skills, skills_type):
     if skills:
         lines.append(f'{LATEX_INDENT}\\cvskill')
         lines.append(f'{LATEX_INDENT * 2}{{{skills_type}}}')
-        lines.append(f'{LATEX_INDENT * 2}{{{", ".join(skills)}}}')
+        lines.append(f'{LATEX_INDENT * 2}{{{escape_latex(", ".join(skills))}}}')
 
     return lines

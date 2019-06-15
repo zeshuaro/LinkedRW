@@ -7,6 +7,7 @@ from requests.exceptions import HTTPError
 from urllib.parse import urlparse
 
 from linkedrw.constants import *
+from linkedrw.utils import escape_latex
 
 
 def make_publication_section(publications, output_dir):
@@ -24,7 +25,7 @@ def make_publication_section(publications, output_dir):
         lines = [f'\\cvsection{{{PUBLICATIONS.title()}}}\n', '\\begin{refsection}']
 
         for reference in references:
-            lines.append(f'{LATEX_INDENT}\\nocite{{{reference}}}')
+            lines.append(f'{LATEX_INDENT}\\nocite{{{escape_latex(reference)}}}')
 
         lines.append(f'{LATEX_INDENT}\\printbibliography[heading=none]')
         lines.append('\\end{refsection}')
