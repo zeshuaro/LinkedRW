@@ -10,6 +10,8 @@ from logbook import Logger
 from linkedrw.constants import *
 from linkedrw.utils import make_dir, copy_files
 
+SECTION_ENDS = ['End #about', 'End #experience', 'End #education', 'End #projects', 'End #skills']
+
 
 def make_website_files(profile, output_dir):
     """
@@ -119,7 +121,7 @@ def make_website_files(profile, output_dir):
                 lines += make_contact_section(profile[CONTACT], indent)
 
             # Comment out sections
-            elif comment_line and any(x in line for x in ['End #about', 'End #experience', 'End #education']):
+            elif comment_line and any(x in line for x in SECTION_ENDS):
                 comment_line = False
             elif comment_line:
                 lines += make_comment_line(line)
