@@ -26,7 +26,7 @@ PUBS = [
         LINK: 'https://doi.org/10.1073/pnas.76.9.4350'
     }
 ]
-CITES = ['Bradford\\_1976', 'Sanger\\_1977', 'Towbin\\_1979']
+CITES = ['Bradford_1976', 'Sanger_1977', 'Towbin_1979']
 
 
 def test_make_publication_section_empty():
@@ -45,7 +45,7 @@ def test_make_publication_section():
                 if '\\nocite' in line:
                     cites.add(line.strip().lstrip('\\nocite').strip('{}'))
 
-        assert cites == set(CITES)
+        assert cites == set([x.replace('_', '\\_') for x in CITES])
 
 
 def test_make_references_no_doi():
