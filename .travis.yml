@@ -5,8 +5,22 @@ python:
   - "3.7"
 
 # command to install dependencies
-install:
-  - pip install -r requirements.txt
+install: pip install -r requirements.txt
 
 # command to run tests
 script: python setup.py test
+
+jobs:
+  include:
+    - stage: deploy
+      python: "3.6"
+      install: skip
+      script: skip
+      deploy:
+        provider: pypi
+        user: zeshuaro
+        password:
+          secure: JxSsLwMmZO2369d/YxX9vadFeuVej4JOpAJz6DXJkTaQhvyGS8lkD4KeBpBeXTC6Y2TZ3lkW68z/6bNBSZ9Vjh+9vKUL+Gkmc0m5RZIyZBw7gu0re+0XxBocJp5eWK24g2Sj36hyNB3zs7BakPSYMUO36Zh9+tE0AFrl7j7oaXccEtYwb3h5srpe4ANc0/PdriE+YteJDE6gMe6obKuVMrdZgGoErgoRALWfapcNNVGYRNbKEYpoD37GGqgteULKTGb7gUv+pyY4N6OsEW3Xu+gptlQysEB09DTyholxIUARv2AMbQUn0juTBneTJC+YKSMyUQTA2muy9WEkQdf2ZxsUi3W3BynmKgt6u6kepB5sNLvuVCe0i2TTlHSea1G519tUJs2WwMdXFDSmFFFyO4QV+70cZs+lQaYglDo6fwE7GWwB1Fb7tkL2a6ftp/eAoNeWJX7nvtGZJMRR8Sv8ic/Ugc4wHF4xGfIsjZSxjg1JmbevIyk2chdxdB0Hpi22of1b4B3G8QX4jR3p2URwUM30WcGujT8or2XBonE9saACl7t84KtVkDErz0e1zeqqNj08MEniOVrviGCvHU+G811EbezSmzuwH81R92ka+n8x2cV1SLfBy0L8tlrgT30YA/gH4HjzdTBncTD1hfuLhKMfrYcelv/l99eFZPJ6FPE=
+        on:
+          branch: master
+          tags: true
