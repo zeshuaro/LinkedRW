@@ -62,8 +62,7 @@ def get_projects(ul):
         name = li.find_element_by_class_name('pv-accomplishment-entity__title').text.replace('Project name', '').strip()
         dates = get_optional_text(li, '.pv-accomplishment-entity__date.pv-accomplishment-entity__subtitle',
                                   is_span=False)
-        description = get_description(li, '.pv-accomplishment-entity__description.t-14.t-black--light.t-normal').\
-            lstrip('Project description\n')
+        description = get_description(li, '.pv-accomplishment-entity__description.t-14').lstrip('Project description\n')
         link = get_accomplishment_link(li)
 
         projects.append({

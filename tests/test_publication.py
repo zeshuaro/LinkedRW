@@ -45,7 +45,7 @@ def test_make_publication_section():
                 if '\\nocite' in line:
                     cites.add(line.strip().lstrip('\\nocite').strip('{}'))
 
-        assert cites == set([x.replace('_', '\\_') for x in CITES])
+        assert cites == set(CITES)
 
 
 def test_make_references_no_doi():
