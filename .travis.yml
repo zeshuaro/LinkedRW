@@ -13,6 +13,7 @@ script: python setup.py test
 branches:
   only:
     - master
+    - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
 jobs:
   include:
