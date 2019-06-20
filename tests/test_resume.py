@@ -1,111 +1,70 @@
+import filecmp
+import json
 import os
-import re
+import pkg_resources
 import tempfile
 
-from linkedrw.constants import *
+from linkedrw.constants import PUBLICATIONS, TITLE, DATE, PUBLISHER, LINK
 from linkedrw.linkedr.resume import make_resume_files
+from linkedrw.linkedr.publication import make_publication_section, make_references
 
-TIMEOUT = 10
+RESUME_DIR = 'resume'
+PROFILE_FILE = 'profile.json'
+TIMEOUT = 1
 
 
-def test_make_resume_files_empty():
+def test_make_resume_files_full():
     with tempfile.TemporaryDirectory() as dirname:
-        make_resume_files({}, dirname, TIMEOUT)
-        assert os.path.exists(os.path.join(dirname, 'resume', 'awesome-cv.cls')) is True
-        assert os.path.exists(os.path.join(dirname, 'resume', 'fontawesome.sty')) is True
-        assert os.path.exists(os.path.join(dirname, 'resume', 'fonts')) is True
+        with open(pkg_resources.resource_filename(__name__, PROFILE_FILE)) as f:
+            profile = json.load(f)
 
-        for section in RESUME_SECTIONS:
-            assert os.path.exists(os.path.join(dirname, 'resume', section)) is False
-
-
-def test_make_resume_files():
-    profile = {
-        NAME: 'name',
-        PUBLICATIONS: [
-            {
-                TITLE: 'Something',
-                DATE: '',
-                PUBLISHER: '',
-                LINK: ''
-            }
-        ],
-        SKILLS: ['Python'],
-        LANGUAGES: ['English']
-    }
-    sections = {PUBLICATIONS, SKILLS, LANGUAGES}
-
-    with tempfile.TemporaryDirectory() as dirname:
         make_resume_files(profile, dirname, TIMEOUT)
-        for section in RESUME_SECTIONS:
-            if section in sections:
-                assert os.path.exists(os.path.join(dirname, 'resume', section)) is True
-            else:
-                assert os.path.exists(os.path.join(dirname, 'resume', section)) is False
-
-        count = 0
-        with open(os.path.join(dirname, 'resume', 'resume.tex')) as f:
-            for line in f:
-                if '.tex' in line:
-                    count += 1
-
-        assert count == len(sections) - 1
+        for filename in os.listdir(pkg_resources.resource_filename(__name__, RESUME_DIR)):
+            assert filecmp.cmp(
+                os.path.join(dirname, RESUME_DIR, filename),
+                pkg_resources.resource_filename(__name__, f'{RESUME_DIR}/{filename}'), shallow=False) is True
 
 
-def test_make_resume_files_contacts():
-    stack_id = 'stack-id'
-    stack_username = 'stack-username'
-    scholar_id = 'scholar-id'
-    profile = {
-        CONTACT: {
-            LINKEDIN: 'linkedin-id',
-            SKYPE: 'skype-id',
-            GITHUB: 'github-id',
-            GITLAB: 'gitlab-id',
-            STACKOVERFLOW: f'/users/{stack_id}/{stack_username}',
-            TWITTER: 'twitter-id',
-            REDDIT: 'reddit-id',
-            MEDIUM: 'medium-id',
-            GOOGLE_SCHOLAR: f'/citations?user={scholar_id}'
-        }
+def test_make_publication_section_empty():
+    with tempfile.TemporaryDirectory() as dirname:
+        assert make_publication_section([], dirname) is False
+        assert os.path.exists(os.path.join(dirname, f'{PUBLICATIONS}.tex')) is False
+
+
+def test_make_resume_files_no_pub():
+    with tempfile.TemporaryDirectory() as dirname:
+        with open(pkg_resources.resource_filename(__name__, PROFILE_FILE)) as f:
+            profile = json.load(f)
+
+        del profile[PUBLICATIONS]
+        make_resume_files(profile, dirname, TIMEOUT)
+        assert os.path.exists(os.path.join(dirname, RESUME_DIR, f'{PUBLICATIONS}.tex')) is False
+
+
+def test_make_references_no_doi():
+    pub = {
+        TITLE: "A rapid and sensitive method for the quantitation of microgram quantities of protein utilizing the "
+               "principle of protein-dye binding",
+        DATE: "May 7, 1976",
+        PUBLISHER: "Science Direct",
+        LINK: ""
     }
 
-    is_contact = False
-    contacts = {}
+    with tempfile.TemporaryDirectory() as dirname:
+        assert make_references([pub], dirname) == ['Bradford_1976']
+        with open(os.path.join(dirname, 'references.bib')) as f:
+            assert f.read() != ''
+
+
+def test_make_references_not_found():
+    pub = {
+        TITLE: 'Some random title',
+        DATE: '',
+        PUBLISHER: '',
+        LINK: ''
+    }
 
     with tempfile.TemporaryDirectory() as dirname:
-        make_resume_files(profile, dirname, TIMEOUT)
-        with open(os.path.join(dirname, 'resume', 'resume.tex')) as f:
-            for line in f:
-                if f'\\{HOMEPAGE}' in line:
-                    is_contact = True
-                elif is_contact:
-                    line = line.strip()
-                    key = re.sub(r'{.*', '', line).lstrip('\\')
-
-                    if key in [STACKOVERFLOW, GOOGLE_SCHOLAR]:
-                        contact_id = re.sub(r'^.*?{', '', line)
-                        contact_id = re.sub(r'}.*', '', contact_id)
-
-                        if key == STACKOVERFLOW:
-                            contact_username = re.sub(r'^.*{', '', line).rstrip('}')
-                            value = (contact_id, contact_username)
-                        else:
-                            value = contact_id
-                    elif key == TWITTER:
-                        value = re.sub(r'^.*{', '', line).rstrip('}').lstrip('@')
-                    else:
-                        value = re.sub(r'^.*{', '', line).rstrip('}')
-
-                    contacts[key] = value
-                    if key == GOOGLE_SCHOLAR:
-                        break
-
-    for key in contacts:
-        if key == STACKOVERFLOW:
-            assert contacts[key][0] == stack_id
-            assert contacts[key][1] == stack_username
-        elif key == GOOGLE_SCHOLAR:
-            assert contacts[key] == scholar_id
-        else:
-            assert contacts[key] == profile[CONTACT][key]
+        assert make_references([pub], dirname) == []
+        with open(os.path.join(dirname, 'references.bib')) as f:
+            assert f.read() == ''
