@@ -3,6 +3,7 @@ import json
 import os
 import tempfile
 
+from linkedrw.constants import EDUCATION, NAME, ENTRIES, DEGREE, LOCATION, DATES, DESCRIPTION
 from linkedrw.linkedw.website import make_website_files
 
 WEBSITE_DIR = 'website'
@@ -18,6 +19,31 @@ def test_make_resume_files_full():
 
 def test_make_resume_files_empty():
     check_outputs({}, 'empty')
+
+
+def test_make_resume_files_no_date():
+    profile = {
+        EDUCATION: [
+            {
+                NAME: 'Name',
+                ENTRIES: [
+                    {
+                        DEGREE: 'Degree 1',
+                        DATES: '',
+                        LOCATION: 'Location 1',
+                        DESCRIPTION: 'Description 1'
+                    },
+                    {
+                        DEGREE: 'Degree 2',
+                        DATES: '2018 - 2019',
+                        LOCATION: 'Location 2',
+                        DESCRIPTION: 'Description 2'
+                    }
+                ]
+            }
+        ]
+    }
+    check_outputs(profile, 'no_date')
 
 
 def check_outputs(profile, files_dir):
