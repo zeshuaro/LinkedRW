@@ -3,7 +3,7 @@ import json
 import os
 import tempfile
 
-from linkedrw.constants import *
+from linkedrw.constants import PUBLICATIONS, TITLE, DATE, PUBLISHER, LINK
 from linkedrw.linkedr.resume import make_resume_files
 from linkedrw.linkedr.publication import make_publication_section, make_references
 
