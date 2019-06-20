@@ -10,7 +10,7 @@ from logbook import Logger
 from linkedrw.constants import *
 from linkedrw.utils import make_dir, copy_files
 
-SECTION_ENDS = ['End #about', 'End #experience', 'End #education', 'End #projects', 'End #skills']
+SECTION_ENDS = ['End #about', 'End #experience', 'End #education', 'End #projects', 'End #skills', 'End #social']
 
 
 def make_website_files(profile, output_dir):
@@ -45,11 +45,11 @@ def make_website_files(profile, output_dir):
                 for section in PORTFOLIO_SECTIONS:
                     if section == CONTACT or (section in profile and profile[section]):
                         lines += make_section_header(section, indent)
-            elif 'name-here' in line:
+            elif NAME in profile and 'name-here' in line:
                 lines.append(line.replace('name-here', profile[NAME]))
-            elif 'title-here' in line:
+            elif POSITION in profile and 'title-here' in line:
                 lines.append(line.replace('title-here', profile[POSITION]))
-            elif 'copyright-here' in line:
+            elif NAME in profile and 'copyright-here' in line:
                 lines.append(line.replace('copyright-here', f'{arrow.now().year} {profile[NAME]}'))
 
             # About section
@@ -108,10 +108,11 @@ def make_website_files(profile, output_dir):
                 lines += make_skills_section(profile[SKILLS], indent)
 
             # Contact section
-            elif 'email-here' in line:
+            elif CONTACT in profile and EMAIL in profile[CONTACT] and 'email-here' in line:
                 lines.append(line.replace('email-here', profile[CONTACT][EMAIL]))
             elif 'col-sm-5 social' in line:
-                if all(x not in profile[CONTACT] or not profile[CONTACT][x] for x in CONTACTS):
+                if CONTACT not in profile or \
+                        all(x not in profile[CONTACT] or not profile[CONTACT][x] for x in CONTACTS):
                     comment_line = True
                     lines += make_comment_line(line)
                 else:
