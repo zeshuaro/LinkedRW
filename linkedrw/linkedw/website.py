@@ -54,7 +54,7 @@ def make_website_files(profile, output_dir):
 
             # About section
             elif 'id="about"' in line:
-                if not profile[SUMMARY]:
+                if SUMMARY not in profile or not profile[SUMMARY]:
                     comment_line = True
                     lines += make_comment_line(line)
                 else:
@@ -65,7 +65,7 @@ def make_website_files(profile, output_dir):
 
             # Experience section
             elif 'id="experience"' in line:
-                if not profile[EXPERIENCE]:
+                if EXPERIENCE not in profile or not profile[EXPERIENCE]:
                     comment_line = True
                     lines += make_comment_line(line)
                 else:
@@ -76,7 +76,7 @@ def make_website_files(profile, output_dir):
 
             # Education section
             elif 'id="education"' in line:
-                if not profile[EDUCATION]:
+                if EDUCATION not in profile or not profile[EDUCATION]:
                     comment_line = True
                     lines += make_comment_line(line)
                 else:
@@ -87,7 +87,7 @@ def make_website_files(profile, output_dir):
 
             # Projects section
             elif 'id="projects"' in line:
-                if not profile[PROJECTS]:
+                if PROJECTS not in profile or not profile[PROJECTS]:
                     comment_line = True
                     lines += make_comment_line(line)
                 else:
@@ -98,7 +98,7 @@ def make_website_files(profile, output_dir):
 
             # Skills section
             elif 'id="skills"' in line:
-                if not profile[SKILLS]:
+                if SKILLS not in profile or not profile[SKILLS]:
                     comment_line = True
                     lines += make_comment_line(line)
                 else:
