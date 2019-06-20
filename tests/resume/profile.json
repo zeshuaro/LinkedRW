@@ -1,0 +1,90 @@
+{
+    "name": "Name",
+    "position": "Position",
+    "contact": {
+        "address": "Address",
+        "mobile": "Mobile",
+        "email": "Email",
+        "homepage": "",
+        "linkedin": "https://www.linkedin.com/in/linkedin-id",
+        "skype": "skype-id",
+        "github": "https://github.com/github-id",
+        "stackoverflow": "https://stackoverflow.com/users/stack-id/stack-username",
+        "twitter": "https://twitter.com/twitter-id",
+        "reddit": "https://www.reddit.com/user/reddit-id",
+        "medium": "https://medium.com/medium-id",
+        "googlescholar": "https://scholar.google.com/citations?user=scholar-id"
+    },
+    "about": "About",
+    "experience": [
+        {
+            "name": "Company",
+            "entries": [
+                {
+                    "title": "Title",
+                    "dates": "Jan 2019 - Present",
+                    "location": "Location",
+                    "description": "Description"
+                }
+            ]
+        }
+    ],
+    "education": [
+        {
+            "name": "School",
+            "entries": [
+                {
+                    "degree": "Degree",
+                    "location": "Location",
+                    "dates": "2018 - 2019",
+                    "description": "Description"
+                }
+            ]
+        }
+    ],
+    "volunteering": [
+        {
+            "name": "Volunteering Centre",
+            "entries": [
+                {
+                    "title": "Title",
+                    "dates": "Jan 2018 - Dec 2018",
+                    "location": "Location",
+                    "description": ""
+                }
+            ]
+        }
+    ],
+    "skills": [
+        "Python",
+        "Java",
+        "Docker"
+    ],
+    "projects": [
+        {
+            "name": "Project",
+            "dates": "Jan 2018 - Present",
+            "description": "Description",
+            "link": "Link"
+        }
+    ],
+    "publications": [
+        {
+            "title": "A rapid and sensitive method for the quantitation of microgram quantities of protein utilizing the principle of protein-dye binding",
+            "date": "May 7, 1976",
+            "publisher": "Science Direct",
+            "link": "https://doi.org/10.1016/0003-2697(76)90527-3"
+        }
+    ],
+    "honors": [
+        {
+            "title": "Award",
+            "date": "2019",
+            "location": "Location",
+            "issuer": "Issuer"
+        }
+    ],
+    "languages": [
+        "English"
+    ]
+}
