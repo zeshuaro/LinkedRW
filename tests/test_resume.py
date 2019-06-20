@@ -14,15 +14,13 @@ TIMEOUT = 1
 
 def test_make_resume_files_full():
     with tempfile.TemporaryDirectory() as dirname:
-        with open(os.path.join(RESUME_DIR, PROFILE_FILE)) as f:
+        with open(PROFILE_FILE) as f:
             profile = json.load(f)
 
         make_resume_files(profile, dirname, TIMEOUT)
         for filename in os.listdir(RESUME_DIR):
-            if not filename.endswith('.json'):
-                assert filecmp.cmp(
-                    os.path.join(dirname, RESUME_DIR, filename), os.path.join(RESUME_DIR, filename),
-                    shallow=False) is True
+            assert filecmp.cmp(
+                os.path.join(dirname, RESUME_DIR, filename), os.path.join(RESUME_DIR, filename), shallow=False) is True
 
 
 def test_make_publication_section_empty():
@@ -33,7 +31,7 @@ def test_make_publication_section_empty():
 
 def test_make_resume_files_no_pub():
     with tempfile.TemporaryDirectory() as dirname:
-        with open(os.path.join(RESUME_DIR, PROFILE_FILE)) as f:
+        with open(PROFILE_FILE) as f:
             profile = json.load(f)
 
         del profile[PUBLICATIONS]
