@@ -190,7 +190,7 @@ def run_cmd(cmd, timeout):
     success = True
     try:
         proc = Popen(shlex.split(cmd), stdout=PIPE, stderr=PIPE)
-        out, err = proc.communicate(timeout=timeout)
+        _, err = proc.communicate(timeout=timeout)
 
         if proc.returncode != 0 or err:
             success = False
