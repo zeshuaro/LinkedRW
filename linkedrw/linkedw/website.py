@@ -43,7 +43,7 @@ def make_website_files(profile, output_dir):
 
             if 'section-headers-here' in line:
                 for section in PORTFOLIO_SECTIONS:
-                    if section == CONTACT or profile[section]:
+                    if section == CONTACT or (section in profile and profile[section]):
                         lines += make_section_header(section, indent)
             elif 'name-here' in line:
                 lines.append(line.replace('name-here', profile[NAME]))
@@ -111,7 +111,7 @@ def make_website_files(profile, output_dir):
             elif 'email-here' in line:
                 lines.append(line.replace('email-here', profile[CONTACT][EMAIL]))
             elif 'col-sm-5 social' in line:
-                if all(not profile[CONTACT][x] for x in CONTACTS):
+                if all(x not in profile[CONTACT] or not profile[CONTACT][x] for x in CONTACTS):
                     comment_line = True
                     lines += make_comment_line(line)
                 else:
@@ -277,7 +277,7 @@ def make_contact_section(cons, indent):
     """
     lines = []
     for con in CONTACTS:
-        if cons[con]:
+        if con in cons and cons[con]:
             lines += [
                 f'{indent}<li>',
                 f'{indent}{HTML_INDENT}'
