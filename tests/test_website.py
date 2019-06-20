@@ -1,6 +1,7 @@
 import filecmp
 import json
 import os
+import pkg_resources
 import tempfile
 
 from linkedrw.constants import EDUCATION, NAME, ENTRIES, DEGREE, LOCATION, DATES, DESCRIPTION
@@ -11,7 +12,7 @@ PROFILE_FILE = 'profile.json'
 
 
 def test_make_resume_files_full():
-    with open(PROFILE_FILE) as f:
+    with open(pkg_resources.resource_filename(__name__, PROFILE_FILE)) as f:
         profile = json.load(f)
 
     check_outputs(profile, 'full')
@@ -49,7 +50,8 @@ def test_make_resume_files_no_date():
 def check_outputs(profile, files_dir):
     with tempfile.TemporaryDirectory() as dirname:
         make_website_files(profile, dirname)
-        for filename in os.listdir(os.path.join(WEBSITE_DIR, files_dir)):
+        for filename in os.listdir(pkg_resources.resource_filename(__name__, f'{WEBSITE_DIR}/{files_dir}')):
             assert filecmp.cmp(
-                os.path.join(dirname, WEBSITE_DIR, filename), os.path.join(WEBSITE_DIR, files_dir, filename),
+                os.path.join(dirname, WEBSITE_DIR, filename),
+                pkg_resources.resource_filename(__name__, f'{WEBSITE_DIR}/{files_dir}/{filename}'),
                 shallow=False) is True
