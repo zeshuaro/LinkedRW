@@ -2,3 +2,4 @@
 omit =
     linkedrw/scraper/*
     linkedrw/utils/*
+    setup.py
