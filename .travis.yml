@@ -4,20 +4,29 @@ python:
   - "3.6"
   - "3.7"
 
-# command to install dependencies
-install: pip install -r requirements.txt
-
-# command to run tests
-script: python setup.py test
-
 branches:
   only:
     - master
     - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
+cache:
+  directories:
+    - $HOME/.cache/pip
+    - $HOME/.pre-commit
+before_cache:
+  - rm -f $HOME/.cache/pip/log/debug.log
+  - rm -f $HOME/.pre-commit/pre-commit.log
+
+# command to install dependencies
+install: pip install -r requirements.txt codecov
+
+# command to run tests
+script: python setup.py test
+
 jobs:
   include:
     - stage: deploy
+      if: tag IS present
       python: "3.6"
       install: skip
       script: skip
@@ -29,3 +38,7 @@ jobs:
         on:
           branch: master
           tags: true
+
+after_success:
+  - coverage combine
+  - codecov -F Travis
