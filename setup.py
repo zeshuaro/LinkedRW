@@ -29,13 +29,13 @@ def read(fname):
 
 def grep(attrname):
     pattern = r'{}\W*=\W*"([^"]+)"'.format(attrname)
-    strval, = re.findall(pattern, read(fpath("linkedrw/__init__.py")))
+    strval, = re.findall(pattern, read(fpath('linkedrw/__init__.py')))
     return strval
 
 
 setup(
     name='linkedrw',
-    version=grep("__version__"),
+    version=grep('__version__'),
     author='Joshua Tang',
     author_email='zeshuaro@gmail.com',
     license='MIT License',
@@ -47,8 +47,8 @@ setup(
     packages=find_packages(),
     python_requires='>=3.6',
     install_requires=requirements(),
-    setup_requires=["pytest-runner"],
-    tests_require=["pytest"],
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest', 'pytest-cov'],
     include_package_data=True,
     entry_points={
         'console_scripts': ['linkedrw=linkedrw:main'],
