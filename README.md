@@ -6,6 +6,7 @@
 
 [![Build Status](https://travis-ci.com/zeshuaro/LinkedRW.svg?branch=master)](https://travis-ci.com/zeshuaro/LinkedRW)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/04b86b6463f749f79378ca580257fbb7)](https://www.codacy.com/app/zeshuaro/LinkedRW?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zeshuaro/LinkedRW&amp;utm_campaign=Badge_Grade)
+[![codecov](https://codecov.io/gh/zeshuaro/linkedRW/branch/master/graph/badge.svg)](https://codecov.io/gh/zeshuaro/linkedRW)
 
 A simple CLI for you to create your resume using the [Awesome CV](https://github.com/posquit0/Awesome-CV) template, 
 and your personal website using the [Dev Portfolio](https://github.com/RyanFitzgerald/devportfolio) template, 
