@@ -1,5 +1,6 @@
 [run]
 omit =
+    linkedrw/main.py
     linkedrw/scraper/*
     linkedrw/utils/*
     setup.py
