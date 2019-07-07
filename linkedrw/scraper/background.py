@@ -124,13 +124,19 @@ def get_multiple_roles(div, summary):
 
     # Show all roles
     try:
-        div.find_element_by_class_name('pv-profile-section__toggle-detail-icon').click()
+        div.find_element_by_css_selector(
+            '.pv-profile-section__see-more-inline.pv-profile-section__text-truncate-toggle.link').click()
         time.sleep(1)
     except NoSuchElementException:
         pass
 
     roles = []
-    for role_section in div.find_elements_by_class_name('pv-entity__position-group-role-item'):
+    try:
+        role_sections = div.find_elements_by_class_name('pv-entity__position-group-role-item')
+    except NoSuchElementException:
+        role_sections = div.find_elements_by_class_name('pv-entity__position-group-role-item-fading-timeline')
+
+    for role_section in role_sections:
         title = get_span_text(role_section, '.t-14.t-black.t-bold')
         dates = get_span_text(role_section, '.pv-entity__date-range.t-14.t-black.t-normal')
         location = get_optional_text(role_section, '.pv-entity__location.t-14.t-black--light.t-normal.block')

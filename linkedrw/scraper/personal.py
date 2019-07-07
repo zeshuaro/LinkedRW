@@ -167,16 +167,15 @@ def get_summary(driver):
     """
     # Check if summary section exists
     try:
-        driver.find_element_by_css_selector(
-            '.pv-top-card-section__summary.pv-top-card-section__summary--with-content.mt4.ember-view')
+        section = driver.find_element_by_css_selector(
+            '.artdeco-container-card.pv-profile-section.pv-about-section.ember-view')
     except NoSuchElementException:
         return ''
 
     # Check if there is a show more button
     try:
-        driver.find_element_by_class_name('pv-top-card-section__summary-toggle-button-icon').click()
+        section.find_element_by_class_name('lt-line-clamp__more').click()
     except NoSuchElementException:
         pass
 
-    return driver.find_element_by_css_selector(
-        '.pv-top-card-section__summary-text.text-align-left.mt4.ember-view').text
+    return driver.find_element_by_class_name('lt-line-clamp__raw-line').text
