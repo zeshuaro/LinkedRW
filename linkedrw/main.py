@@ -7,7 +7,7 @@ import sys
 from getpass import getpass
 from logbook import Logger, StreamHandler
 
-from linkedrw.constants import PACKAGE_NAME, CREDENTIALS_FILE, CHROME, DRIVERS
+from linkedrw.constants import PACKAGE_NAME, CREDENTIALS_FILE, CHROME, DRIVERS, FIREFOX
 from linkedrw.utils import make_dir
 from linkedrw.scraper import scrape
 from linkedrw.linkedr import make_resume_files
@@ -66,7 +66,9 @@ def run(driver, email, password, keep_creds, output_dir, scrape_only, resume_onl
                 password = getpass('Enter your LinkedIn login password: ')
 
         log.notice('Scraping LinkedIn profile')
-        log.notice('Please keep the browser window on top')
+        if driver != FIREFOX:
+            log.notice('Please keep the browser window on top')
+
         profile = scrape(driver.lower(), email, password, output_dir, timeout)
 
         if keep_creds:
