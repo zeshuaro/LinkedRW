@@ -47,7 +47,7 @@ def get_background_details(driver, by, section_id, section_type):
     elif section_type == VOLUNTEERING:
         return get_volunteering(section)
     elif section_type == SKILLS:
-        return get_skills(section)
+        return get_skills(driver, section)
 
 
 def get_experience(section):
@@ -256,10 +256,11 @@ def get_volunteering(section):
     return vol_list
 
 
-def get_skills(section):
+def get_skills(driver, section):
     """
     Scrape skills
     Args:
+        driver: the web driver
         section: the skills section
 
     Returns:
@@ -268,8 +269,10 @@ def get_skills(section):
 
     # Show all skills
     try:
-        section.find_element_by_class_name('pv-skills-section__chevron-icon').click()
+        btn = driver.find_element_by_class_name('pv-skills-section__chevron-icon')
+        driver.execute_script("arguments[0].scrollIntoView(false);", btn)
         time.sleep(1)
+        btn.click()
     except NoSuchElementException:
         pass
 

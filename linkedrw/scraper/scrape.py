@@ -4,6 +4,7 @@ import os
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.support import expected_conditions as ec
@@ -18,7 +19,10 @@ from linkedrw.scraper.personal import get_personal_details
 
 def scrape(browser_driver, email, password, output_dir, timeout):
     if browser_driver == CHROME:
-        driver = webdriver.Chrome()
+        options = ChromeOptions()
+        options.add_argument('--headless')
+        options.add_argument('--window-size=1920,1080')
+        driver = webdriver.Chrome(options=options)
     elif browser_driver == FIREFOX:
         options = FirefoxOptions()
         options.add_argument('--headless')
