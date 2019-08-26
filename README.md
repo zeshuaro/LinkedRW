@@ -20,7 +20,7 @@ Install through pip:
 pip install linkedrw
 ```
 
-You will also need to download a web driver and put it in path (e.g. `/usr/local/bin/`), `linkedrw` supports the following: 
+You will also need to download a web driver. You can either put it in path (e.g. `/usr/local/bin/`) or specify it by using the `-dp/--driver_path` option, `linkedrw` supports the following: 
 
 * [Chrome Driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
 * [Firefox Driver](https://github.com/mozilla/geckodriver/releases)
