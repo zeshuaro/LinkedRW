@@ -17,20 +17,34 @@ from linkedrw.scraper.background import get_background_details
 from linkedrw.scraper.personal import get_personal_details
 
 
-def scrape(browser_driver, email, password, output_dir, timeout):
+def scrape(browser_driver, driver_path, email, password, output_dir, timeout):
     if browser_driver == CHROME:
         options = ChromeOptions()
         options.add_argument('--headless')
         options.add_argument('--window-size=1920,1080')
-        driver = webdriver.Chrome(options=options)
+
+        if driver_path is None:
+            driver = webdriver.Chrome(options=options)
+        else:
+            driver = webdriver.Chrome(executable_path=driver_path, options=options)
     elif browser_driver == FIREFOX:
         options = FirefoxOptions()
         options.add_argument('--headless')
-        driver = webdriver.Firefox(options=options)
+
+        if driver_path is None:
+            driver = webdriver.Firefox(options=options)
+        else:
+            driver = webdriver.Firefox(executable_path=driver_path, options=options)
     elif browser_driver == SAFARI:
-        driver = webdriver.Safari()
+        if driver_path is None:
+            driver = webdriver.Safari()
+        else:
+            driver = webdriver.Safari(executable_path=driver_path)
     elif browser_driver == OPERA:
-        driver = webdriver.Opera()
+        if driver_path is None:
+            driver = webdriver.Opera()
+        else:
+            driver = webdriver.Opera(executable_path=driver_path)
     else:
         raise ValueError(f'Browser driver has to be one of these: {", ".join(DRIVERS)}')
 

@@ -30,6 +30,7 @@ def main():
     parser.add_argument('--profile', '-j', dest='profile_file', help='The profile json file')
     parser.add_argument('--driver', '-d', default=CHROME,
                         help=f'The web driver: {", ".join(DRIVERS)} (default: %(default)s)')
+    parser.add_argument('--driver_path', '-dp', help='The executable path of the web driver')
     parser.add_argument('--timeout', '-t', type=int, default=10, help='The timeout value (default: %(default)s)')
 
     args = parser.parse_args()
@@ -37,7 +38,7 @@ def main():
 
 
 def run(driver, email, password, keep_creds, output_dir, scrape_only, resume_only, website_only, profile_file, timeout,
-        **kwargs):
+        driver_path, **kwargs):
     # Setup logging
     logbook.set_datetime_format('local')
     format_string = '[{record.time:%Y-%m-%d %H:%M:%S}] {record.level_name}: {record.message}'
@@ -69,7 +70,7 @@ def run(driver, email, password, keep_creds, output_dir, scrape_only, resume_onl
         if driver not in [CHROME, FIREFOX]:
             log.notice('Please keep the browser window on top')
 
-        profile = scrape(driver.lower(), email, password, output_dir, timeout)
+        profile = scrape(driver.lower(), driver_path, email, password, output_dir, timeout)
 
         if keep_creds:
             store_creds(email, password, credentials_file)
