@@ -66,7 +66,7 @@ def run(driver, email, password, keep_creds, output_dir, scrape_only, resume_onl
                 password = getpass('Enter your LinkedIn login password: ')
 
         log.notice('Scraping LinkedIn profile')
-        if driver != FIREFOX:
+        if driver not in [CHROME, FIREFOX]:
             log.notice('Please keep the browser window on top')
 
         profile = scrape(driver.lower(), email, password, output_dir, timeout)
