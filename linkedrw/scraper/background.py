@@ -122,14 +122,10 @@ def get_multiple_roles(div, summary):
     # Show all roles
     while True:
         try:
-            btn = div.find_element_by_css_selector(
+            div.find_element_by_css_selector(
                 '.pv-profile-section__see-more-inline.pv-profile-section__text-truncate-toggle.link.'
-                'link-without-hover-state')
-            if 'more roles' in btn.text.lower():
-                btn.click()
-                time.sleep(1)
-            else:
-                break
+                'link-without-hover-state').click()
+            time.sleep(1)
         except NoSuchElementException:
             break
 
