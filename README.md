@@ -107,6 +107,8 @@ Below is the list of options:
   --driver DRIVER, -d DRIVER
                         The web driver: chrome, firefox, safari, opera
                         (default: chrome)
+  --driver_path DRIVER_PATH, -dp DRIVER_PATH
+                        The executable path of the web driver
   --timeout TIMEOUT, -t TIMEOUT
                         The timeout value (default: 10)
 ```
