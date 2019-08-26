@@ -123,12 +123,18 @@ def get_multiple_roles(div, summary):
     company = get_span_text(summary, '.t-16.t-black.t-bold')
 
     # Show all roles
-    try:
-        div.find_element_by_css_selector(
-            '.pv-profile-section__see-more-inline.pv-profile-section__text-truncate-toggle.link').click()
-        time.sleep(1)
-    except NoSuchElementException:
-        pass
+    while True:
+        try:
+            btn = div.find_element_by_css_selector(
+                '.pv-profile-section__see-more-inline.pv-profile-section__text-truncate-toggle.link.'
+                'link-without-hover-state')
+            if 'more roles' in btn.text.lower():
+                btn.click()
+                time.sleep(1)
+            else:
+                break
+        except NoSuchElementException:
+            break
 
     roles = []
     try:
