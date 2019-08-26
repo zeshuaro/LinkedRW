@@ -307,21 +307,26 @@ def get_section(section):
     Returns:
         The items section
     """
-    # Check if the section is expandable, if so expand the section and get the ul element
-    try:
-        section.find_element_by_css_selector(
-            '.pv-profile-section__see-more-inline.pv-profile-section__text-truncate-toggle.link').click()
-        time.sleep(1)
+    # Check if the section is expandable, if so expand the section
+    count = 0
+    while True:
+        try:
+            section.find_element_by_css_selector(
+                '.pv-profile-section__see-more-inline.pv-profile-section__text-truncate-toggle.link').click()
+            time.sleep(1)
+            count += 1
+        except NoSuchElementException:
+            break
 
+    if count:
+        # The ul element can appear in two different classes
         try:
             elem = section.find_element_by_css_selector(
                 '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-more.ember-view')
         except NoSuchElementException:
             elem = section.find_element_by_css_selector(
                 '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-more')
-
-    # The section is not expandable, simply get the ul element
-    except NoSuchElementException:
+    else:
         # The ul element can appear in two different classes
         try:
             elem = section.find_element_by_css_selector(
