@@ -2,9 +2,10 @@ import time
 
 from collections import defaultdict
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
 
 from linkedrw.constants import *
-from linkedrw.utils import get_span_text, get_optional_text, get_description
+from linkedrw.utils import get_span_text, get_optional_text, get_description, scroll_to_elem
 
 
 def get_background_details(driver, by, section_id, section_type):
@@ -21,16 +22,12 @@ def get_background_details(driver, by, section_id, section_type):
     """
     # Load background section
     if section_type == EXPERIENCE:
-        background = driver.find_element_by_id('oc-background-section')
-        driver.execute_script("arguments[0].scrollIntoView(true);", background)
-        time.sleep(1)
+        scroll_to_elem(driver, By.ID, 'oc-background-section')
 
     # Load the rest of the page
     elif section_type == SKILLS:
         try:
-            skills = driver.find_element_by_css_selector('.pv-deferred-area.pv-deferred-area--pending.ember-view')
-            driver.execute_script("arguments[0].scrollIntoView(true);", skills)
-            time.sleep(1)
+            scroll_to_elem(driver, By.CSS_SELECTOR, '.pv-deferred-area.pv-deferred-area--pending.ember-view')
         except NoSuchElementException:
             pass
 
@@ -275,9 +272,7 @@ def get_skills(driver, section):
 
     # Show all skills
     try:
-        btn = driver.find_element_by_class_name('pv-skills-section__chevron-icon')
-        driver.execute_script("arguments[0].scrollIntoView(false);", btn)
-        time.sleep(1)
+        btn = scroll_to_elem(driver, By.CLASS_NAME, 'pv-skills-section__chevron-icon', align='false')
         btn.click()
     except NoSuchElementException:
         pass

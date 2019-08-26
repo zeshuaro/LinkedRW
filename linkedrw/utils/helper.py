@@ -154,3 +154,16 @@ def make_dir(dir_name):
         os.mkdir(dir_name)
     except FileExistsError:
         pass
+
+
+def scroll_to_elem(driver, by, value, align='true'):
+    elem = driver.find_element(by, value)
+    script = f"arguments[0].scrollIntoView({align});" \
+             "var scrollTimeout;" \
+             "addEventListener('scroll', function(e) {" \
+             "clearTimeout(scrollTimeout);" \
+             "scrollTimeout = setTimeout(function() {}, 1000);" \
+             "});"
+    driver.execute_script(script, elem)
+
+    return elem
