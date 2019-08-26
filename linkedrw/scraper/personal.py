@@ -178,4 +178,7 @@ def get_summary(driver):
     except NoSuchElementException:
         pass
 
-    return driver.find_element_by_class_name('lt-line-clamp__raw-line').text
+    try:
+        return section.find_element_by_class_name('lt-line-clamp__raw-line').text
+    except NoSuchElementException:
+        return ''

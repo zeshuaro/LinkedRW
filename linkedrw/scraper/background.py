@@ -2,9 +2,10 @@ import time
 
 from collections import defaultdict
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
 
 from linkedrw.constants import *
-from linkedrw.utils import get_span_text, get_optional_text, get_description
+from linkedrw.utils import get_span_text, get_optional_text, get_description, scroll_to_elem
 
 
 def get_background_details(driver, by, section_id, section_type):
@@ -21,16 +22,12 @@ def get_background_details(driver, by, section_id, section_type):
     """
     # Load background section
     if section_type == EXPERIENCE:
-        background = driver.find_element_by_id('oc-background-section')
-        driver.execute_script("arguments[0].scrollIntoView(true);", background)
-        time.sleep(1)
+        scroll_to_elem(driver, By.ID, 'oc-background-section')
 
     # Load the rest of the page
     elif section_type == SKILLS:
         try:
-            skills = driver.find_element_by_css_selector('.pv-deferred-area.pv-deferred-area--pending.ember-view')
-            driver.execute_script("arguments[0].scrollIntoView(true);", skills)
-            time.sleep(1)
+            scroll_to_elem(driver, By.CSS_SELECTOR, '.pv-deferred-area.pv-deferred-area--pending.ember-view')
         except NoSuchElementException:
             pass
 
@@ -123,12 +120,14 @@ def get_multiple_roles(div, summary):
     company = get_span_text(summary, '.t-16.t-black.t-bold')
 
     # Show all roles
-    try:
-        div.find_element_by_css_selector(
-            '.pv-profile-section__see-more-inline.pv-profile-section__text-truncate-toggle.link').click()
-        time.sleep(1)
-    except NoSuchElementException:
-        pass
+    while True:
+        try:
+            div.find_element_by_css_selector(
+                '.pv-profile-section__see-more-inline.pv-profile-section__text-truncate-toggle.link.'
+                'link-without-hover-state').click()
+            time.sleep(1)
+        except NoSuchElementException:
+            break
 
     roles = []
     try:
@@ -269,9 +268,7 @@ def get_skills(driver, section):
 
     # Show all skills
     try:
-        btn = driver.find_element_by_class_name('pv-skills-section__chevron-icon')
-        driver.execute_script("arguments[0].scrollIntoView(false);", btn)
-        time.sleep(1)
+        btn = scroll_to_elem(driver, By.CLASS_NAME, 'pv-skills-section__chevron-icon', align='false')
         btn.click()
     except NoSuchElementException:
         pass
@@ -310,21 +307,26 @@ def get_section(section):
     Returns:
         The items section
     """
-    # Check if the section is expandable, if so expand the section and get the ul element
-    try:
-        section.find_element_by_css_selector(
-            '.pv-profile-section__see-more-inline.pv-profile-section__text-truncate-toggle.link').click()
-        time.sleep(1)
+    # Check if the section is expandable, if so expand the section
+    count = 0
+    while True:
+        try:
+            section.find_element_by_css_selector(
+                '.pv-profile-section__see-more-inline.pv-profile-section__text-truncate-toggle.link').click()
+            time.sleep(1)
+            count += 1
+        except NoSuchElementException:
+            break
 
+    if count:
+        # The ul element can appear in two different classes
         try:
             elem = section.find_element_by_css_selector(
                 '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-more.ember-view')
         except NoSuchElementException:
             elem = section.find_element_by_css_selector(
                 '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-more')
-
-    # The section is not expandable, simply get the ul element
-    except NoSuchElementException:
+    else:
         # The ul element can appear in two different classes
         try:
             elem = section.find_element_by_css_selector(
