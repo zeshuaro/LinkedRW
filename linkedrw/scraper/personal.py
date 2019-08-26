@@ -180,5 +180,5 @@ def get_summary(driver):
 
     try:
         return section.find_element_by_class_name('lt-line-clamp__raw-line').text
-    except:
+    except NoSuchElementException:
         return ''
