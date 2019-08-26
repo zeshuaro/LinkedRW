@@ -117,24 +117,12 @@ def get_multiple_roles(div, summary):
     Returns:
         A dict of the details for multiple roles
     """
-    company = get_span_text(summary, '.t-16.t-black.t-bold')
-
-    # Show all roles
-    while True:
-        try:
-            div.find_element_by_css_selector(
-                '.pv-profile-section__see-more-inline.pv-profile-section__text-truncate-toggle.link.'
-                'link-without-hover-state').click()
-            time.sleep(1)
-        except NoSuchElementException:
-            break
-
-    roles = []
     try:
         role_sections = div.find_elements_by_class_name('pv-entity__position-group-role-item')
     except NoSuchElementException:
         role_sections = div.find_elements_by_class_name('pv-entity__position-group-role-item-fading-timeline')
 
+    roles = []
     for role_section in role_sections:
         title = get_span_text(role_section, '.t-14.t-black.t-bold')
         dates = get_span_text(role_section, '.pv-entity__date-range.t-14.t-black.t-normal')
@@ -149,7 +137,7 @@ def get_multiple_roles(div, summary):
         })
 
     results = {
-        NAME: company,
+        NAME: get_span_text(summary, '.t-16.t-black.t-bold'),
         ENTRIES: roles
     }
 
@@ -307,18 +295,8 @@ def get_section(section):
     Returns:
         The items section
     """
-    # Check if the section is expandable, if so expand the section
-    count = 0
-    while True:
-        try:
-            section.find_element_by_css_selector(
-                '.pv-profile-section__see-more-inline.pv-profile-section__text-truncate-toggle.link').click()
-            time.sleep(1)
-            count += 1
-        except NoSuchElementException:
-            break
-
-    if count:
+    is_expanded = expand_section(section)
+    if is_expanded:
         # The ul element can appear in two different classes
         try:
             elem = section.find_element_by_css_selector(
@@ -337,3 +315,25 @@ def get_section(section):
                 '.pv-profile-section__section-info.section-info.pv-profile-section__section-info--has-no-more')
 
     return elem
+
+
+def expand_section(section):
+    css = '.pv-profile-section__see-more-inline.pv-profile-section__text-truncate-toggle.link'
+    btns = section.find_elements_by_css_selector(css)
+    count = 0
+
+    while btns:
+        btn = btns.pop()
+        text = btn.text.lower()
+        btn.click()
+        time.sleep(1)
+
+        if EXPERIENCE in text or EDUCATION in text:
+            count += 1
+
+        try:
+            btns += section.find_elements_by_css_selector(css)
+        except NoSuchElementException:
+            continue
+
+    return count > 0
