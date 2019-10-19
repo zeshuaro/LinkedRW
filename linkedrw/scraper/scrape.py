@@ -20,8 +20,8 @@ from linkedrw.scraper.personal import get_personal_details
 def scrape(browser_driver, driver_path, email, password, output_dir, timeout):
     if browser_driver == CHROME:
         options = ChromeOptions()
-        options.add_argument('--headless')
-        options.add_argument('--window-size=1920,1080')
+        options.add_argument("--headless")
+        options.add_argument("--window-size=1920,1080")
 
         if driver_path is None:
             driver = webdriver.Chrome(options=options)
@@ -29,7 +29,7 @@ def scrape(browser_driver, driver_path, email, password, output_dir, timeout):
             driver = webdriver.Chrome(executable_path=driver_path, options=options)
     elif browser_driver == FIREFOX:
         options = FirefoxOptions()
-        options.add_argument('--headless')
+        options.add_argument("--headless")
 
         if driver_path is None:
             driver = webdriver.Firefox(options=options)
@@ -49,30 +49,38 @@ def scrape(browser_driver, driver_path, email, password, output_dir, timeout):
         raise ValueError(f'Browser driver has to be one of these: {", ".join(DRIVERS)}')
 
     # Login to LinkedIn
-    driver.get('https://www.linkedin.com/login/')
-    driver.find_element_by_id('username').send_keys(email)
-    driver.find_element_by_id('password').send_keys(password)
-    driver.find_element_by_class_name('login__form_action_container').submit()
+    driver.get("https://www.linkedin.com/login/")
+    driver.find_element_by_id("username").send_keys(email)
+    driver.find_element_by_id("password").send_keys(password)
+    driver.find_element_by_class_name("login__form_action_container").submit()
 
     # Check if login is successful
     html = driver.page_source.lower()
-    if any(x in html for x in ['we don\'t recognize that email', 'that\'s not the right password']):
+    if any(
+        x in html
+        for x in ["we don't recognize that email", "that's not the right password"]
+    ):
         driver.quit()
 
-        raise LoginError('Invalid login credentials')
+        raise LoginError("Invalid login credentials")
 
     # Skip adding a phone number
     try:
-        driver.find_element_by_css_selector('.ember-view.cp-add-phone')
-        driver.find_element_by_class_name('secondary-action').click()
+        driver.find_element_by_css_selector(".ember-view.cp-add-phone")
+        driver.find_element_by_class_name("secondary-action").click()
     except NoSuchElementException:
         pass
 
     # Navigate to profile page
-    elem = WebDriverWait(driver, timeout).until(ec.presence_of_element_located(
-        (By.CSS_SELECTOR, '.tap-target.block.link-without-hover-visited.ember-view')))
+    elem = WebDriverWait(driver, timeout).until(
+        ec.presence_of_element_located(
+            (By.CSS_SELECTOR, ".tap-target.block.link-without-hover-visited.ember-view")
+        )
+    )
     elem.click()
-    WebDriverWait(driver, timeout).until(ec.presence_of_element_located((By.ID, 'oc-background-section')))
+    WebDriverWait(driver, timeout).until(
+        ec.presence_of_element_located((By.ID, "oc-background-section"))
+    )
 
     # Scrape profile
     profile = {
@@ -80,33 +88,49 @@ def scrape(browser_driver, driver_path, email, password, output_dir, timeout):
         POSITION: get_personal_details(driver, POSITION),
         CONTACT: get_personal_details(driver, CONTACT, timeout),
         SUMMARY: get_personal_details(driver, SUMMARY),
-        EXPERIENCE: get_background_details(driver, By.ID, 'experience-section', EXPERIENCE),
-        EDUCATION: get_background_details(driver, By.ID, 'education-section', EDUCATION),
+        EXPERIENCE: get_background_details(
+            driver, By.ID, "experience-section", EXPERIENCE
+        ),
+        EDUCATION: get_background_details(
+            driver, By.ID, "education-section", EDUCATION
+        ),
         VOLUNTEERING: get_background_details(
-            driver, By.CSS_SELECTOR, '.pv-profile-section.volunteering-section.ember-view', VOLUNTEERING),
+            driver,
+            By.CSS_SELECTOR,
+            ".pv-profile-section.volunteering-section.ember-view",
+            VOLUNTEERING,
+        ),
         SKILLS: get_background_details(
-            driver, By.CSS_SELECTOR,
-            '.pv-profile-section.pv-skill-categories-section.artdeco-container-card.ember-view', SKILLS),
+            driver,
+            By.CSS_SELECTOR,
+            ".pv-profile-section.pv-skill-categories-section.artdeco-container-card.ember-view",
+            SKILLS,
+        ),
         PROJECTS: get_accomplishment_details(driver, PROJECTS),
         PUBLICATIONS: get_accomplishment_details(driver, PUBLICATIONS),
         HONORS: get_accomplishment_details(driver, HONORS),
-        LANGUAGES: get_accomplishment_details(driver, LANGUAGES)
+        LANGUAGES: get_accomplishment_details(driver, LANGUAGES),
     }
 
     driver.quit()
-    with open(os.path.join(output_dir, 'profile.json'), 'w') as f:
+    with open(os.path.join(output_dir, "profile.json"), "w") as f:
         json.dump(profile, f, indent=4)
 
     return profile
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Scrape your LinkedIn profile')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Scrape your LinkedIn profile")
     parser.set_defaults(method=scrape)
 
-    parser.add_argument('email', help='Your LinkedIn login email')
-    parser.add_argument('password', help='Your LinkedIn login password')
-    parser.add_argument('--output_dir', '-o', default='.', help='The output directory (default: current directory)')
+    parser.add_argument("email", help="Your LinkedIn login email")
+    parser.add_argument("password", help="Your LinkedIn login password")
+    parser.add_argument(
+        "--output_dir",
+        "-o",
+        default=".",
+        help="The output directory (default: current directory)",
+    )
 
     args = parser.parse_args()
     args.method(**vars(args))

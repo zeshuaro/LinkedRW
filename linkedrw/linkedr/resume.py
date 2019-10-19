@@ -25,11 +25,11 @@ def make_resume_files(profile, output_dir, timeout):
         None
     """
     log = Logger()
-    log.notice('Creating resume files')
+    log.notice("Creating resume files")
 
-    output_dir = os.path.join(output_dir, 'resume')
+    output_dir = os.path.join(output_dir, "resume")
     make_dir(output_dir)
-    copy_files(__name__.split('.')[0], 'templates/awesome_cv_files', output_dir)
+    copy_files(__name__.split(".")[0], "templates/awesome_cv_files", output_dir)
 
     if PUBLICATIONS in profile:
         has_publications = make_publication_section(profile[PUBLICATIONS], output_dir)
@@ -58,23 +58,25 @@ def make_resume_main(profile, has_publications, output_dir):
         None
     """
     lines = []
-    with open(pkg_resources.resource_filename(__name__.split('.')[0], RESUME_TEMPLATE)) as f:
+    with open(
+        pkg_resources.resource_filename(__name__.split(".")[0], RESUME_TEMPLATE)
+    ) as f:
         for line in f:
             line = line.strip()
-            if 'personal-info-here' in line:
+            if "personal-info-here" in line:
                 lines += make_personal_info(profile)
-            elif 'resume-content-here' in line:
+            elif "resume-content-here" in line:
                 lines += make_resume_content(profile)
-            elif 'addbibresource' in line and has_publications:
-                lines.append(line.lstrip('% '))
+            elif "addbibresource" in line and has_publications:
+                lines.append(line.lstrip("% "))
             else:
-                if line.startswith('\\makecvfooter') and NAME in profile:
-                    line += f'{{\\today}}{{{profile[NAME]}~~~·~~~Resume}}{{\\thepage}}'
+                if line.startswith("\\makecvfooter") and NAME in profile:
+                    line += f"{{\\today}}{{{profile[NAME]}~~~·~~~Resume}}{{\\thepage}}"
 
                 lines.append(line)
 
-    with open(os.path.join(output_dir, 'resume.tex'), 'w') as f:
-        f.write('\n'.join(lines))
+    with open(os.path.join(output_dir, "resume.tex"), "w") as f:
+        f.write("\n".join(lines))
 
 
 def make_personal_info(profile):
@@ -93,42 +95,44 @@ def make_personal_info(profile):
         elif CONTACT in profile and info_type in profile[CONTACT]:
             value = profile[CONTACT][info_type]
         else:
-            value = ''
+            value = ""
 
-        line = f'\\{info_type}'
+        line = f"\\{info_type}"
         if value:
             if info_type == NAME:
                 names = value.split()
-                last_name = ' '.join(names[1:])
-                line += f'{{{names[0]}}}{{{last_name}}}'
+                last_name = " ".join(names[1:])
+                line += f"{{{names[0]}}}{{{last_name}}}"
             elif info_type == STACKOVERFLOW:
-                user_id, username = urlparse(value).path.replace('/users/', '').strip('/').split('/')
-                line += f'{{{user_id}}}{{{username}}}'
+                user_id, username = (
+                    urlparse(value).path.replace("/users/", "").strip("/").split("/")
+                )
+                line += f"{{{user_id}}}{{{username}}}"
             elif info_type == GOOGLE_SCHOLAR:
-                queries = urlparse(value).query.split('&')
+                queries = urlparse(value).query.split("&")
                 for query in queries:
-                    if 'user=' in query:
-                        user_id = query.replace('user=', '').strip('/')
-                        line += f'{{{user_id}}}{{}}'
+                    if "user=" in query:
+                        user_id = query.replace("user=", "").strip("/")
+                        line += f"{{{user_id}}}{{}}"
 
                         break
             else:
                 url_path = urlparse(value).path
                 if info_type in (GITHUB, GITLAB):
-                    value = url_path.strip('/')
+                    value = url_path.strip("/")
                 elif info_type == LINKEDIN:
-                    value = url_path.lstrip('/in/').strip('/')
+                    value = url_path.lstrip("/in/").strip("/")
                 elif info_type == TWITTER:
-                    user_id = url_path.strip('/')
-                    value = f'@{user_id}'
+                    user_id = url_path.strip("/")
+                    value = f"@{user_id}"
                 elif info_type == REDDIT:
-                    value = url_path.replace('/user/', '').strip('/')
+                    value = url_path.replace("/user/", "").strip("/")
                 elif info_type == MEDIUM:
-                    value = url_path.lstrip('/@').strip('/')
+                    value = url_path.lstrip("/@").strip("/")
 
-                line += f'{{{value}}}'
+                line += f"{{{value}}}"
         else:
-            line = f'% {line}{{}}'
+            line = f"% {line}{{}}"
 
         lines.append(line)
 
@@ -147,7 +151,7 @@ def make_resume_content(profile):
     lines = []
     for section in RESUME_CONTENT:
         if section in profile and profile[section]:
-            lines.append(f'\\input{{{section}.tex}}')
+            lines.append(f"\\input{{{section}.tex}}")
 
     return lines
 
@@ -164,15 +168,18 @@ def compile_resume(output_dir, has_pubs, timeout):
         None
     """
     log = Logger()
-    log.notice('Compiling resume files')
+    log.notice("Compiling resume files")
     curr_dir = os.getcwd()
     os.chdir(output_dir)
 
-    if run_cmd('xelatex resume.tex', timeout):
-        if has_pubs and (not run_cmd('biber resume', timeout) or not run_cmd('xelatex resume.tex', timeout)):
-            log.warn('Failed to compile resume files, please compile them manually')
+    if run_cmd("xelatex resume.tex", timeout):
+        if has_pubs and (
+            not run_cmd("biber resume", timeout)
+            or not run_cmd("xelatex resume.tex", timeout)
+        ):
+            log.warn("Failed to compile resume files, please compile them manually")
     else:
-        log.warn('Failed to compile resume files, please compile them manually')
+        log.warn("Failed to compile resume files, please compile them manually")
 
     os.chdir(curr_dir)
 

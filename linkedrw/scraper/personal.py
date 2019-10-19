@@ -25,7 +25,7 @@ def get_personal_details(driver, section_type, timeout=None):
         return get_position(driver)
     elif section_type == CONTACT:
         if timeout is None:
-            raise ValueError('timeout needs to be provided')
+            raise ValueError("timeout needs to be provided")
 
         return get_contact(driver, timeout)
     elif section_type == SUMMARY:
@@ -42,9 +42,13 @@ def get_name(driver):
         A string of name
     """
     try:
-        return driver.find_element_by_css_selector('.pv-top-card-section__name.inline.t-24.t-black.t-normal').text
+        return driver.find_element_by_css_selector(
+            ".pv-top-card-section__name.inline.t-24.t-black.t-normal"
+        ).text
     except NoSuchElementException:
-        return driver.find_element_by_css_selector('.inline.t-24.t-black.t-normal.break-words').text
+        return driver.find_element_by_css_selector(
+            ".inline.t-24.t-black.t-normal.break-words"
+        ).text
 
 
 def get_position(driver):
@@ -57,11 +61,15 @@ def get_position(driver):
         A string of the position
     """
     try:
-        position = driver.find_element_by_css_selector('.pv-top-card-section__headline.mt1.t-18.t-black.t-normal').text
+        position = driver.find_element_by_css_selector(
+            ".pv-top-card-section__headline.mt1.t-18.t-black.t-normal"
+        ).text
     except NoSuchElementException:
-        position = driver.find_element_by_css_selector('.mt1.t-18.t-black.t-normal').text
+        position = driver.find_element_by_css_selector(
+            ".mt1.t-18.t-black.t-normal"
+        ).text
 
-    return re.sub(r'\s+at.*', '', position)
+    return re.sub(r"\s+at.*", "", position)
 
 
 def get_contact(driver, timeout):
@@ -78,23 +86,44 @@ def get_contact(driver, timeout):
     # Show contact details
     driver.find_element_by_xpath("//a[@data-control-name='contact_see_more']").click()
 
-    linkedin_id = WebDriverWait(driver, timeout).until(ec.presence_of_element_located((
-        By.CLASS_NAME, 'pv-contact-info__ci-container'))).find_element_by_tag_name('a').get_attribute('href')
-    email = driver.find_element_by_css_selector('.pv-contact-info__contact-type.ci-email').\
-        find_element_by_tag_name('a').text
+    linkedin_id = (
+        WebDriverWait(driver, timeout)
+        .until(
+            ec.presence_of_element_located(
+                (By.CLASS_NAME, "pv-contact-info__ci-container")
+            )
+        )
+        .find_element_by_tag_name("a")
+        .get_attribute("href")
+    )
+    email = (
+        driver.find_element_by_css_selector(".pv-contact-info__contact-type.ci-email")
+        .find_element_by_tag_name("a")
+        .text
+    )
     social_media = get_social_media(driver)
 
     try:
-        mobile = driver.find_element_by_css_selector('.pv-contact-info__contact-type.ci-phone').\
-            find_element_by_css_selector('.t-14.t-black.t-normal').text
+        mobile = (
+            driver.find_element_by_css_selector(
+                ".pv-contact-info__contact-type.ci-phone"
+            )
+            .find_element_by_css_selector(".t-14.t-black.t-normal")
+            .text
+        )
     except NoSuchElementException:
-        mobile = ''
+        mobile = ""
 
     try:
-        address = driver.find_element_by_css_selector('.pv-contact-info__contact-type.ci-address').\
-            find_element_by_tag_name('a').text
+        address = (
+            driver.find_element_by_css_selector(
+                ".pv-contact-info__contact-type.ci-address"
+            )
+            .find_element_by_tag_name("a")
+            .text
+        )
     except NoSuchElementException:
-        address = ''
+        address = ""
 
     # Close contact details
     driver.find_element_by_xpath("//button[@aria-label='Dismiss']").click()
@@ -103,9 +132,9 @@ def get_contact(driver, timeout):
         ADDRESS: address,
         MOBILE: mobile,
         EMAIL: email,
-        HOMEPAGE: '',
+        HOMEPAGE: "",
         LINKEDIN: linkedin_id,
-        SKYPE: '',
+        SKYPE: "",
     }
     results.update(social_media)
 
@@ -121,24 +150,26 @@ def get_social_media(driver):
     Returns:
         A dict of social media details
     """
-    github = gitlab = stackoverflow = twitter = reddit = medium = scholar = ''
+    github = gitlab = stackoverflow = twitter = reddit = medium = scholar = ""
     try:
-        websites_section = driver.find_element_by_css_selector('.pv-contact-info__contact-type.ci-websites')
-        for li in websites_section.find_elements_by_tag_name('li'):
-            link = li.find_element_by_tag_name('a').get_attribute('href')
-            if 'github.com' in link:
+        websites_section = driver.find_element_by_css_selector(
+            ".pv-contact-info__contact-type.ci-websites"
+        )
+        for li in websites_section.find_elements_by_tag_name("li"):
+            link = li.find_element_by_tag_name("a").get_attribute("href")
+            if "github.com" in link:
                 github = link
-            elif 'scholar.google.com' in link:
+            elif "scholar.google.com" in link:
                 scholar = link
-            elif 'gitlab.com' in link:
+            elif "gitlab.com" in link:
                 gitlab = link
-            elif 'stackoverflow.com' in link:
+            elif "stackoverflow.com" in link:
                 stackoverflow = link
-            elif 'twitter.com' in link:
+            elif "twitter.com" in link:
                 twitter = link
-            elif 'reddit' in link:
+            elif "reddit" in link:
                 reddit = link
-            elif 'medium.com' in link:
+            elif "medium.com" in link:
                 medium = link
     except NoSuchElementException:
         pass
@@ -150,7 +181,7 @@ def get_social_media(driver):
         TWITTER: twitter,
         REDDIT: reddit,
         MEDIUM: medium,
-        GOOGLE_SCHOLAR: scholar
+        GOOGLE_SCHOLAR: scholar,
     }
 
     return results
@@ -168,17 +199,18 @@ def get_summary(driver):
     # Check if summary section exists
     try:
         section = driver.find_element_by_css_selector(
-            '.artdeco-container-card.pv-profile-section.pv-about-section.ember-view')
+            ".artdeco-container-card.pv-profile-section.pv-about-section.ember-view"
+        )
     except NoSuchElementException:
-        return ''
+        return ""
 
     # Check if there is a show more button
     try:
-        section.find_element_by_class_name('lt-line-clamp__more').click()
+        section.find_element_by_class_name("lt-line-clamp__more").click()
     except NoSuchElementException:
         pass
 
     try:
-        return section.find_element_by_class_name('lt-line-clamp__raw-line').text
+        return section.find_element_by_class_name("lt-line-clamp__raw-line").text
     except NoSuchElementException:
-        return ''
+        return ""

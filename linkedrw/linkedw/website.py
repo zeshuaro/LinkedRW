@@ -10,7 +10,14 @@ from logbook import Logger
 from linkedrw.constants import *
 from linkedrw.utils import make_dir, copy_files
 
-SECTION_ENDS = ['End #about', 'End #experience', 'End #education', 'End #projects', 'End #skills', 'End #social']
+SECTION_ENDS = [
+    "End #about",
+    "End #experience",
+    "End #education",
+    "End #projects",
+    "End #skills",
+    "End #social",
+]
 
 
 def make_website_files(profile, output_dir):
@@ -24,33 +31,39 @@ def make_website_files(profile, output_dir):
         None
     """
     log = Logger()
-    log.notice('Creating website files...')
+    log.notice("Creating website files...")
 
-    output_dir = os.path.join(output_dir, 'website')
+    output_dir = os.path.join(output_dir, "website")
     make_dir(output_dir)
-    copy_files(__name__.split('.')[0], 'templates/dev_portfolio_files', output_dir)
+    copy_files(__name__.split(".")[0], "templates/dev_portfolio_files", output_dir)
 
     lines = []
     comment_line = has_sum = has_exp = has_edu = has_prj = has_skl = has_con = False
 
-    with open(pkg_resources.resource_filename(__name__.split('.')[0], PORTFOLIO_TEMPLATE)) as f:
+    with open(
+        pkg_resources.resource_filename(__name__.split(".")[0], PORTFOLIO_TEMPLATE)
+    ) as f:
         for line in f:
-            line = line.strip('\n')
-            indent = re.match(r'\s+', line)
+            line = line.strip("\n")
+            indent = re.match(r"\s+", line)
 
             if indent is not None:
                 indent = indent.group()
 
-            if 'section-headers-here' in line:
+            if "section-headers-here" in line:
                 for section in PORTFOLIO_SECTIONS:
                     if section == CONTACT or (section in profile and profile[section]):
                         lines += make_section_header(section, indent)
-            elif NAME in profile and 'name-here' in line:
-                lines.append(line.replace('name-here', profile[NAME]))
-            elif POSITION in profile and 'title-here' in line:
-                lines.append(line.replace('title-here', profile[POSITION]))
-            elif NAME in profile and 'copyright-here' in line:
-                lines.append(line.replace('copyright-here', f'{arrow.now().year} {profile[NAME]}'))
+            elif NAME in profile and "name-here" in line:
+                lines.append(line.replace("name-here", profile[NAME]))
+            elif POSITION in profile and "title-here" in line:
+                lines.append(line.replace("title-here", profile[POSITION]))
+            elif NAME in profile and "copyright-here" in line:
+                lines.append(
+                    line.replace(
+                        "copyright-here", f"{arrow.now().year} {profile[NAME]}"
+                    )
+                )
 
             # About section
             elif 'id="about"' in line:
@@ -60,7 +73,7 @@ def make_website_files(profile, output_dir):
                 else:
                     has_sum = True
                     lines.append(line)
-            elif has_sum and 'summary-here' in line:
+            elif has_sum and "summary-here" in line:
                 lines += make_summary_section(profile[SUMMARY], indent)
 
             # Experience section
@@ -71,7 +84,7 @@ def make_website_files(profile, output_dir):
                 else:
                     has_exp = True
                     lines.append(line)
-            elif has_exp and 'experience-here' in line:
+            elif has_exp and "experience-here" in line:
                 lines += make_experience_section(profile[EXPERIENCE], indent)
 
             # Education section
@@ -82,7 +95,7 @@ def make_website_files(profile, output_dir):
                 else:
                     has_edu = True
                     lines.append(line)
-            elif has_edu and 'education-here' in line:
+            elif has_edu and "education-here" in line:
                 lines += make_education_section(profile[EDUCATION], indent)
 
             # Projects section
@@ -93,7 +106,7 @@ def make_website_files(profile, output_dir):
                 else:
                     has_prj = True
                     lines.append(line)
-            elif has_prj and 'projects-here' in line:
+            elif has_prj and "projects-here" in line:
                 lines += make_projects_section(profile[PROJECTS], indent)
 
             # Skills section
@@ -104,21 +117,27 @@ def make_website_files(profile, output_dir):
                 else:
                     has_skl = True
                     lines.append(line)
-            elif has_skl and 'skills-here' in line:
+            elif has_skl and "skills-here" in line:
                 lines += make_skills_section(profile[SKILLS], indent)
 
             # Contact section
-            elif CONTACT in profile and EMAIL in profile[CONTACT] and 'email-here' in line:
-                lines.append(line.replace('email-here', profile[CONTACT][EMAIL]))
-            elif 'col-sm-5 social' in line:
-                if CONTACT not in profile or \
-                        all(x not in profile[CONTACT] or not profile[CONTACT][x] for x in CONTACTS):
+            elif (
+                CONTACT in profile
+                and EMAIL in profile[CONTACT]
+                and "email-here" in line
+            ):
+                lines.append(line.replace("email-here", profile[CONTACT][EMAIL]))
+            elif "col-sm-5 social" in line:
+                if CONTACT not in profile or all(
+                    x not in profile[CONTACT] or not profile[CONTACT][x]
+                    for x in CONTACTS
+                ):
                     comment_line = True
                     lines += make_comment_line(line)
                 else:
                     has_con = True
                     lines.append(line)
-            elif has_con and 'contact-here' in line:
+            elif has_con and "contact-here" in line:
                 lines += make_contact_section(profile[CONTACT], indent)
 
             # Comment out sections
@@ -131,8 +150,8 @@ def make_website_files(profile, output_dir):
             else:
                 lines.append(line)
 
-    with open(os.path.join(output_dir, 'index.html'), 'w') as f:
-        f.write('\n'.join(lines))
+    with open(os.path.join(output_dir, "index.html"), "w") as f:
+        f.write("\n".join(lines))
 
 
 def make_section_header(section, indent):
@@ -146,9 +165,9 @@ def make_section_header(section, indent):
         A list of lines for the section header
     """
     lines = [
-        f'{indent}<li>',
+        f"{indent}<li>",
         f'{indent}{HTML_INDENT}<a href="#{section}">{section.title()}</a>',
-        f'{indent}</li>'
+        f"{indent}</li>",
     ]
 
     return lines
@@ -164,8 +183,8 @@ def make_summary_section(summary, indent):
     Returns:
         A string of the summary line
     """
-    text = summary.replace('\n', '<br>')
-    line = [f'{indent}{text}']
+    text = summary.replace("\n", "<br>")
+    line = [f"{indent}{text}"]
 
     return line
 
@@ -186,11 +205,11 @@ def make_experience_section(exps, indent):
     for exp in sorted_exps:
         lines += [
             f'{indent}<div data-date="{exp[DATES]}">',
-            f'{indent}{HTML_INDENT}<h3>{exp[NAME]}</h3>',
-            f'{indent}{HTML_INDENT}<h4>{exp[TITLE]}</h4>',
+            f"{indent}{HTML_INDENT}<h3>{exp[NAME]}</h3>",
+            f"{indent}{HTML_INDENT}<h4>{exp[TITLE]}</h4>",
         ]
         lines += get_description(exp[DESCRIPTION], indent)
-        lines += [f'{indent}</div>', '']
+        lines += [f"{indent}</div>", ""]
 
     return lines
 
@@ -205,18 +224,18 @@ def make_education_section(edus, indent):
     Returns:
         A list of lines of the education section
     """
-    sorted_edus = sort_entries(edus, date_format='YYYY')
+    sorted_edus = sort_entries(edus, date_format="YYYY")
     lines = []
 
     for edu in sorted_edus:
         lines += [
             f'{indent}<div class="education-block">',
-            f'{indent}{HTML_INDENT}<h3>{edu[NAME]}</h3>',
+            f"{indent}{HTML_INDENT}<h3>{edu[NAME]}</h3>",
             f'{indent}{HTML_INDENT}<span class="education-date">{edu[DATES]}</span>',
-            f'{indent}{HTML_INDENT}<h4>{edu[DEGREE]}</h4>'
+            f"{indent}{HTML_INDENT}<h4>{edu[DEGREE]}</h4>",
         ]
         lines += get_description(edu[DESCRIPTION], indent)
-        lines += [f'{indent}</div>', '']
+        lines += [f"{indent}</div>", ""]
 
     return lines
 
@@ -237,14 +256,16 @@ def make_projects_section(prjs, indent):
             f'{indent}<div class="project shadow-large">',
             f'{indent}{HTML_INDENT}<div class="project no-image">',
             f'{indent}{HTML_INDENT * 2}<div class="project-info">',
-            f'{indent}{HTML_INDENT * 3}<h3>{prj[NAME]}</h3>'
+            f"{indent}{HTML_INDENT * 3}<h3>{prj[NAME]}</h3>",
         ]
 
         lines += get_description(prj[DESCRIPTION], indent + HTML_INDENT * 2)
         if prj[LINK]:
-            lines.append(f'{indent}{HTML_INDENT * 3}<a href="{prj[LINK]}" target="_blank">View Project</a>')
+            lines.append(
+                f'{indent}{HTML_INDENT * 3}<a href="{prj[LINK]}" target="_blank">View Project</a>'
+            )
 
-        lines += [f'{indent}{HTML_INDENT * x}</div>' for x in range(2, -1, -1)] + ['']
+        lines += [f"{indent}{HTML_INDENT * x}</div>" for x in range(2, -1, -1)] + [""]
 
     return lines
 
@@ -261,7 +282,7 @@ def make_skills_section(skls, indent):
     """
     lines = []
     for skl in skls:
-        lines.append(f'{indent}<li>{skl}</li>')
+        lines.append(f"{indent}<li>{skl}</li>")
 
     return lines
 
@@ -280,16 +301,16 @@ def make_contact_section(cons, indent):
     for con in CONTACTS:
         if con in cons and cons[con]:
             lines += [
-                f'{indent}<li>',
-                f'{indent}{HTML_INDENT}'
+                f"{indent}<li>",
+                f"{indent}{HTML_INDENT}"
                 f'<a href="{cons[con]}" target="_blank"><i class="fa fa-{con}" aria-hidden="true"></i></a>',
-                f'{indent}</li>'
+                f"{indent}</li>",
             ]
 
     return lines
 
 
-def sort_entries(entries, date_format='MMM YYYY'):
+def sort_entries(entries, date_format="MMM YYYY"):
     """
     Sort entries by date
     Args:
@@ -304,9 +325,9 @@ def sort_entries(entries, date_format='MMM YYYY'):
         name = exp[NAME]
         for entry in exp[ENTRIES]:
             entry[NAME] = name
-            date = entry[DATES].split(' - ')[-1]
+            date = entry[DATES].split(" - ")[-1]
 
-            if date.lower() == 'present':
+            if date.lower() == "present":
                 arrow_date = arrow.utcnow().date()
             elif date:
                 arrow_date = arrow.get(date, date_format).date()
@@ -334,16 +355,16 @@ def get_description(descs, indent):
     """
     lines = []
     if descs:
-        lines.append(f'{indent}{HTML_INDENT}<ul>')
-        for desc in descs.split('\n'):
-            desc = desc.strip('-').strip()
+        lines.append(f"{indent}{HTML_INDENT}<ul>")
+        for desc in descs.split("\n"):
+            desc = desc.strip("-").strip()
             if desc:
-                lines.append(f'{indent}{HTML_INDENT * 2}<li>{desc}')
+                lines.append(f"{indent}{HTML_INDENT * 2}<li>{desc}")
 
-        lines.append(f'{indent}{HTML_INDENT}</ul>')
+        lines.append(f"{indent}{HTML_INDENT}</ul>")
 
     return lines
 
 
 def make_comment_line(line):
-    return [f'<!-- {line} -->']
+    return [f"<!-- {line} -->"]

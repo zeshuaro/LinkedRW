@@ -39,7 +39,7 @@ def escape_latex(s):
     Returns:
         a string with escaped LaTeX special characters
     """
-    return ''.join(LATEX_CHARS.get(c, c) for c in s)
+    return "".join(LATEX_CHARS.get(c, c) for c in s)
 
 
 def get_span_text(element, name):
@@ -53,9 +53,13 @@ def get_span_text(element, name):
         A string of text
     """
     try:
-        return element.find_element_by_css_selector(name).find_elements_by_tag_name('span')[1].text.replace('–', '-')
+        return (
+            element.find_element_by_css_selector(name)
+            .find_elements_by_tag_name("span")[1]
+            .text.replace("–", "-")
+        )
     except NoSuchElementException:
-        return ''
+        return ""
 
 
 def get_optional_text(element, name, is_span=True):
@@ -69,12 +73,12 @@ def get_optional_text(element, name, is_span=True):
     Returns:
         A string of text
     """
-    text = ''
+    text = ""
     try:
         if is_span:
             text = get_span_text(element, name)
         else:
-            text = element.find_element_by_css_selector(name).text.replace('–', '-')
+            text = element.find_element_by_css_selector(name).text.replace("–", "-")
     except NoSuchElementException:
         pass
 
@@ -93,9 +97,9 @@ def get_optional_text_replace(element, name, text):
         A string of text
     """
     try:
-        return element.find_element_by_class_name(name).text.replace(text, '').strip()
+        return element.find_element_by_class_name(name).text.replace(text, "").strip()
     except NoSuchElementException:
-        return ''
+        return ""
 
 
 def get_description(element, name):
@@ -110,18 +114,22 @@ def get_description(element, name):
     """
     try:
         section = element.find_element_by_css_selector(name)
-        btn_section = section.find_elements_by_class_name('lt-line-clamp__ellipsis')
+        btn_section = section.find_elements_by_class_name("lt-line-clamp__ellipsis")
 
         # Check if there is a more button
-        if not btn_section or 'lt-line-clamp__ellipsis--dummy' in btn_section[0].get_attribute('class'):
+        if not btn_section or "lt-line-clamp__ellipsis--dummy" in btn_section[
+            0
+        ].get_attribute("class"):
             description = section.text
         else:
-            btn_section[0].find_element_by_class_name('lt-line-clamp__more').click()
-            description = section.find_element_by_class_name('lt-line-clamp__raw-line').text
+            btn_section[0].find_element_by_class_name("lt-line-clamp__more").click()
+            description = section.find_element_by_class_name(
+                "lt-line-clamp__raw-line"
+            ).text
     except NoSuchElementException:
-        description = ''
+        description = ""
 
-    description = description.replace('•', '-')
+    description = description.replace("•", "-")
 
     return description
 
@@ -136,9 +144,11 @@ def get_accomplishment_link(element):
         A string of link
     """
     try:
-        return element.find_element_by_class_name('pv-accomplishment-entity__external-source').get_attribute('href')
+        return element.find_element_by_class_name(
+            "pv-accomplishment-entity__external-source"
+        ).get_attribute("href")
     except NoSuchElementException:
-        return ''
+        return ""
 
 
 def make_dir(dir_name):
@@ -156,14 +166,16 @@ def make_dir(dir_name):
         pass
 
 
-def scroll_to_elem(driver, by, value, align='true'):
+def scroll_to_elem(driver, by, value, align="true"):
     elem = driver.find_element(by, value)
-    script = f"arguments[0].scrollIntoView({align});" \
-             "var scrollTimeout;" \
-             "addEventListener('scroll', function(e) {" \
-             "clearTimeout(scrollTimeout);" \
-             "scrollTimeout = setTimeout(function() {}, 1000);" \
-             "});"
+    script = (
+        f"arguments[0].scrollIntoView({align});"
+        "var scrollTimeout;"
+        "addEventListener('scroll', function(e) {"
+        "clearTimeout(scrollTimeout);"
+        "scrollTimeout = setTimeout(function() {}, 1000);"
+        "});"
+    )
     driver.execute_script(script, elem)
 
     return elem
