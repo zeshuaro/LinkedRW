@@ -319,8 +319,12 @@ def get_section(section):
 
 def expand_section(section):
     css = '.pv-profile-section__see-more-inline.pv-profile-section__text-truncate-toggle.link'
-    btns = section.find_elements_by_css_selector(css)
+    btns = []
     count = 0
+
+    all_btns = section.find_elements_by_css_selector(css)
+    if all_btns:
+        btns.append(all_btns[-1])
 
     while btns:
         btn = btns.pop()
@@ -331,9 +335,8 @@ def expand_section(section):
         if EXPERIENCE in text or EDUCATION in text:
             count += 1
 
-        try:
-            btns += section.find_elements_by_css_selector(css)
-        except NoSuchElementException:
-            continue
+        new_btns = section.find_elements_by_css_selector(css)
+        if new_btns:
+            btns.append(new_btns[-1])
 
     return count > 0

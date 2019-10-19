@@ -63,7 +63,7 @@ def make_references(publications, output_dir):
 
         # Extract the DOI using the title
         else:
-            results = cr.works(query_title=title, limit=1)
+            results = cr.works(query_bibliographic=title, limit=1)
             if results['message']['total-results'] == 0 or \
                     results['message']['items'][0]['title'][0].lower() != title.lower():
                 log.warn(f'Could not find the doi for "{title}"')

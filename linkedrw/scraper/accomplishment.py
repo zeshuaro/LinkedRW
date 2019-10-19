@@ -1,7 +1,8 @@
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
 
 from linkedrw.constants import *
-from linkedrw.utils import get_optional_text, get_optional_text_replace, get_description, get_accomplishment_link
+from linkedrw.utils import get_optional_text, get_optional_text_replace, get_description, get_accomplishment_link, scroll_to_elem
 
 
 def get_accomplishment_details(driver, section_type):
@@ -25,7 +26,8 @@ def get_accomplishment_details(driver, section_type):
 
     if section_type in (PROJECTS, PUBLICATIONS, HONORS):
         # Expand the section
-        section.find_element_by_xpath(f"//button[@aria-controls='{section_type}-expandable-content']").click()
+        btn = scroll_to_elem(driver, By.XPATH, f"//button[@aria-controls='{section_type}-expandable-content']", align='false')
+        btn.click()
         section = driver.find_element_by_css_selector(
             f'.accordion-panel.pv-profile-section.pv-accomplishments-block.{section_type}.'
             f'pv-accomplishments-block--expanded.ember-view')
