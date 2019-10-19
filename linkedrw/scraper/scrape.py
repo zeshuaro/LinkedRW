@@ -70,7 +70,7 @@ def scrape(browser_driver, driver_path, email, password, output_dir, timeout):
 
     # Navigate to profile page
     elem = WebDriverWait(driver, timeout).until(ec.presence_of_element_located(
-        (By.XPATH, "//a[@data-control-name='identity_welcome_message']")))
+        (By.CSS_SELECTOR, '.tap-target.block.link-without-hover-visited.ember-view')))
     elem.click()
     WebDriverWait(driver, timeout).until(ec.presence_of_element_located((By.ID, 'oc-background-section')))
 
