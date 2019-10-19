@@ -12,7 +12,7 @@ def requirements():
         A list of requirements
     """
     requirements_list = []
-    with open('requirements.txt') as f:
+    with open("requirements.txt") as f:
         for line in f:
             requirements_list.append(line.strip())
 
@@ -29,37 +29,35 @@ def read(fname):
 
 def grep(attrname):
     pattern = r'{}\W*=\W*"([^"]+)"'.format(attrname)
-    strval, = re.findall(pattern, read(fpath('linkedrw/__init__.py')))
+    strval, = re.findall(pattern, read(fpath("linkedrw/__init__.py")))
     return strval
 
 
 setup(
-    name='linkedrw',
-    version=grep('__version__'),
-    author='Joshua Tang',
-    author_email='zeshuaro@gmail.com',
-    license='MIT License',
-    url='https://github.com/zeshuaro/LinkedRW',
-    keywords='python scraper cv resume portfolio profile website',
-    description='A simple CLI for you to create your resume and personal website based on your LinkedIn profile',
-    long_description=open('README.md').read(),
-    long_description_content_type='text/markdown',
+    name="linkedrw",
+    version=grep("__version__"),
+    author="Joshua Tang",
+    author_email="zeshuaro@gmail.com",
+    license="MIT License",
+    url="https://github.com/zeshuaro/LinkedRW",
+    keywords="python scraper cv resume portfolio profile website",
+    description="A simple CLI for you to create your resume and personal website based on your LinkedIn profile",
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
     packages=find_packages(),
-    python_requires='>=3.6',
+    python_requires=">=3.6",
     install_requires=requirements(),
-    setup_requires=['pytest-runner'],
-    tests_require=['pytest', 'pytest-cov'],
+    setup_requires=["pytest-runner"],
+    tests_require=["pytest", "pytest-cov"],
     include_package_data=True,
-    entry_points={
-        'console_scripts': ['linkedrw=linkedrw:main'],
-    },
+    entry_points={"console_scripts": ["linkedrw=linkedrw:main"]},
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'Operating System :: OS Independent',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7'
-    ]
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+    ],
 )
