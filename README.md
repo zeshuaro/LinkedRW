@@ -136,7 +136,7 @@ npm run watch
 
 For more customisation instructions, please refer to the original [repo](https://github.com/RyanFitzgerald/devportfolio).
 
-## Issues
+## Issues/Problems
 
 If `NoSuchElementException` is raised, try increasing the timeout value by specifying `-t/--timeout` option.
 If the problem remains, please raise an issue.
