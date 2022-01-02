@@ -1,3 +1,5 @@
+### ⚠️ This app is no longer maintained. ⚠️
+
 # LinkedRW
 
 [![PyPi Package Version](https://img.shields.io/pypi/v/linkedrw.svg)](https://pypi.org/project/linkedrw/)
